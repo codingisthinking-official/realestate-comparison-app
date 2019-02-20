@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}Porównaj czynsz!{% endblock %}</title>
+
+    {% block stylesheets %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:400,500,600,700&amp;subset=latin-ext">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
+</head>
+<body {% block bodyType %}{% endblock %}>
+    <header>
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-xs-6 logo">
+                    <img src="{{ asset('images/logo.png') }}" alt="logo">
+                </div>
+                <div class="col-xs-6 align-right">
+                    <a href="{{ path('contact') }}" class="button red-bcg"> 
+                        <img src="{{ asset('images/envelope.png') }}" alt="koperta"> <span> Zostaw wiadomość</span>
+                    </a>
+                </div>
+            </div>
+            <div class="row claim">
+                <div class="col-sm-8 col-md-7 col-lg-6">
+                    <div class="description">
+                        <h1> Lorem ipsum dolor sit amet enim. </h2>
+                        <p> Consectetur adipisicing elit. Eaque corporis laboriosam excepturi facere perspiciatis. Repellat adipisci nobis suscipit inventore nesciunt quibusdam.</p>
+                        <a href="" class="button yellow-bcg"> Porównaj </a>
+                    </div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{{ path('city', {'city': 'bydgoszcz'}) }}"> Bydgoszcz </a></li>
+                    <li><a href="{{ path('city', {'city': 'gdansk'}) }}"> Gdańsk </a></li>
+                    <li><a href="{{ path('city', {'city': 'katowice'}) }}"> Katowice </a></li>
+                    <li><a href="{{ path('city', {'city': 'krakow'}) }}"> Kraków </a></li>
+                    <li><a href="{{ path('city', {'city': 'lodz'}) }}"> Łódź </a></li>
+                    <li><a href="{{ path('city', {'city': 'poznan'}) }}"> Poznań </a></li>
+                    <li><a href="{{ path('city', {'city': 'szczecin'}) }}"> Szczecin </a></li>
+                    <li><a href="{{ path('city', {'city': 'warszawa'}) }}"> Warszawa </a></li>
+                    <li><a href="{{ path('city', {'city': 'wroclaw'}) }}"> Wrocław </a></li>
+                    <li><a href="{{ path('city', {'city': 'other'}) }}"> Inne miasta </a></li>
+                </ul>
+            </nav>
+            <a href="#form" class="button red-bcg scroll-down"> <img src="{{ asset('images/arrow-down.png') }}" alt="strzłka w dół"> </a>
+        </div>
+        <div class="overlay"></div>
+    </header>
+    {% block body %}{% endblock %}
+    <footer>
+        <div class="wrapper">
+            <div class="row center-xs">
+                <div class="col-xs-8 col-md-2">
+                    <div class="logo"> <img src="{{ asset('images/logo.png') }}" alt="logo"> </div>
+                    <p> www.porownaj-czynsz.pl</p>
+                </div>
+            </div>
+        </div>
+        <div class="overlay"></div>
+    </footer>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

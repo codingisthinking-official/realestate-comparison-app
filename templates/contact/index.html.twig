@@ -18,27 +18,27 @@
         <div class="wrapper">
             <div class="row">
                 <div class="col-xs-12 cl-md-7 col-lg-6">
-                    <h1 class="red"> Lorem, ipsum dolor sit amet elit. Molestias ad sint.</h1>
-                    <p class='no-padding'> Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae aut consequuntur iure ad pari atur ipsum. Rerum consectetur similique totam deserunt saepe, eum, obcaecati illum voluptates culpa voluptas voluptate? Consequuntur, maiores. </p>
+                    <h1 class="red"> {{ 'contact.header'|toWording }}</h1>
+                    <p class='no-padding'> {{ 'contact.content'|toWording }} </p>
                 </div>
                 <div class="col-xs-12">
 
                     <form action="" class='contact'>
                         <div class="row">
                             <div class="col-md-4 col-sm-12">
-                                <input type="text" placeholder="Imię i nazwisko">
+                                <input type="text" placeholder="{{ 'contact.input-content-name'|toWording }}">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                                <input type="tel" placeholder="Telefon">
+                                <input type="tel" placeholder="{{ 'contact.input-content-phone'|toWording }}">
                             </div>
                             <div class="col-md-4 col-sm-12">
-                                <input type="email" placeholder="E-mail">
+                                <input type="email" placeholder="{{ 'contact.input-content-mail'|toWording }}">
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <textarea name="message" id="" placeholder="Wiadomość" rows="1"></textarea>
+                                <textarea name="message" id="" placeholder="{{ 'contact.input-content-message'|toWording }}" rows="1"></textarea>
                             </div>
                         </div>
                     </form>
@@ -46,7 +46,7 @@
             </div>
             <div class="end-xs">
                 <div class="col-xs-12">
-                    <a href="#" class="button yellow-bcg "> Wyślij </a>
+                    <a href="#" class="button yellow-bcg "> {{ 'contact.button-send'|toWording }} </a>
                 </div>
             </div>
         </div>

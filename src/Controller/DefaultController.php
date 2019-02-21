@@ -20,10 +20,10 @@ class DefaultController extends AbstractController
     /**
      * @Route("/city/{city}", name="city")
      */
-    public function city()
+    public function city($city)
     {
         return $this->render('city/index.html.twig', [
-            'controller_name' => 'DefaultController',
+            'city' => $city,
         ]);
     }
 

@@ -68,7 +68,7 @@ $(document).ready(function() {
             scrollTop: $("#compared").offset().top
         }, 500);
     }
-    function analyzeRent(e) {
+    function analyseRent(e) {
         e.preventDefault();
         $(this).addClass('unactive');
         
@@ -78,25 +78,25 @@ $(document).ready(function() {
             scrollTop: $("#price-analysis").offset().top
         }, 500);
 
-        let analyzeAverage = 4.5;
-        let analyzeUserRent = 6.2;
-        let analyzeMin = 1;
-        let analyzeMax = 8;
+        let analyseAverage = 4.5;
+        let analyseUserRent = 6.2;
+        let analyseMin = 1;
+        let analyseMax = 8;
 
-        let analyzeAvgPercent = (analyzeAverage/(analyzeMax - analyzeMin)) * 100;
-        let analyzeUserPercent = (analyzeUserRent/(analyzeMax - analyzeMin)) * 100;
-        if(analyzeAvgPercent > 100) analyzeAvgPercent = 100;
-        if(analyzeUserPercent > 100) analyzeUserPercent = 100;
-        if(analyzeAvgPercent < 0) analyzeAvgPercent = 0;
-        if(analyzeUserPercent < 0) analyzeUserPercent = 0;
+        let analyseAvgPercent = (analyseAverage/(analyseMax - analyseMin)) * 100;
+        let analyseUserPercent = (analyseUserRent/(analyseMax - analyseMin)) * 100;
+        if(analyseAvgPercent > 100) analyseAvgPercent = 100;
+        if(analyseUserPercent > 100) analyseUserPercent = 100;
+        if(analyseAvgPercent < 0) analyseAvgPercent = 0;
+        if(analyseUserPercent < 0) analyseUserPercent = 0;
 
-        $('.small-price-bar .average-bar').css('width', analyzeAvgPercent + '%');
-        $('.small-price-bar .average').css('left', analyzeAvgPercent + '%');
-        $('.small-price-bar .your-bar').css('width', analyzeUserPercent + '%');
-        $('.small-price-bar .your-result').css('left', analyzeUserPercent + '%');
+        $('.small-price-bar .average-bar').css('width', analyseAvgPercent + '%');
+        $('.small-price-bar .average').css('left', analyseAvgPercent + '%');
+        $('.small-price-bar .your-bar').css('width', analyseUserPercent + '%');
+        $('.small-price-bar .your-result').css('left', analyseUserPercent + '%');
 
     }
-    $('#analyze').click(analyzeRent);
+    $('#analyse').click(analyseRent);
     $('#compare').click(getFormData);
     $('.info').hover(showTooltip, hideTooltip);
     

@@ -25,31 +25,23 @@
                 </div>
                 <div class="col-xs-6 align-right">
                     <a href="{{ path('contact') }}" class="button red-bcg"> 
-                        <img src="{{ asset('images/envelope.png') }}" alt="koperta"> <span> Zostaw wiadomość</span>
+                        <img src="{{ asset('images/envelope.png') }}" alt="koperta"> <span> {{ 'header.message'|toWording }} </span>
                     </a>
                 </div>
             </div>
             <div class="row claim">
                 <div class="col-sm-8 col-md-7 col-lg-6">
                     <div class="description">
-                        <h1> Lorem ipsum dolor sit amet enim. </h2>
-                        <p> Consectetur adipisicing elit. Eaque corporis laboriosam excepturi facere perspiciatis. Repellat adipisci nobis suscipit inventore nesciunt quibusdam.</p>
-                        <a href="" class="button yellow-bcg"> Porównaj </a>
+                        <h1> {{ 'header.first_line'|toWording }} </h2>
+                        <p> {{ 'header.description'|toWording }}</p>
+                        <a href="" class="button yellow-bcg"> {{ "header.button" | toWording }} </a>
                     </div>
                 </div>
             </div>
             <nav>
-                <ul>
-                    <li><a href="{{ path('city', {'city': 'bydgoszcz'}) }}"> Bydgoszcz </a></li>
-                    <li><a href="{{ path('city', {'city': 'gdansk'}) }}"> Gdańsk </a></li>
-                    <li><a href="{{ path('city', {'city': 'katowice'}) }}"> Katowice </a></li>
-                    <li><a href="{{ path('city', {'city': 'krakow'}) }}"> Kraków </a></li>
-                    <li><a href="{{ path('city', {'city': 'lodz'}) }}"> Łódź </a></li>
-                    <li><a href="{{ path('city', {'city': 'poznan'}) }}"> Poznań </a></li>
-                    <li><a href="{{ path('city', {'city': 'szczecin'}) }}"> Szczecin </a></li>
-                    <li><a href="{{ path('city', {'city': 'warszawa'}) }}"> Warszawa </a></li>
-                    <li><a href="{{ path('city', {'city': 'wroclaw'}) }}"> Wrocław </a></li>
-                    <li><a href="{{ path('city', {'city': 'other'}) }}"> Inne miasta </a></li>
+                <ul>{% for x in 1..10 %}
+                        <li><a href="{{ x|cityInfo(x|findCity) }}"> {{ x|findCity }} </a></li>
+                    {% endfor %}
                 </ul>
             </nav>
             <a href="#form" class="button red-bcg scroll-down"> <img src="{{ asset('images/arrow-down.png') }}" alt="strzłka w dół"> </a>
@@ -62,7 +54,7 @@
             <div class="row center-xs">
                 <div class="col-xs-8 col-md-2">
                     <div class="logo"> <img src="{{ asset('images/logo.png') }}" alt="logo"> </div>
-                    <p> www.porownaj-czynsz.pl</p>
+                    <p> {{ 'footer.link' | toWording }}</p>
                 </div>
             </div>
         </div>

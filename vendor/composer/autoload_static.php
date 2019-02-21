@@ -15,6 +15,10 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '3e76f7f02b41af8cea96018933f6b7e3' => __DIR__ . '/..' . '/hoa/protocol/Wrapper.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -133,6 +137,12 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
             'Hoa\\Consistency\\' => 16,
             'Hoa\\Compiler\\' => 13,
         ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
+            'GuzzleHttp\\Promise\\' => 19,
+            'GuzzleHttp\\' => 11,
+        ),
         'F' => 
         array (
             'Fig\\Link\\' => 9,
@@ -140,6 +150,7 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         ),
         'E' => 
         array (
+            'EightPoints\\Bundle\\GuzzleBundle\\' => 32,
             'Egulias\\EmailValidator\\' => 23,
             'EasyCorp\\EasyLog\\' => 17,
         ),
@@ -524,6 +535,18 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         array (
             0 => __DIR__ . '/..' . '/hoa/compiler',
         ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'GuzzleHttp\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+        ),
+        'GuzzleHttp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
         'Fig\\Link\\' => 
         array (
             0 => __DIR__ . '/..' . '/fig/link-util/src',
@@ -531,6 +554,10 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         'Facebook\\WebDriver\\' => 
         array (
             0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
+        ),
+        'EightPoints\\Bundle\\GuzzleBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/eightpoints/guzzle-bundle/src',
         ),
         'Egulias\\EmailValidator\\' => 
         array (

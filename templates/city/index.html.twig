@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ 'title.city'|toWording }}{% endblock %}
 {% block bodyType %} class='subpage' {% endblock %}
 {% block body %}
     <section class="breadcrumbs">
@@ -77,9 +78,9 @@
                     </thead>
                     <tbody>
                     {% for x in 1..9 %}
-                        <tr{% if x|findCity == city|cityInfo %} class='active'{% endif %}>
+                        <tr{% if x|findCity == city %} class='active'{% endif %}>
                             <td>
-                                {{ x|findCity }} 
+                                {{ x|findCity|cityInfo }} 
                                 <span class="info">?</span>
                                 <div class="tooltip">
                                     <div class="content">

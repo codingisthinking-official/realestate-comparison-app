@@ -79,32 +79,32 @@ class AppExtension extends AbstractExtension
             switch ($type) {
                 case "title":
                     if ($page->getTitle() == $parametr) {
-                        return $page->getTitle();
+                        return $page->getSlug();
                     }
                     break;
                 case "photo":
                     if ($page->getPhoto() == $parametr) {
-                        return $page->getTitle();
+                        return $page->getSlug();
                     }
                     break;
                 case "position":
                     if ($page->getPosition() == $parametr) {
-                        return $page->getTitle();
+                        return $page->getSlug();
                     }
                     break;
                 case "description":
                     if ($page->getDescription() == $parametr) {
-                        return $page->getTitle();
+                        return $page->getSlug();
                     }
                     break;
                 case "title_header":
                     if ($page->getTitleHeader() == $parametr) {
-                        return $page->getTitle();
+                        return $page->getSlug();
                     }
                     break;
                 case "subtitle_header":
                     if ($page->getSubtitleheader() == $parametr) {
-                        return $page->getTitle();
+                        return $page->getSlug();
                     }
                     break;
             }

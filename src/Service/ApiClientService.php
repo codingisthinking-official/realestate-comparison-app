@@ -3,32 +3,35 @@
 namespace App\Service;
 
 use JMS\Serializer\SerializerInterface;
-// use Buzz\Browser;
+use GuzzleHttp\Client;
+
 
 class ApiClientService
 {
-    protected $apiUrl="http://realestate.wiseweb.pl";
+    protected $apiUrl;
     protected $serializer;
-    // protected $browser;
-    
-    public function __construct(SerializerInterface $serializer)
+    protected $client;
+
+    public function __construct(SerializerInterface $serializer, $apiUrl)
     {
         $this->serializer = $serializer;
-        // $this->browser = $browser;
+        $this->client = new Client(['base_uri' => 'http://realestate.wiseweb.pl/api/']);
+        $this->apiUrl = $apiUrl;
     }
-    
+
     public function getPages(): array
     {
-        // $response = $this->browser->get($this->apiUrl . '/api/pages/');
-        $json = file_get_contents('http://realestate.wiseweb.pl/api/pages/');
-        return $this->serializer->deserialize($json, 'array<App\ValueObject\Cms\Page>', 'json');
+        // $response = file_get_contents('http://realestate.wiseweb.pl/api/pages/');
+        $response = $this->client->request('GET', 'pages/');
+        $response = $response->getBody();
+        return $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\Page>', 'json');
     }
-    
+
     public function getWordings(): array
     {
-        // $response = $this->browser->get($this->apiUrl . '/api/wording/');
-        $json = file_get_contents('http://realestate.wiseweb.pl/api/wording/');
-        return $this->serializer->deserialize($json, 'array<App\ValueObject\Cms\Wording>', 'json');
-        
+        // $response = file_get_contents('http://realestate.wiseweb.pl/api/wording/');
+        $response = $this->client->request('GET', 'wording/');
+        $response = $response->getBody();
+        return $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\Wording>', 'json');
     }
 }

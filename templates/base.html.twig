@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>{% block title %}Porównaj czynsz!{% endblock %}</title>
+    <title>{% block title %}{{ 'title'|toWording }}{% endblock %}</title>
 
     {% block stylesheets %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:400,500,600,700&amp;subset=latin-ext">
@@ -40,7 +40,7 @@
             </div>
             <nav>
                 <ul>{% for x in 1..10 %}
-                        <li><a href="{{ x|cityInfo(x|findCity) }}"> {{ x|findCity }} </a></li>
+                        <li><a href="{{ path('city', {city: x|findCity}) }}"> {{ x|findCity|cityInfo("title") }} </a></li>
                     {% endfor %}
                 </ul>
             </nav>

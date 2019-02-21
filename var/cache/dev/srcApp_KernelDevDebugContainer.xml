@@ -23,6 +23,7 @@
       <parameter key="MakerBundle">Symfony\Bundle\MakerBundle\MakerBundle</parameter>
       <parameter key="WebServerBundle">Symfony\Bundle\WebServerBundle\WebServerBundle</parameter>
       <parameter key="JMSSerializerBundle">JMS\SerializerBundle\JMSSerializerBundle</parameter>
+      <parameter key="EightPointsGuzzleBundle">EightPoints\Bundle\GuzzleBundle\EightPointsGuzzleBundle</parameter>
     </parameter>
     <parameter key="kernel.bundles_metadata" type="collection">
       <parameter key="FrameworkBundle" type="collection">
@@ -80,6 +81,10 @@
       <parameter key="JMSSerializerBundle" type="collection">
         <parameter key="path">/application/vendor/jms/serializer-bundle</parameter>
         <parameter key="namespace">JMS\SerializerBundle</parameter>
+      </parameter>
+      <parameter key="EightPointsGuzzleBundle" type="collection">
+        <parameter key="path">/application/vendor/eightpoints/guzzle-bundle/src</parameter>
+        <parameter key="namespace">EightPoints\Bundle\GuzzleBundle</parameter>
       </parameter>
     </parameter>
     <parameter key="kernel.charset">UTF-8</parameter>
@@ -294,6 +299,19 @@
       </parameter>
     </parameter>
     <parameter key="env(VAR_DUMPER_SERVER)">127.0.0.1:9912</parameter>
+    <parameter key="eight_points_guzzle.http_client.class">GuzzleHttp\Client</parameter>
+    <parameter key="eight_points_guzzle.formatter.class">GuzzleHttp\MessageFormatter</parameter>
+    <parameter key="eight_points_guzzle.symfony_log_formatter.class">GuzzleHttp\MessageFormatter</parameter>
+    <parameter key="eight_points_guzzle.data_collector.class">EightPoints\Bundle\GuzzleBundle\DataCollector\HttpDataCollector</parameter>
+    <parameter key="eight_points_guzzle.logger.class">EightPoints\Bundle\GuzzleBundle\Log\Logger</parameter>
+    <parameter key="eight_points_guzzle.middleware.log.class">EightPoints\Bundle\GuzzleBundle\Middleware\LogMiddleware</parameter>
+    <parameter key="eight_points_guzzle.middleware.profile.class">EightPoints\Bundle\GuzzleBundle\Middleware\ProfileMiddleware</parameter>
+    <parameter key="eight_points_guzzle.middleware.event_dispatcher.class">EightPoints\Bundle\GuzzleBundle\Middleware\EventDispatchMiddleware</parameter>
+    <parameter key="eight_points_guzzle.middleware.request_time.class">EightPoints\Bundle\GuzzleBundle\Middleware\RequestTimeMiddleware</parameter>
+    <parameter key="eight_points_guzzle.middleware.symfony_log.class">EightPoints\Bundle\GuzzleBundle\Middleware\SymfonyLogMiddleware</parameter>
+    <parameter key="eight_points_guzzle.symfony_log_formatter.pattern">{method} {uri} {code}</parameter>
+    <parameter key="eight_points_guzzle.middleware.class">GuzzleHttp\Middleware</parameter>
+    <parameter key="eight_points_guzzle.plugin.header.headers" type="collection"/>
     <parameter key="data_collector.templates" type="collection">
       <parameter key="data_collector.request" type="collection">
         <parameter>request</parameter>
@@ -363,6 +381,10 @@
         <parameter>dump</parameter>
         <parameter>@Debug/Profiler/dump.html.twig</parameter>
       </parameter>
+      <parameter key="eight_points_guzzle.data_collector" type="collection">
+        <parameter>eight_points_guzzle</parameter>
+        <parameter>@EightPointsGuzzle/debug.html.twig</parameter>
+      </parameter>
       <parameter key="data_collector.config" type="collection">
         <parameter>config</parameter>
         <parameter>@WebProfiler/Collector/config.html.twig</parameter>
@@ -397,8 +419,9 @@
         <argument type="service" id=".service_locator.KTVqfp6.App\Controller\DefaultController"/>
       </call>
     </service>
-    <service id="App\Service\ApiClientService" class="App\Service\ApiClientService" autowire="true" autoconfigure="true">
+    <service id="App\Service\ApiClientService" class="App\Service\ApiClientService" public="true" autowire="true">
       <argument type="service" id="jms_serializer.serializer"/>
+      <argument>%env(API_URL)%</argument>
     </service>
     <service id="App\Twig\AppExtension" class="App\Twig\AppExtension" autowire="true" autoconfigure="true">
       <tag name="twig.extension"/>
@@ -1627,6 +1650,9 @@
       </call>
       <call method="add">
         <argument type="service" id="data_collector.dump"/>
+      </call>
+      <call method="add">
+        <argument type="service" id="eight_points_guzzle.data_collector"/>
       </call>
       <call method="add">
         <argument type="service" id="data_collector.config"/>
@@ -3697,6 +3723,9 @@
       <call method="addExtension">
         <argument type="service" id="jms_serializer.twig_extension.serializer"/>
       </call>
+      <call method="addExtension">
+        <argument type="service" id="eight_points_guzzle.twig_extension.debug"/>
+      </call>
       <call method="addGlobal">
         <argument>app</argument>
         <argument type="service" id="twig.app_variable"/>
@@ -3802,6 +3831,14 @@
       <call method="addPath">
         <argument>/application/vendor/symfony/debug-bundle/Resources/views</argument>
         <argument>!Debug</argument>
+      </call>
+      <call method="addPath">
+        <argument>/application/vendor/eightpoints/guzzle-bundle/src/Resources/views</argument>
+        <argument>EightPointsGuzzle</argument>
+      </call>
+      <call method="addPath">
+        <argument>/application/vendor/eightpoints/guzzle-bundle/src/Resources/views</argument>
+        <argument>!EightPointsGuzzle</argument>
       </call>
       <call method="addPath">
         <argument>/application/templates</argument>
@@ -4765,6 +4802,99 @@
     </service>
     <service id="jms_serializer.configured_serialization_context_factory" class="JMS\SerializerBundle\ContextFactory\ConfiguredContextFactory" public="false"/>
     <service id="jms_serializer.configured_deserialization_context_factory" class="JMS\SerializerBundle\ContextFactory\ConfiguredContextFactory" public="false"/>
+    <service id="eight_points_guzzle.twig_extension.debug" class="EightPoints\Bundle\GuzzleBundle\Twig\Extension\DebugExtension" public="false">
+      <tag name="twig.extension"/>
+    </service>
+    <service id="eight_points_guzzle.logger" class="EightPoints\Bundle\GuzzleBundle\Log\Logger" public="true"/>
+    <service id="eight_points_guzzle.data_collector" class="EightPoints\Bundle\GuzzleBundle\DataCollector\HttpDataCollector" public="false">
+      <tag name="data_collector" id="eight_points_guzzle" template="@EightPointsGuzzle/debug.html.twig"/>
+      <argument type="service" id="eight_points_guzzle.logger"/>
+      <argument>0</argument>
+    </service>
+    <service id="eight_points_guzzle.formatter" class="GuzzleHttp\MessageFormatter" public="true"/>
+    <service id="eight_points_guzzle.symfony_log_formatter" class="GuzzleHttp\MessageFormatter" public="true">
+      <argument>{method} {uri} {code}</argument>
+    </service>
+    <service id="eight_points_guzzle.middleware.symfony_log" class="EightPoints\Bundle\GuzzleBundle\Middleware\SymfonyLogMiddleware" public="true">
+      <tag name="monolog.logger" channel="eight_points_guzzle"/>
+      <argument type="service" id="monolog.logger.eight_points_guzzle"/>
+      <argument type="service" id="eight_points_guzzle.symfony_log_formatter"/>
+    </service>
+    <service id="eight_points_guzzle.middleware.event_dispatch.my_client" class="EightPoints\Bundle\GuzzleBundle\Middleware\EventDispatchMiddleware" public="true">
+      <argument type="service" id="debug.event_dispatcher"/>
+      <argument>my_client</argument>
+    </service>
+    <service id="eight_points_guzzle.handler_stack.my_client" class="GuzzleHttp\HandlerStack" public="true">
+      <call method="push">
+        <argument type="expression">service('eight_points_guzzle.middleware.log.my_client').log()</argument>
+        <argument>log</argument>
+      </call>
+      <call method="after">
+        <argument>log</argument>
+        <argument type="expression">service('eight_points_guzzle.middleware.request_time.my_client')</argument>
+        <argument>request_time</argument>
+      </call>
+      <call method="push">
+        <argument type="expression">service('eight_points_guzzle.middleware.symfony_log')</argument>
+        <argument>symfony_log</argument>
+      </call>
+      <call method="push">
+        <argument type="expression">service('eight_points_guzzle.middleware.profile.my_client').profile()</argument>
+        <argument>profile</argument>
+      </call>
+      <call method="unshift">
+        <argument type="expression">service('eight_points_guzzle.middleware.event_dispatch.my_client').dispatchEvent()</argument>
+        <argument>events</argument>
+      </call>
+      <factory class="GuzzleHttp\HandlerStack" method="create"/>
+    </service>
+    <service id="eight_points_guzzle.middleware.log.my_client" class="EightPoints\Bundle\GuzzleBundle\Middleware\LogMiddleware" public="true">
+      <argument type="service" id="eight_points_guzzle.logger"/>
+      <argument type="service" id="eight_points_guzzle.formatter"/>
+    </service>
+    <service id="eight_points_guzzle.middleware.request_time.my_client" class="EightPoints\Bundle\GuzzleBundle\Middleware\RequestTimeMiddleware" public="true">
+      <argument type="service" id="eight_points_guzzle.logger"/>
+      <argument type="service" id="eight_points_guzzle.data_collector"/>
+    </service>
+    <service id="eight_points_guzzle.middleware.profile.my_client" class="EightPoints\Bundle\GuzzleBundle\Middleware\ProfileMiddleware" public="true">
+      <argument type="service" id="debug.stopwatch"/>
+    </service>
+    <service id="eight_points_guzzle.client.my_client" class="GuzzleHttp\Client" public="true">
+      <argument type="collection">
+        <argument key="base_uri">null</argument>
+        <argument key="handler" type="service">
+          <service class="GuzzleHttp\HandlerStack" public="true">
+            <call method="push">
+              <argument type="expression">service('eight_points_guzzle.middleware.log.my_client').log()</argument>
+              <argument>log</argument>
+            </call>
+            <call method="after">
+              <argument>log</argument>
+              <argument type="expression">service('eight_points_guzzle.middleware.request_time.my_client')</argument>
+              <argument>request_time</argument>
+            </call>
+            <call method="push">
+              <argument type="expression">service('eight_points_guzzle.middleware.symfony_log')</argument>
+              <argument>symfony_log</argument>
+            </call>
+            <call method="push">
+              <argument type="expression">service('eight_points_guzzle.middleware.profile.my_client').profile()</argument>
+              <argument>profile</argument>
+            </call>
+            <call method="unshift">
+              <argument type="expression">service('eight_points_guzzle.middleware.event_dispatch.my_client').dispatchEvent()</argument>
+              <argument>events</argument>
+            </call>
+            <factory class="GuzzleHttp\HandlerStack" method="create"/>
+          </service>
+        </argument>
+        <argument key="timeout">30</argument>
+        <argument key="http_errors">true</argument>
+        <argument key="headers" type="collection">
+          <argument key="User-Agent">EightPointsGuzzleBundle/v7</argument>
+        </argument>
+      </argument>
+    </service>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\DefaultController" class="App\Controller\DefaultController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -5136,6 +5266,18 @@
     </service>
     <service id="monolog.logger.debug" class="Symfony\Bridge\Monolog\Logger">
       <argument>debug</argument>
+      <call method="pushProcessor">
+        <argument type="service" id="debug.log_processor"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.console"/>
+      </call>
+      <call method="pushHandler">
+        <argument type="service" id="monolog.handler.main"/>
+      </call>
+    </service>
+    <service id="monolog.logger.eight_points_guzzle" class="Symfony\Bridge\Monolog\Logger">
+      <argument>eight_points_guzzle</argument>
       <call method="pushProcessor">
         <argument type="service" id="debug.log_processor"/>
       </call>

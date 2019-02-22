@@ -32,19 +32,27 @@ class ApiClientService
             throw new \RuntimeException('Can not connect to the API (pages)');
         }
 
-        return $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
+        $sortedPages = [];
+        $response = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
+        for($x = 0; $x<sizeOf($response); $x++) {
+            if($response[$x]->getPosition()){
+                $sortedPages[$response[$x]->getPosition()] = $response[$x];
+            }
+        }
+
+        return $sortedPages;
     }
 
     public function getWordings(): array
     {
         $response = $this->client->get('wording/');
         if ($response->getStatusCode() != 200) {
-            throw new \RuntimeException('Can not connect to the API (pages)');
+            throw new \RuntimeException('Can not connect to the API (wording)');
         }
         return $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Wording>', 'json');
     }
 
-    public function findOneBySlug(string $slug)
+    public function findOnePageBySlug(string $slug)
     {
         $response = $this->client->get('pages/');
         if ($response->getStatusCode() != 200) {

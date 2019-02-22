@@ -1,7 +1,7 @@
-{% for city in cityList %}
-    <tr{% if activeCity == city.slug %} class='active'{% endif %}>
+{% for page in pageList %}
+    <tr{% if activePage == page.slug %} class='active'{% endif %}>
         <td>
-            {{ city.title }}
+            {{ page.title }}
             <span class="info">?</span>
             <div class="tooltip">
                 <div class="content">

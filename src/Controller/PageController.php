@@ -15,7 +15,7 @@ class PageController extends AbstractController
     {
         $page = $apiClientService->findOnePageBySlug($page);
 
-        if (!page) {
+        if (!$page) {
             throw $this->createNotFoundException();
         }
 

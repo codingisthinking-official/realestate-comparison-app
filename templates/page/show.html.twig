@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <a href="{{ path('homepage') }}"> Strona główna </a>
-                    <a href="#"> {{ city.title }} </a>
+                    <a href="#"> {{ page.title }} </a>
                 </div>
             </div>
             
@@ -20,24 +20,24 @@
             <div class="row middle-md between-md">
                 <div class="col-md-6 col-sm-12">
                     <div class="content left">
-                        <h1 class="red"> {{ city.titleHeader }}</h1>
+                        <h1 class="red"> {{ page.titleHeader }}</h1>
                         <p class="big-paragraph">
-                            {{ city.subtitleHeader }}
+                            {{ page.subtitleHeader }}
                         </p>
-                        {{ city.description }}
+                        {{ page.description }}
                     </div>
                 </div>
 
                 <div class="col-md-5 col-sm-12">
                     <div class="image-border">
-                        <img src="{{ city.photo }}" alt="zdjęcie">
+                        <img src="{{ page.photo }}" alt="zdjęcie">
                     </div>
                 </div>
 
                 <div class="col-xs-12">
                     <ul class="social-media">
-                        <li> <a href="{{ 'city.facebook'|toWording }}"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a> </li>
-                        <li> <a href="{{ 'city.twitter'|toWording }}"> <img src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a> </li>
+                        <li> <a href="{{ 'page.facebook'|toWording }}"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a> </li>
+                        <li> <a href="{{ 'page.twitter'|toWording }}"> <img src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a> </li>
                     </ul>
                 </div>
             </div>
@@ -46,11 +46,11 @@
 
     <section class="comparision smaller-padding">
         <div class="wrapper">
-            <h3> {{ 'city.chart_title'|toWording }} </h3>
+            <h3> {{ 'page.chart_title'|toWording }} </h3>
             <form action="">
                 <div class="row">
                     <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
-                        <label for="flat-type"> {{ 'city.input-type'|toWording }} </label>
+                        <label for="flat-type"> {{ 'page.input-type'|toWording }} </label>
                     </div>
                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                         <div class="input-wrapper">
@@ -62,7 +62,7 @@
                             <span class="info">?</span>
 
                             <div class="tooltip">
-                                <div class="content"> {{ 'city.input-type-tooltip'|toWording }} </div>
+                                <div class="content"> {{ 'page.input-type-tooltip'|toWording }} </div>
                             </div>
                         </div>
                     </div>
@@ -72,17 +72,17 @@
                 <table>
                     <thead>
                         <th></th>
-                        <th> {{ 'city.chart_cheapest'|toWording }} </th>
-                        <th class='av'> {{ 'city.chart_avg'|toWording }} </th>
-                        <th class="red"> {{ 'city.chart_expansive'|toWording }} </th>
+                        <th> {{ 'page.chart_cheapest'|toWording }} </th>
+                        <th class='av'> {{ 'page.chart_avg'|toWording }} </th>
+                        <th class="red"> {{ 'page.chart_expansive'|toWording }} </th>
                     </thead>
-                    <tbody>{{ render(controller('App\\Controller\\CityController::recentChart',{ 'active': city.slug  } )) }} </tbody>
+                    <tbody>{{ render(controller('App\\Controller\\PageController::recentChart',{ 'active': page.slug  } )) }} </tbody>
                 </table>
             </div>
         </div>
     </section>
     <section>
-        <div class="wrapper"> {{ 'city.wrapper'|toWording }} </div>
+        <div class="wrapper"> {{ 'page.wrapper'|toWording }} </div>
     </section>
 {% endblock %}
 {% block javascripts %}<script src="{{ asset('js/canvasChart.js') }}"></script>{% endblock %}

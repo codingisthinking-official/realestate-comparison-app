@@ -1,0 +1,360 @@
+<?php
+
+/* page/show.html.twig */
+class __TwigTemplate_d86c5092730b1b420e634df8ff4ace1c648f2470c48edcdd583ddc7037602a53 extends Twig_Template
+{
+    private $source;
+
+    public function __construct(Twig_Environment $env)
+    {
+        parent::__construct($env);
+
+        $this->source = $this->getSourceContext();
+
+        // line 1
+        $this->parent = $this->loadTemplate("base.html.twig", "page/show.html.twig", 1);
+        $this->blocks = [
+            'title' => [$this, 'block_title'],
+            'bodyType' => [$this, 'block_bodyType'],
+            'body' => [$this, 'block_body'],
+            'javascripts' => [$this, 'block_javascripts'],
+        ];
+    }
+
+    protected function doGetParent(array $context)
+    {
+        return "base.html.twig";
+    }
+
+    protected function doDisplay(array $context, array $blocks = [])
+    {
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "page/show.html.twig"));
+
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "page/show.html.twig"));
+
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+        
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->leave($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof);
+
+        
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
+
+    }
+
+    // line 3
+    public function block_title($context, array $blocks = [])
+    {
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
+
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
+
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("title.city"), "html", null, true);
+        
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
+
+        
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->leave($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof);
+
+    }
+
+    // line 4
+    public function block_bodyType($context, array $blocks = [])
+    {
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "bodyType"));
+
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "bodyType"));
+
+        echo " class='subpage' ";
+        
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
+
+        
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->leave($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof);
+
+    }
+
+    // line 5
+    public function block_body($context, array $blocks = [])
+    {
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+
+        // line 6
+        echo "    <section class=\"breadcrumbs\">
+        <div class=\"wrapper\">
+            <div class=\"row\">
+                <div class=\"col-xs-12\">
+                    <a href=\"";
+        // line 10
+        echo $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("homepage");
+        echo "\"> Strona główna </a>
+                    <a href=\"#\"> ";
+        // line 11
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["page"]) || array_key_exists("page", $context) ? $context["page"] : (function () { throw new Twig_Error_Runtime('Variable "page" does not exist.', 11, $this->source); })()), "title", []), "html", null, true);
+        echo " </a>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class='smaller-padding'>
+        <div class=\"wrapper\">
+            <div class=\"row middle-md between-md\">
+                <div class=\"col-md-6 col-sm-12\">
+                    <div class=\"content left\">
+                        <h1 class=\"red\"> ";
+        // line 23
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["page"]) || array_key_exists("page", $context) ? $context["page"] : (function () { throw new Twig_Error_Runtime('Variable "page" does not exist.', 23, $this->source); })()), "titleHeader", []), "html", null, true);
+        echo "</h1>
+                        <p class=\"big-paragraph\">
+                            ";
+        // line 25
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["page"]) || array_key_exists("page", $context) ? $context["page"] : (function () { throw new Twig_Error_Runtime('Variable "page" does not exist.', 25, $this->source); })()), "subtitleHeader", []), "html", null, true);
+        echo "
+                        </p>
+                        ";
+        // line 27
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["page"]) || array_key_exists("page", $context) ? $context["page"] : (function () { throw new Twig_Error_Runtime('Variable "page" does not exist.', 27, $this->source); })()), "description", []), "html", null, true);
+        echo "
+                    </div>
+                </div>
+
+                <div class=\"col-md-5 col-sm-12\">
+                    <div class=\"image-border\">
+                        <img src=\"";
+        // line 33
+        echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->source, (isset($context["page"]) || array_key_exists("page", $context) ? $context["page"] : (function () { throw new Twig_Error_Runtime('Variable "page" does not exist.', 33, $this->source); })()), "photo", []), "html", null, true);
+        echo "\" alt=\"zdjęcie\">
+                    </div>
+                </div>
+
+                <div class=\"col-xs-12\">
+                    <ul class=\"social-media\">
+                        <li> <a href=\"";
+        // line 39
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.facebook"), "html", null, true);
+        echo "\"> <img src=\"";
+        echo twig_escape_filter($this->env, $this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("images/fb-icon.jpg"), "html", null, true);
+        echo "\" alt=\"facebook\"> </a> </li>
+                        <li> <a href=\"";
+        // line 40
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.twitter"), "html", null, true);
+        echo "\"> <img src=\"";
+        echo twig_escape_filter($this->env, $this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("images/tw-icon.jpg"), "html", null, true);
+        echo "\" alt=\"twitter\"> </a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class=\"comparision smaller-padding\">
+        <div class=\"wrapper\">
+            <h3> ";
+        // line 49
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.chart_title"), "html", null, true);
+        echo " </h3>
+            <form action=\"\">
+                <div class=\"row\">
+                    <div class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12\">
+                        <label for=\"flat-type\"> ";
+        // line 53
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.input-type"), "html", null, true);
+        echo " </label>
+                    </div>
+                    <div class=\"col-lg-10 col-md-9 col-sm-8 col-xs-12\">
+                        <div class=\"input-wrapper\">
+                            <select name=\"flat-type\">
+                                <option value=\"typ1\"> Typ 1</option>
+                                <option value=\"typ2\"> Typ 2</option>
+                                <option value=\"typ3\"> Typ 3</option>
+                            </select>
+                            <span class=\"info\">?</span>
+
+                            <div class=\"tooltip\">
+                                <div class=\"content\"> ";
+        // line 65
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.input-type-tooltip"), "html", null, true);
+        echo " </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class=\"cities\">
+                <table>
+                    <thead>
+                        <th></th>
+                        <th> ";
+        // line 75
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.chart_cheapest"), "html", null, true);
+        echo " </th>
+                        <th class='av'> ";
+        // line 76
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.chart_avg"), "html", null, true);
+        echo " </th>
+                        <th class=\"red\"> ";
+        // line 77
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.chart_expansive"), "html", null, true);
+        echo " </th>
+                    </thead>
+                    <tbody>";
+        // line 79
+        echo $this->env->getRuntime('Symfony\Bridge\Twig\Extension\HttpKernelRuntime')->renderFragment(Symfony\Bridge\Twig\Extension\HttpKernelExtension::controller("App\\Controller\\PageController::recentChart", ["active" => twig_get_attribute($this->env, $this->source, (isset($context["page"]) || array_key_exists("page", $context) ? $context["page"] : (function () { throw new Twig_Error_Runtime('Variable "page" does not exist.', 79, $this->source); })()), "slug", [])]));
+        echo " </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class=\"wrapper\"> ";
+        // line 85
+        echo twig_escape_filter($this->env, $this->extensions['App\Twig\AppExtension']->toWording("page.wrapper"), "html", null, true);
+        echo " </div>
+    </section>
+";
+        
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
+
+        
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->leave($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof);
+
+    }
+
+    // line 88
+    public function block_javascripts($context, array $blocks = [])
+    {
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e = $this->extensions["Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension"];
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->enter($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
+
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02 = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->enter($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
+
+        echo "<script src=\"";
+        echo twig_escape_filter($this->env, $this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("js/canvasChart.js"), "html", null, true);
+        echo "\"></script>";
+        
+        $__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02->leave($__internal_319393461309892924ff6e74d6d6e64287df64b63545b994e100d4ab223aed02_prof);
+
+        
+        $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->leave($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof);
+
+    }
+
+    public function getTemplateName()
+    {
+        return "page/show.html.twig";
+    }
+
+    public function isTraitable()
+    {
+        return false;
+    }
+
+    public function getDebugInfo()
+    {
+        return array (  235 => 88,  222 => 85,  213 => 79,  208 => 77,  204 => 76,  200 => 75,  187 => 65,  172 => 53,  165 => 49,  151 => 40,  145 => 39,  136 => 33,  127 => 27,  122 => 25,  117 => 23,  102 => 11,  98 => 10,  92 => 6,  83 => 5,  65 => 4,  47 => 3,  15 => 1,);
+    }
+
+    public function getSourceContext()
+    {
+        return new Twig_Source("{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.city'|toWording }}{% endblock %}
+{% block bodyType %} class='subpage' {% endblock %}
+{% block body %}
+    <section class=\"breadcrumbs\">
+        <div class=\"wrapper\">
+            <div class=\"row\">
+                <div class=\"col-xs-12\">
+                    <a href=\"{{ path('homepage') }}\"> Strona główna </a>
+                    <a href=\"#\"> {{ page.title }} </a>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class='smaller-padding'>
+        <div class=\"wrapper\">
+            <div class=\"row middle-md between-md\">
+                <div class=\"col-md-6 col-sm-12\">
+                    <div class=\"content left\">
+                        <h1 class=\"red\"> {{ page.titleHeader }}</h1>
+                        <p class=\"big-paragraph\">
+                            {{ page.subtitleHeader }}
+                        </p>
+                        {{ page.description }}
+                    </div>
+                </div>
+
+                <div class=\"col-md-5 col-sm-12\">
+                    <div class=\"image-border\">
+                        <img src=\"{{ page.photo }}\" alt=\"zdjęcie\">
+                    </div>
+                </div>
+
+                <div class=\"col-xs-12\">
+                    <ul class=\"social-media\">
+                        <li> <a href=\"{{ 'page.facebook'|toWording }}\"> <img src=\"{{ asset('images/fb-icon.jpg') }}\" alt=\"facebook\"> </a> </li>
+                        <li> <a href=\"{{ 'page.twitter'|toWording }}\"> <img src=\"{{ asset('images/tw-icon.jpg') }}\" alt=\"twitter\"> </a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class=\"comparision smaller-padding\">
+        <div class=\"wrapper\">
+            <h3> {{ 'page.chart_title'|toWording }} </h3>
+            <form action=\"\">
+                <div class=\"row\">
+                    <div class=\"col-lg-2 col-md-3 col-sm-4 col-xs-12\">
+                        <label for=\"flat-type\"> {{ 'page.input-type'|toWording }} </label>
+                    </div>
+                    <div class=\"col-lg-10 col-md-9 col-sm-8 col-xs-12\">
+                        <div class=\"input-wrapper\">
+                            <select name=\"flat-type\">
+                                <option value=\"typ1\"> Typ 1</option>
+                                <option value=\"typ2\"> Typ 2</option>
+                                <option value=\"typ3\"> Typ 3</option>
+                            </select>
+                            <span class=\"info\">?</span>
+
+                            <div class=\"tooltip\">
+                                <div class=\"content\"> {{ 'page.input-type-tooltip'|toWording }} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class=\"cities\">
+                <table>
+                    <thead>
+                        <th></th>
+                        <th> {{ 'page.chart_cheapest'|toWording }} </th>
+                        <th class='av'> {{ 'page.chart_avg'|toWording }} </th>
+                        <th class=\"red\"> {{ 'page.chart_expansive'|toWording }} </th>
+                    </thead>
+                    <tbody>{{ render(controller('App\\\\Controller\\\\PageController::recentChart',{ 'active': page.slug  } )) }} </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class=\"wrapper\"> {{ 'page.wrapper'|toWording }} </div>
+    </section>
+{% endblock %}
+{% block javascripts %}<script src=\"{{ asset('js/canvasChart.js') }}\"></script>{% endblock %}", "page/show.html.twig", "/application/templates/page/show.html.twig");
+    }
+}

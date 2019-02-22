@@ -39,9 +39,10 @@
                 </div>
             </div>
             <nav>
-                <ul>{% for x in 1..10 %}
-                        <li><a href="{{ path('city', {city: x|findCity}) }}"> {{ x|findCity|cityInfo("title") }} </a></li>
-                    {% endfor %}
+                <ul>
+                    {{ render(controller(
+                        'App\\Controller\\CityController::recentCities',{ 'max': 8 }
+                    )) }}
                 </ul>
             </nav>
             <a href="#form" class="button red-bcg scroll-down"> <img src="{{ asset('images/arrow-down.png') }}" alt="strzłka w dół"> </a>

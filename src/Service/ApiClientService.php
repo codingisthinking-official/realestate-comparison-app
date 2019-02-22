@@ -5,33 +5,66 @@ namespace App\Service;
 use JMS\Serializer\SerializerInterface;
 use GuzzleHttp\Client;
 
-
 class ApiClientService
 {
-    protected $apiUrl;
     protected $serializer;
     protected $client;
 
-    public function __construct(SerializerInterface $serializer, $apiUrl)
+    public function __construct(SerializerInterface $serializer, Client $client)
     {
         $this->serializer = $serializer;
-        $this->client = new Client(['base_uri' => 'http://realestate.wiseweb.pl/api/']);
-        $this->apiUrl = $apiUrl;
+        $this->client = $client;
     }
 
     public function getPages(): array
     {
-        // $response = file_get_contents('http://realestate.wiseweb.pl/api/pages/');
-        $response = $this->client->request('GET', 'pages/');
-        $response = $response->getBody();
-        return $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\Page>', 'json');
+        $response = $this->client->get('pages/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (pages)');
+        }
+        return $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
+    }
+
+    public function getSortPages(): array
+    {
+        $response = $this->client->get('pages/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (pages)');
+        }
+
+        return $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
     }
 
     public function getWordings(): array
     {
-        // $response = file_get_contents('http://realestate.wiseweb.pl/api/wording/');
-        $response = $this->client->request('GET', 'wording/');
-        $response = $response->getBody();
-        return $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\Wording>', 'json');
+        $response = $this->client->get('wording/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (pages)');
+        }
+        return $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Wording>', 'json');
+    }
+
+    public function findOneBySlug(string $slug)
+    {
+        $response = $this->client->get('pages/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (pages)');
+        }
+        $pageList = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
+        foreach ($pageList as $page) {
+            if ($page->getSlug() == $slug) {
+                return $page;
+            }
+        }
+    }
+
+    public function findWordingByKey(string $key)
+    {
+        $wordingList = $this->getWordings();
+        foreach ($wordingList as $wording) {
+            if ($key == $wording->getTitle()) {
+                return $wording;
+            }
+        }
     }
 }

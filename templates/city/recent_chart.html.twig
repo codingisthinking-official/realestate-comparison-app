@@ -1,0 +1,21 @@
+{% for city in cityList %}
+    <tr{% if activeCity == city.slug %} class='active'{% endif %}>
+        <td>
+            {{ city.title }}
+            <span class="info">?</span>
+            <div class="tooltip">
+                <div class="content">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
+                </div>
+            </div>
+        </td>
+        <td data-min="1">
+            1,00 zł
+        </td>
+        <td class="canvas-holder chart-cell">
+            <canvas height="603" id="can"> </canvas>
+            <div class="chart-bar"><div class="chart-point"><span>5,00zł</span></div> </div>
+        </td>
+        <td> 7,00 zł</td>
+    </tr>
+{% endfor %}

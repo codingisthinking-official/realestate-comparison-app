@@ -27,8 +27,8 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\Service\ApiClientService:
-            public: true
-            autowire: true
-            autoconfigure: false
-            arguments:
-              $apiUrl: '%env(API_URL)%'
+        public: true
+        autowire: true
+        autoconfigure: false
+        arguments:
+            $client: "@eight_points_guzzle.client.api_client"

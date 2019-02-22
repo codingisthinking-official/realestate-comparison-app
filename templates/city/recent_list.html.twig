@@ -1,0 +1,3 @@
+{% for city in cityList %}
+    <li><a href="{{ path('city', {'city': city.slug}) }}"> {{ city.title }} </a></li>
+{% endfor %}

@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\ApiClientService;
+use App\Service\PageService;
+use App\Entity\Flat;
 
 class PageController extends AbstractController
 {
@@ -33,9 +35,12 @@ class PageController extends AbstractController
         ]);
     }
 
-    public function recentChart(ApiClientService $apiClientService, string $active, int $max = 8)
+    public function recentChart(ApiClientService $apiClientService, PageService $pageService, string $active, int $max = 8)
     {
         $pageList = $apiClientService->getSortPages();
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+
+        $pageList = $pageService->addPriceValues($pageList, $repository);
 
         return $this->render('page/recent_chart.html.twig', [
             'pageList' => $pageList,

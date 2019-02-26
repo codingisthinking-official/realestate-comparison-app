@@ -1,5 +1,5 @@
 {% for page in pageList %}
-    <tr{% if activePage == page.slug %} class='active'{% endif %}>
+    <tr{% if activePage == page.slug %} class='active'{% endif %} data-min="{{ page.minPrice }}" data-avg="{{ page.avgPrice }}" data-max="{{ page.maxPrice }}">
         <td>
             {{ page.title }}
             <span class="info">?</span>
@@ -9,13 +9,13 @@
                 </div>
             </div>
         </td>
-        <td data-min="1">
-            1,00 zł
+        <td>
+            {{ page.minPrice|number_format(2, '.', ',') }}zł
         </td>
         <td class="canvas-holder chart-cell">
             <canvas height="603" id="can"> </canvas>
-            <div class="chart-bar"><div class="chart-point"><span>5,00zł</span></div> </div>
+            <div class="chart-bar"><div class="chart-point"><span>{{ page.avgPrice|number_format(2, '.', ',') }}zł</span></div> </div>
         </td>
-        <td> 7,00 zł</td>
+        <td> {{ page.maxPrice|number_format(2, '.', ',') }}zł</td>
     </tr>
 {% endfor %}

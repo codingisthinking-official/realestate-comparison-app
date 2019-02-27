@@ -54,10 +54,10 @@
                     </div>
                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                         <div class="input-wrapper">
-                            <select name="flat-type">
-                                <option value="typ1"> Typ 1</option>
-                                <option value="typ2"> Typ 2</option>
-                                <option value="typ3"> Typ 3</option>
+                            <select name="flat-type" id="select-flat-type">
+                                {% for type in typeList %}
+                                    <option value="{{ loop.index }}">{{ type }}</option>
+                                {% endfor %}
                             </select>
                             <span class="info">?</span>
 
@@ -69,15 +69,7 @@
                 </div>
             </form>
             <div class="cities">
-                <table>
-                    <thead>
-                        <th></th>
-                        <th> {{ 'page.chart_cheapest'|toWording }} </th>
-                        <th class='av'> {{ 'page.chart_avg'|toWording }} </th>
-                        <th class="red"> {{ 'page.chart_expansive'|toWording }} </th>
-                    </thead>
-                    <tbody>{{ render(controller('App\\Controller\\PageController::recentChart',{ 'active': page.slug  } )) }} </tbody>
-                </table>
+                {{ render(controller('App\\Controller\\PageController::recentChart',{ 'active': page.slug  } )) }}
             </div>
         </div>
     </section>

@@ -1,15 +1,15 @@
 $(document).ready(function() {
-    $("#can").attr({width: $(".canvas-holder").width()});
+    $(".can").attr({width: $(".canvas-holder").width()});
 
     $( window ).resize(function() {
-        $("#can").attr({width: $(".canvas-holder").width()});
+        $(".can").attr({width: $(".canvas-holder").width()});
         drawChart();
     });
     drawChart();
 
-    function drawLine(pointsStart, pointsEnd) {
-        var canvas = document.getElementById("can");
-        var ctx = canvas.getContext("2d");
+    function drawLine(pointsStart, pointsEnd, canva) {
+        let canvas = document.getElementsByClassName("can")[canva];
+        let ctx = canvas.getContext("2d");
 
         ctx.beginPath();
         ctx.setLineDash([2, 2]);
@@ -21,23 +21,33 @@ $(document).ready(function() {
     }
 
     function drawChart() {
-        let canvas = $("#can");
-        let width = canvas.width();
-        let height = canvas.height();
-        let points = [];
-        let tableRows = $("tbody tr");
+        let can = $(".can");
+        for(let x = 0; x<can.length; x++){
+            let canvas = can[x];
+            let width = canvas.style.width;
+            let points = [];
+            let tableRows = [...$(`.table-${x+1} tbody tr`)];
+            document.getElementsByClassName("can")[x].height=tableRows.length*68;
 
-        for(let x = 0; x<tableRows.length; x++){
-            let min = tableRows[x].getAttribute("data-min");
-            let avg = tableRows[x].getAttribute("data-avg");
-            let max = tableRows[x].getAttribute("data-max");
-            points[x] = ((avg - min) / (max - min)) * 100;
-        }
+            for(let y = 0; y<tableRows.length; y++){
+                let min = tableRows[y].getAttribute("data-min");
+                let avg = tableRows[y].getAttribute("data-avg");
+                let max = tableRows[y].getAttribute("data-max");
+                points[y] = ((avg - min) / (max - min)) * 100;
+            }
 
-        $( ".chart-point:eq(0)" ).css({left: points[0]+"%" });
-        for(let x = 1; x<tableRows.length; x++){
-            drawLine([width*points[x]/100, 34+68*x], [width*(points[x-1]/100), 35+68*(x-1)]);
-            $( ".chart-point:eq("+x+")" ).css({left: points[x]+"%" });
+            $(tableRows[0]).find('.chart-point').css({left: points[0]+"%" });
+            console.log(tableRows.length);
+            for(let y = 1; y<tableRows.length; y++){
+                drawLine([width*points[y]/100, 34+68*y], [width*(points[y-1]/100), 35+68*(y-1)],y);
+                $(tableRows[y]).find('.chart-point').css({left: points[y]+"%" });
+            }
         }
     }
+
+    $("#select-flat-type").change(function() {
+        $(".chart").css("display","none");
+        let index=$("#select-flat-type").val();
+        $(".table-"+index).css("display","inline");
+    });
 });

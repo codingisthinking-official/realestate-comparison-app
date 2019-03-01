@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use JMS\Serializer\SerializerInterface;
-use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\ApiClientService;

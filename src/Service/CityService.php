@@ -4,7 +4,6 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
-use GuzzleHttp\Client;
 
 class CityService
 {
@@ -70,7 +69,7 @@ class CityService
         return $flatTypes;
     }
 
-    public function getCityByPostcode($code): string
+    public function getCityByPostcode(string $code): string
     {
         $response = file_get_contents('postcode.json');
         $postcodeList = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\Postcode>', 'json');

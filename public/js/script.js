@@ -28,6 +28,9 @@ $(document).ready(function () {
                             setMinMaxAndAverageValues(parsedReponse);
                             compareRent(e, formData);
                         })
+                        .catch(error => {
+                            alert("Brak danych dla tego kodu pocztowego.");
+                        })
                 }
             })
     }
@@ -35,7 +38,7 @@ $(document).ready(function () {
     function setMinMaxAndAverageValues(parsedResponse) {
         $('.min-price span').attr('data-min', parsedResponse.minPrice).text(parsedResponse.minPrice.toFixed(2) + ' zł');
         $('.max-price span').attr('data-max', parsedResponse.maxPrice).text(parsedResponse.maxPrice.toFixed(2) + ' zł');
-        $('.average').attr('data-avg', parsedResponse.avgPrice).text(parsedResponse.avgPrice.toFixed(2) + ' zł');
+        $('.average').attr('data-avg', parsedResponse.avgPrice).text(parsedResponse.avgPrice.toFixed(2));
 
         console.log($('.min-price span').data('min'));
     }

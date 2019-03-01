@@ -47,11 +47,11 @@ $(document).ready(function () {
         let min = $(".min-price span").data("min");
         let max = $(".max-price span").data("max");
 
-        let price = Math.round((formData.price / formData.area) * 10) / 10;
+        let price = (formData.price / formData.area).toFixed(2);
         $('.result .user-rent').text(price);
         $('.avg-info').text(average.toFixed(2));
 
-        $('.bar .your-result').text(`${price}zł`);
+        $('.bar .your-result').text(`${price}`);
 
         if (price > average) {
             //cos tam

@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   mysql:
     image: mariadb:10.2
     container_name: realestate-mysql
@@ -14,6 +13,7 @@ services:
       - MYSQL_PASSWORD=test
     ports:
       - "3308:3306"
+
   webserver:
     image: nginx:alpine
     container_name: realestate-webserver

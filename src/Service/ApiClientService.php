@@ -34,13 +34,28 @@ class ApiClientService
 
         $sortedPages = [];
         $response = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
-        for($x = 0; $x<sizeOf($response); $x++) {
-            if($response[$x]->getPosition()){
+        for ($x = 0; $x < sizeOf($response); $x++) {
+            if ($response[$x]->getPosition()) {
                 $sortedPages[$response[$x]->getPosition()] = $response[$x];
             }
         }
 
         return $sortedPages;
+    }
+
+    public function getOneCityByTitle($city): object
+    {
+        $response = $this->client->get('pages/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (pages)');
+        }
+
+        $response = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
+        for ($x = 0; $x < sizeOf($response); $x++) {
+            if ($response[$x]->getTitle() == $city) {
+                return $response[$x];
+            }
+        }
     }
 
     public function getWordings(): array

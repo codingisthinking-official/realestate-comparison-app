@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use JMS\Serializer\SerializerInterface;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\ApiClientService;
-use App\Service\PageService;
+use App\Service\CityService;
 use App\Entity\Flat;
 
 class PageController extends AbstractController
@@ -13,7 +15,7 @@ class PageController extends AbstractController
     /**
      * @Route("/page/{page}/", name="page")
      */
-    public function show(string $page, ApiClientService $apiClientService, PageService $pageService)
+    public function show(string $page, ApiClientService $apiClientService, CityService $cityService)
     {
         $page = $apiClientService->findOnePageBySlug($page);
 
@@ -22,11 +24,11 @@ class PageController extends AbstractController
         }
 
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatTypesList = $pageService->getFlatTypes($repository);
+        $flatTypesList = $cityService->getFlatTypes($repository);
 
         return $this->render('page/show.html.twig', [
             'page' => $page,
-            'typeList' => $flatTypesList,
+            'type_list' => $flatTypesList,
         ]);
     }
 
@@ -39,16 +41,16 @@ class PageController extends AbstractController
         ]);
     }
 
-    public function recentChart(ApiClientService $apiClientService, PageService $pageService, string $active, int $max = 8)
+    public function recentChart(ApiClientService $apiClientService, CityService $cityService, string $active, int $max = 8)
     {
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatTypesList = $pageService->getFlatTypes($repository);
-        $types = array();
+        $flatTypesList = $cityService->getFlatTypes($repository);
+        $types = [];
 
-        foreach($flatTypesList as $flatType){
+        foreach ($flatTypesList as $flatType) {
             $pageList = $apiClientService->getSortPages();
             $repository = $this->getDoctrine()->getRepository(Flat::class);
-            array_push($types, $pageService->addPriceValues($pageList, $repository, $flatType));
+            array_push($types, $cityService->addPriceValues($pageList, $repository, $flatType));
         }
 
         return $this->render('page/recent_chart.html.twig', [

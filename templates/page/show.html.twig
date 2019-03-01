@@ -11,7 +11,7 @@
                     <a href="#"> {{ page.title }} </a>
                 </div>
             </div>
-            
+
         </div>
     </section>
 
@@ -30,14 +30,16 @@
 
                 <div class="col-md-5 col-sm-12">
                     <div class="image-border">
-                        <img src="{{ page.photo }}" alt="zdjęcie">
+                        <img src="http://realestate.wiseweb.pl/{{ page.photo }}" alt="zdjęcie">
                     </div>
                 </div>
 
                 <div class="col-xs-12">
                     <ul class="social-media">
-                        <li> <a href="{{ 'page.facebook'|toWording }}"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a> </li>
-                        <li> <a href="{{ 'page.twitter'|toWording }}"> <img src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a> </li>
+                        <li><a href="{{ 'page.facebook'|toWording }}"> <img src="{{ asset('images/fb-icon.jpg') }}"
+                                                                            alt="facebook"> </a></li>
+                        <li><a href="{{ 'page.twitter'|toWording }}"> <img src="{{ asset('images/tw-icon.jpg') }}"
+                                                                           alt="twitter"> </a></li>
                     </ul>
                 </div>
             </div>
@@ -55,7 +57,7 @@
                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                         <div class="input-wrapper">
                             <select name="flat-type" id="select-flat-type">
-                                {% for type in typeList %}
+                                {% for type in type_list %}
                                     <option value="{{ loop.index }}">{{ type }}</option>
                                 {% endfor %}
                             </select>
@@ -69,7 +71,10 @@
                 </div>
             </form>
             <div class="cities">
-                {{ render(controller('App\\Controller\\PageController::recentChart',{ 'active': page.slug  } )) }}
+                {{ render(controller(
+                    'App\\Controller\\PageController::recentChart',
+                    { 'active': page.slug  }
+                )) }}
             </div>
         </div>
     </section>
@@ -77,4 +82,5 @@
         <div class="wrapper"> {{ 'page.wrapper'|toWording }} </div>
     </section>
 {% endblock %}
-{% block javascripts %}<script src="{{ asset('js/canvasChart.js') }}"></script>{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/canvasChart.js') }}"></script>{% endblock %}

@@ -46,6 +46,13 @@ class Page
         return $this->title;
     }
 
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
     public function getPhoto()
     {
         return $this->photo;

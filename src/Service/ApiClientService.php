@@ -90,4 +90,12 @@ class ApiClientService
             }
         }
     }
+
+    public function getBillTypes(): array
+    {
+        $response = file_get_contents('bill_types.json');
+        $billTypes = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\BillTypes>', 'json');
+
+        return $billTypes;
+    }
 }

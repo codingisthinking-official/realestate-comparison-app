@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "title": "Gaz",
+    "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
+    "chart": 1
+  },
+  {
+    "id": 2,
+    "title": "Woda",
+    "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
+    "chart": 1
+  }
+]

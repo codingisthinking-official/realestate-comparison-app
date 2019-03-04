@@ -17,6 +17,13 @@ $(document).ready(function () {
             area: parseInt($('input[name="area"]').val())
         };
 
+        fetch('/flat/', {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(formData)
+        })
+            .then(res => res.json());
+
         fetch('/get/' + formData.postalCode + '/' + formData.flatType, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
@@ -57,7 +64,6 @@ $(document).ready(function () {
         $('.bar .your-result').text(`${price}`);
 
         if (price > average) {
-            //cos tam
             let percent = ((average - min) * 100 / (max - min));
             let percentResult = ((price - min) * 100 / (max - min));
             if (percentResult < 0) percentResult = 0;
@@ -71,7 +77,6 @@ $(document).ready(function () {
             $('.your-result').css('left', percentResult + "%");
         }
         else if (average >= price) {
-            //$('.bar .your-result').css('transform', 'translate(-50%, -50%)');
             let percent = ((price - min) / (max - min)) * 100;
             let percentAverage = ((average - min) / (max - min)) * 100;
             if (percent < 0) percent = 0;
@@ -108,7 +113,7 @@ $(document).ready(function () {
         let analyseAverage = 4.5;
         let analyseUserRent = 6.2;
         let analyseMin = 1;
-        let analyseMax = 8;
+        let analyseMax = 10;
 
         let analyseAvgPercent = (analyseAverage / (analyseMax - analyseMin)) * 100;
         let analyseUserPercent = (analyseUserRent / (analyseMax - analyseMin)) * 100;

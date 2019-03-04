@@ -123,7 +123,7 @@
             </div>
             <p class="big-paragraph"> {{ 'index.result_comment_bad'|toWording }} </p>
 
-            <div class="expensive" style="display: none;">
+            <div class="expensive">
                 <p> {{ 'index.result_summary_header'|toWording }} </p>
 
                 <div class="added-bills">
@@ -151,229 +151,92 @@
             <form action="">
                 <div class="row">
                     <div class="col-md-6 col-xs-12">
-                        <label for="in1">{{ "stat1"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
+                        {% for bill in bills %}
+                            {% if loop.index is odd %}
+                                {% if bill.chart %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="number" name="in1" placeholder="0">
+                                        <span class="info">?</span>
 
-                            <div class="tooltip">
-                                <div class="content">{{ "stat1_tooltip"|toWording }}</div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
 
-                        <label for="in1">{{ "stat2"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
+                                        <div class="small-price-bar">
+                                            <div class="min-price">
+                                                <span> 1,00 zł</span>
+                                            </div>
 
-                            <div class="tooltip">
-                                <div class="content">{{ "stat2_tooltip"|toWording }}</div>
-                            </div>
-                        </div>
+                                            <div class="small-bar">
+                                                <div class="average-bar"></div>
+                                                <div class="your-bar"></div>
+                                                <div class="your-result"> 6,20zł</div>
+                                                <div class="average"> 4,50zł</div>
+                                            </div>
 
-                        <label for="in1">{{ "stat3"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
+                                            <div class="max-price">
+                                                <span> 8,00 zł</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="text" name="in1" placeholder="Wpisz nazwę">
+                                        <span class="info">?</span>
 
-                            <div class="tooltip">
-                                <div class="content">{{ "stat3_tooltip"|toWording }}</div>
-                            </div>
-                        </div>
-
-                        <label for="in1">{{ "stat4"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-
-                            <div class="tooltip">
-                                <div class="content">{{ "stat4_tooltip"|toWording }}</div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł</div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1">{{ "stat5"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-
-                            <div class="tooltip">
-                                <div class="content">{{ "stat5_tooltip"|toWording }}</div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł</div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1">{{ "stat6"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-
-                            <div class="tooltip">
-                                <div class="content">{{ "stat6_tooltip"|toWording }}</div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł</div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
-
                     <div class="col-md-6 col-xs-12">
-                        <label for="in1">{{ "stat7"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="texte" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
+                        {% for bill in bills %}
+                            {% if loop.index is even %}
+                                {% if bill.chart %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="number" name="in1" placeholder="0">
+                                        <span class="info">?</span>
 
-                            <div class="tooltip">
-                                <div class="content">{{ "stat7_tooltip"|toWording }}</div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
 
-                        <label for="in1">{{ "stat8"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
+                                        <div class="small-price-bar">
+                                            <div class="min-price">
+                                                <span> 1,00 zł</span>
+                                            </div>
 
-                            <div class="tooltip">
-                                <div class="content">{{ "stat8_tooltip"|toWording }}</div>
-                            </div>
-                        </div>
+                                            <div class="small-bar">
+                                                <div class="average-bar"></div>
+                                                <div class="your-bar"></div>
+                                                <div class="your-result"> 6,20zł</div>
+                                                <div class="average"> 4,50zł</div>
+                                            </div>
 
-                        <label for="in1">{{ "stat9"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
+                                            <div class="max-price">
+                                                <span> 8,00 zł</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="text" name="in1" placeholder="Wpisz nazwę">
+                                        <span class="info">?</span>
 
-                            <div class="tooltip">
-                                <div class="content">{{ "stat9_tooltip"|toWording }}</div>
-                            </div>
-                        </div>
-
-                        <label for="in1">{{ "stat10"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-
-                            <div class="tooltip">
-                                <div class="content">{{ "stat10_tooltip"|toWording }}</div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł</div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1">{{ "stat11"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-
-                            <div class="tooltip">
-                                <div class="content">{{ "stat11_tooltip"|toWording }}</div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł</div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1">{{ "stat12"|toWording }}</label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-
-                            <div class="tooltip">
-                                <div class="content">{{ "stat12_tooltip"|toWording }}</div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł</div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="row end-xs savings">

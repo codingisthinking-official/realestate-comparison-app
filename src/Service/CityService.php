@@ -4,16 +4,20 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
+use App\Entity\Bill;
+use App\Service\ApiClientService;
 
 class CityService
 {
     private $entityManager;
     private $serializer;
+    private $apiClientService;
 
-    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
+    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer, ApiClientService $apiClientService)
     {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
+        $this->apiClientService = $apiClientService;
     }
 
     public function addPriceValues(array $pageList, $repository, string $type): array
@@ -81,4 +85,37 @@ class CityService
         return $code;
     }
 
+    public function createBillsTabByCity(object $city, $repository, string $type): array
+    {
+        $billTypes = $this->apiClientService->getBillTypes();
+        foreach ($billTypes as $billType) {
+            $minPrice = 0;
+            $sumPrice = 0;
+            $quantity = 0;
+            $maxPrice = 0;
+            $bills = $repository->findBy(['city' => $city->getTitle(), 'flatType' => $type, 'billType' => $billType->getId()]);
+
+            foreach ($bills as $bill) {
+                $price = $bill->getValue();
+                if ($price >= $maxPrice) {
+                    $maxPrice = $price;
+                }
+                if ($price < $minPrice or $minPrice == 0) {
+                    $minPrice = $price;
+                }
+                $quantity++;
+                $sumPrice += $price;
+            }
+
+            $billType->minPrice = $minPrice;
+            if ($quantity != 0) {
+                $billType->avgPrice = $sumPrice / $quantity;
+            } else {
+                $billType->avgPrice = $sumPrice;
+            }
+            $billType->maxPrice = $maxPrice;
+        }
+
+        return $billTypes;
+    }
 }

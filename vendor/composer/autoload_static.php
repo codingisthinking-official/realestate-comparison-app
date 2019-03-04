@@ -51,6 +51,7 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Validator\\' => 28,
             'Symfony\\Component\\Translation\\' => 30,
+            'Symfony\\Component\\Templating\\' => 29,
             'Symfony\\Component\\Stopwatch\\' => 28,
             'Symfony\\Component\\Serializer\\' => 29,
             'Symfony\\Component\\Security\\Http\\' => 32,
@@ -109,6 +110,10 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
             'PhpParser\\' => 10,
             'PackageVersions\\' => 16,
         ),
+        'N' => 
+        array (
+            'Negotiation\\' => 12,
+        ),
         'M' => 
         array (
             'Monolog\\' => 8,
@@ -147,6 +152,7 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         array (
             'Fig\\Link\\' => 9,
             'Facebook\\WebDriver\\' => 19,
+            'FOS\\RestBundle\\' => 15,
         ),
         'E' => 
         array (
@@ -241,6 +247,10 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
+        ),
+        'Symfony\\Component\\Templating\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/templating',
         ),
         'Symfony\\Component\\Stopwatch\\' => 
         array (
@@ -459,6 +469,10 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         array (
             0 => __DIR__ . '/..' . '/ocramius/package-versions/src/PackageVersions',
         ),
+        'Negotiation\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/willdurand/negotiation/src/Negotiation',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -555,6 +569,10 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
         array (
             0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
         ),
+        'FOS\\RestBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/friendsofsymfony/rest-bundle',
+        ),
         'EightPoints\\Bundle\\GuzzleBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/eightpoints/guzzle-bundle/src',
@@ -648,6 +666,13 @@ class ComposerStaticInit0d807a0717cc2869930d6175092020c7
             'ProxyManager\\' => 
             array (
                 0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src',
+            ),
+        ),
+        'J' => 
+        array (
+            'JsonpCallbackValidator' => 
+            array (
+                0 => __DIR__ . '/..' . '/willdurand/jsonp-callback-validator/src',
             ),
         ),
         'D' => 

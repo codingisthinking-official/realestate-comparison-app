@@ -1,5 +1,18 @@
 version: "3"
 services:
+  mysql:
+    image: mariadb:10.2
+    container_name: realestate-mysql
+    working_dir: /application
+    volumes:
+      - .:/application
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    ports:
+      - "3308:3306"
 
   webserver:
     image: nginx:alpine
@@ -24,6 +37,7 @@ services:
     environment:
       - APP_ENV=dev
       - API_URL=http://realestate.wiseweb.pl/api/
+      - DATABASE_URL=mysql://test:test@realestate-mysql:3306/test
 
   composer:
     restart: 'no'

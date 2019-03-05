@@ -355,7 +355,7 @@ input::placeholder {
   display: none;
   width: 480px;
   max-width: 100vw;
-  height: 150px;
+  height: auto;
   overflow: auto;
   font-family: Montserrat, sans-serif;
   z-index: 100;
@@ -1083,7 +1083,7 @@ h3 {
 }
 
 @media (max-width: 792px) {
-  #can {
+  .can {
     display: none;
   }
   .chart-bar {
@@ -1234,4 +1234,21 @@ h3 {
     min-width: 200px;
   }
 }
+
+@media(max-width: 560px)  {
+
+    #form .wrapper  {
+        padding: 0 15px;
+    }
+
+    #form .align-right {
+        text-align: left;
+    }
+
+    #form .col-xs-4, #form .col-xs-8 {
+        flex-basis: 100%;
+        max-width: 100%;
+    }
+}
+
 /*# sourceMappingURL=style.css.map */

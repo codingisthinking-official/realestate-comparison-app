@@ -21,7 +21,7 @@
         <div class="wrapper">
             <div class="row">
                 <div class="col-xs-6 logo">
-                    <img src="{{ asset('images/logo.png') }}" alt="logo">
+                    <a href="{{ path('homepage') }}"> <img src="{{ asset('images/logo.png') }}" alt="logo"></a>
                 </div>
                 <div class="col-xs-6 align-right">
                     <a href="{{ path('contact') }}" class="button red-bcg"> 
@@ -41,7 +41,8 @@
             <nav>
                 <ul>
                     {{ render(controller(
-                        'App\\Controller\\PageController::recentCities',{ 'max': 8 }
+                        'App\\Controller\\PageController::recentCities',
+                        { 'max': 8 }
                     )) }}
                 </ul>
             </nav>

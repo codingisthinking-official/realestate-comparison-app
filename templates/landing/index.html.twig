@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'title.default'|toWording }}{% endblock %}
 {% block body %}
-        <section id="form">
+    <section id="form">
         <div class="wrapper">
             <div class="row">
                 <div class="col-xs-12">
@@ -12,15 +12,16 @@
 
                     <form action="">
                         <div class="row">
-                            <div class="col-sm-4 align-right">
-                                <label for="flat-type"> {{ 'index.input-type'|toWording }}<span class="red">*</span>: </label>
+                            <div class="col-xs-4 align-right">
+                                <label for="flat-type"> {{ 'index.input-type'|toWording }}<span class="red">*</span>:
+                                </label>
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-xs-8">
                                 <div class="input-wrapper">
                                     <select name="flat-type">
-                                        <option value="typ1"> Typ 1</option>
-                                        <option value="typ2"> Typ 2</option>
-                                        <option value="typ3"> Typ 3</option>
+                                        {% for type in type_list %}
+                                            <option value="{{ type }}">{{ type }}</option>
+                                        {% endfor %}
                                     </select>
                                     <span class="info">?</span>
                                     <div class="tooltip">
@@ -31,30 +32,32 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-4 align-right">
-                                <label for="postal-code"> {{ 'index.input-postcode'|toWording }} <span class="red">*</span>: </label>
+                            <div class="col-xs-4 align-right">
+                                <label for="postal-code"> {{ 'index.input-postcode'|toWording }} <span
+                                            class="red">*</span>: </label>
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-xs-8">
                                 <div class="input-wrapper">
-                                    <input type="number" name="postal-code" maxlength="6">
+                                    <input type="text" name="postal-code" maxlength="6">
                                     <span class="info">?</span>
-                                    
+
                                     <div class="tooltip">
                                         <div class="content"> {{ 'index.input-postcode-tooltip'|toWording }} </div>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-4 align-right">
-                                <label for="rent"> {{ 'index.input-cost'|toWording }} <span class="red">*</span>: </label>
+                            <div class="col-xs-4 align-right">
+                                <label for="rent"> {{ 'index.input-cost'|toWording }} <span class="red">*</span>:
+                                </label>
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-xs-8">
                                 <div class="input-wrapper">
                                     <input type="number" name="rent">
                                     <span class="info">?</span>
-                                    
+
                                     <div class="tooltip">
                                         <div class="content"> {{ 'index.input-cost-tooltip'|toWording }} </div>
                                     </div>
@@ -63,14 +66,14 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-4 align-right">
+                            <div class="col-xs-4 align-right">
                                 <label for="area"> Powierzchnia w m<sup>2</sup><span class="red">*</span>: </label>
                             </div>
-                            <div class="col-sm-8">
+                            <div class="col-xs-8">
                                 <div class="input-wrapper">
                                     <input type="number" name="area">
                                     <span class="info">?</span>
-                                    
+
                                     <div class="tooltip">
                                         <div class="content"> {{ 'index.input-msquare-tooltip'|toWording }} </div>
                                     </div>
@@ -93,11 +96,13 @@
             </div>
         </div>
     </section>
-        
+
     <section class="compared bad" id="compared">
         <div class="wrapper">
             <div class="result">
-                <span> <b> {{ 'index.result'|toWording }} <span class="user-rent">15</span> zł/m<sup>2</sup>   </b> {{ 'index.result_avg'|toWording }} 10zł/m<sup>2</sup></span>
+                <span> <b> {{ 'index.result'|toWording }} <span
+                                class="user-rent">15</span> zł/m<sup>2</sup>   </b> {{ 'index.result_avg'|toWording }}
+                    <span class="avg-info">10</span> zł/m<sup>2</sup></span>
             </div>
             <div class="price-bar">
                 <div class="min-price">
@@ -108,7 +113,7 @@
                 <div class="bar">
                     <div class="your-bar"></div>
                     <div class="your-result"> 15zł</div>
-                    <div class="average" data-avg="10"> 10zł </div>
+                    <div class="average" data-avg="10"> 10zł</div>
                 </div>
 
                 <div class="max-price">
@@ -124,8 +129,8 @@
                 <div class="added-bills">
                     <div class="row">
                         <div class="col-sm-6 end-xs"> {{ 'index.result_summary_text'|toWording }} </div>
-                        <div class="col-sm-6 start-xs"> 
-                            <div class="bill-name"> nazwa_rachunku_1 
+                        <div class="col-sm-6 start-xs">
+                            <div class="bill-name"> nazwa_rachunku_1
                                 <span class="delete"> usuń X</span>
                             </div>
                         </div>
@@ -133,257 +138,105 @@
                 </div>
                 <div class=" center-xs">
                     <div class="col-xs-12">
-                        <a href="#" id="analyse" class="button yellow-bcg wide"> {{ 'index.button_analyse'|toWording }} </a>
+                        <a href="#" id="analyse"
+                           class="button yellow-bcg wide"> {{ 'index.button_analyse'|toWording }} </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <section class="price-analysis" id="price-analysis">
         <div class="wrapper">
             <form action="">
                 <div class="row">
                     <div class="col-md-6 col-xs-12">
-                        <label for="in1"> {{ "test" | toWording }} </label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content"> {{ "test" | toWording }} </div>
-                            </div>
-                        </div>
+                        {% for bill in bills %}
+                            {% if loop.index is odd %}
+                                {% if bill.chart %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="number" name="in1" placeholder="0">
+                                        <span class="info">?</span>
 
-                        <label for="in1"> {{ "test" | toWording }} </label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content"> {{ "test" | toWording }} </div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
 
-                        <label for="in1"> {{ "test" | toWording }} </label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content"> {{ "test" | toWording }} </div>
-                            </div>
-                        </div>
+                                        <div class="small-price-bar">
+                                            <div class="min-price">
+                                                <span> 1,00 zł</span>
+                                            </div>
 
-                        <label for="in1"> {{ "test" | toWording }} </label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content"> {{ "test" | toWording }} </div>
-                            </div>
+                                            <div class="small-bar">
+                                                <div class="average-bar"></div>
+                                                <div class="your-bar"></div>
+                                                <div class="your-result"> 6,20zł</div>
+                                                <div class="average"> 4,50zł</div>
+                                            </div>
 
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
+                                            <div class="max-price">
+                                                <span> 8,00 zł</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="text" name="in1" placeholder="Wpisz nazwę">
+                                        <span class="info">?</span>
 
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł </div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1"> {{ "test" | toWording }} </label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł </div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł </div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
-
                     <div class="col-md-6 col-xs-12">
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="texte" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-                        </div>
+                        {% for bill in bills %}
+                            {% if loop.index is even %}
+                                {% if bill.chart %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="number" name="in1" placeholder="0">
+                                        <span class="info">?</span>
 
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
 
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="text" name="in1" placeholder="Wpisz nazwę">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="small-price-bar">
+                                            <div class="min-price">
+                                                <span> 1,00 zł</span>
+                                            </div>
 
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
+                                            <div class="small-bar">
+                                                <div class="average-bar"></div>
+                                                <div class="your-bar"></div>
+                                                <div class="your-result"> 6,20zł</div>
+                                                <div class="average"> 4,50zł</div>
+                                            </div>
 
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
+                                            <div class="max-price">
+                                                <span> 8,00 zł</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <label for="in1">{{ bill.title }}</label>
+                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                        <input type="text" name="in1" placeholder="Wpisz nazwę">
+                                        <span class="info">?</span>
 
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł </div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł </div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="in1"> Lorem ipsum: </label>
-                        <div class="input-wrapper">
-                            <input type="number" name="in1" placeholder="0">
-                            <span class="info">?</span>
-                            
-                            <div class="tooltip">
-                                <div class="content">
-                                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                                </div>
-                            </div>
-
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> 1,00 zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"></div>
-                                    <div class="your-bar"></div>
-                                    <div class="your-result"> 6,20zł</div>
-                                    <div class="average"> 4,50zł </div>
-                                </div>
-
-                                <div class="max-price">
-                                    <span> 8,00 zł</span>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="tooltip">
+                                            <div class="content">{{ bill.tooltip }}</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="row end-xs savings">
@@ -392,7 +245,7 @@
                     </div>
                 </div>
             </form>
-            
+
             <br/>
             <br/>
             <div class=" center-xs">

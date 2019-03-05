@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use App\Service\ApiClientService;
 use App\Service\CityService;
 use App\Entity\Flat;
@@ -13,7 +14,7 @@ class PageController extends AbstractController
     /**
      * @Route("/page/{page}/", name="page")
      */
-    public function show(string $page, ApiClientService $apiClientService, CityService $cityService)
+    public function show(string $page, ApiClientService $apiClientService, CityService $cityService, Request $request)
     {
         $page = $apiClientService->findOnePageBySlug($page);
 
@@ -27,6 +28,7 @@ class PageController extends AbstractController
         return $this->render('page/show.html.twig', [
             'page' => $page,
             'type_list' => $flatTypesList,
+            'http_host' => $request->getHttpHost(),
         ]);
     }
 

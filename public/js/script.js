@@ -17,12 +17,12 @@ $(document).ready(function () {
             area: parseInt($('input[name="area"]').val())
         };
 
-        fetch('/flat/', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(formData)
-        })
-            .then(res => res.json());
+        // fetch('/flat/', {
+        //     method: 'post',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify(formData)
+        // })
+        //     .then(res => res.json());
 
         fetch('/get/' + formData.postalCode + '/' + formData.flatType, {
             method: 'GET',
@@ -140,4 +140,10 @@ $(document).ready(function () {
         return false;
     });
 
+    $('.description .button').click(function () {
+        $('html, body').animate({
+            scrollTop: $($(this).attr('href')).offset().top
+        }, 300);
+        return false;
+    });
 });

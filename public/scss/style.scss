@@ -217,6 +217,7 @@ form {
             padding: 10px;
             width: 100%;
             font-family: Open Sans;
+            outline: none;
         }
     
         textarea {
@@ -344,7 +345,7 @@ input {
     font-size: 14px;
     display: none;
     width: 480px;
-    max-width: 100vw;
+    max-width: calc(100vw - 100px);
     height: auto;
     overflow: auto;
     font-family: Montserrat, sans-serif;

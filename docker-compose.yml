@@ -35,7 +35,7 @@ services:
       - .:/application
       - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
     environment:
-      - APP_ENV=dev
+      - APP_ENV=prod
       - API_URL=http://realestate.wiseweb.pl/api/
 
   composer:

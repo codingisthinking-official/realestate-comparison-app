@@ -28,7 +28,6 @@ class PageController extends AbstractController
         return $this->render('page/show.html.twig', [
             'page' => $page,
             'type_list' => $flatTypesList,
-            'http_host' => $request->getHttpHost(),
         ]);
     }
 

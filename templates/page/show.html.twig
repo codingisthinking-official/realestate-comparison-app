@@ -36,8 +36,8 @@
 
                 <div class="col-xs-12">
                     <ul class="social-media">
-                        <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]={{ http_host }}/page/{{ page.slug }}/&p[images][1]={{ http_host }}/page/{{ page.slug }}/}&p[title]={{ page.title }}&p[summary]=zajawka”" target="_blank"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a></li>
-                        <li><a href="https://twitter.com/intent/tweet?url={{ http_host }}/page/{{ page.slug }}/" target="_blank"> <img src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a></li>
+                        <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]={{ app.request.uri }}/&p[images][1]={{ app.request.uri }}/}&p[title]={{ page.title }}&p[summary]=zajawka”" target="_blank"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a></li>
+                        <li><a href="https://twitter.com/intent/tweet?url={{ app.request.uri }}" target="_blank"> <img src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a></li>
                     </ul>
                 </div>
             </div>

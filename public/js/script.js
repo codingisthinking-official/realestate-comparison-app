@@ -32,11 +32,20 @@ $(document).ready(function () {
                 if (response.status == 200) {
                     response.json()
                         .then(parsedReponse => {
-                            setMinMaxAndAverageValues(parsedReponse);
+                            if(parsedReponse.minPrice == 0){
+                                $('.price-bar').hide();
+                                $('.turnOff').html('Brak danych');
+                                $('.big-paragraph').hide();
+                            }
+                            else {
+                                setMinMaxAndAverageValues(parsedReponse);
+                                $('.price-bar').show();
+                                $('.turnOff').html('Brak danych');
+                            }
                             compareRent(e, formData);
                         })
                         .catch(error => {
-                            alert("Brak danych dla tego kodu pocztowego.");
+                            console.log("Brak danych dla tego kodu pocztowego.");
                         })
                 }
             })

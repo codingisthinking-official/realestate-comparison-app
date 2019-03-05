@@ -24,6 +24,7 @@ $(document).ready(function () {
         // })
         //     .then(res => res.json());
 
+        $('#data-loader').css('display','flex');
         fetch('/get/' + formData.postalCode + '/' + formData.flatType, {
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
@@ -40,9 +41,9 @@ $(document).ready(function () {
                             else {
                                 setMinMaxAndAverageValues(parsedReponse);
                                 $('.price-bar').show();
-                                $('.turnOff').html('Brak danych');
                             }
                             compareRent(e, formData);
+                            $('#data-loader').hide();
                         })
                         .catch(error => {
                             console.log("Brak danych dla tego kodu pocztowego.");

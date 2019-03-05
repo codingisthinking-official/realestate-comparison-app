@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use phpDocumentor\Reflection\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +41,11 @@ class LandingController extends AbstractController
         $city = $apiClientService->getOneCityByTitle($city);
 
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
+        if($city){
+            $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
+        } else {
+            return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => 5, 'avgPrice' => 25, 'maxPrice' => 55], 'json'));
+        }
 
         return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => $cityWithValues[0]->minPrice, 'avgPrice' => $cityWithValues[0]->avgPrice, 'maxPrice' => $cityWithValues[0]->maxPrice], 'json'));
     }

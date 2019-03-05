@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\ValueObject\Cms\Page;
 use JMS\Serializer\SerializerInterface;
 use GuzzleHttp\Client;
 
@@ -56,6 +57,10 @@ class ApiClientService
                 return $response[$x];
             }
         }
+        $page = new Page();
+        $page = $page->setTitle($city);
+
+        return $page;
     }
 
     public function getWordings(): array

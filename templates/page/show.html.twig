@@ -56,7 +56,7 @@
                         <div class="input-wrapper">
                             <select name="flat-type" id="select-flat-type">
                                 {% for type in type_list %}
-                                    <option value="{{ loop.index }}">{{ type }}</option>
+                                    <option value="{{ type.id }}">{{ type.title }}</option>
                                 {% endfor %}
                             </select>
                             <span class="info">?</span>

@@ -19,20 +19,18 @@ class LandingController extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function index(CityService $cityService, ApiClientService $apiClientService)
+    public function index(ApiClientService $apiClientService)
     {
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatTypesList = $cityService->getFlatTypes($repository);
-        $billList = $apiClientService->getBillTypes();
 
         return $this->render('landing/index.html.twig', [
-            'type_list' => $flatTypesList,
-            'bills' => $billList,
+            'type_list' => $apiClientService->getFlatTypes(),
+            'bills' => $apiClientService->getBillTypes(),
         ]);
     }
 
     /**
-     * @Route("/get/{postCode}/{flatType}", name="flat.get")
+     * @Route("/flat/{postCode}/{flatType}", name="flat.get")
      * @Method({"GET"})
      */
     public function getCityValues(SerializerInterface $serializer, CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType)

@@ -10,5 +10,11 @@
     "title": "Woda",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
     "chart": 1
+  },
+  {
+    "id": 3,
+    "title": "Prąd",
+    "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
+    "chart": 1
   }
 ]

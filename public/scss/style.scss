@@ -228,6 +228,11 @@ form {
     
 }
 
+.wrong-data {
+    text-align: center;
+    display: none;
+}
+
 .savings {
     font-size: 14px;
     padding-bottom: 10px;
@@ -412,7 +417,7 @@ input {
         height: 100%;
         background: $good;
         border-radius: 4px;
-        width: 35%;
+        width: 0%;
         transition: background-color .3s;
     }
 
@@ -647,13 +652,15 @@ input {
 
     .your-bar {
         background: $yellow;
-        width: 60%;
+        width: 0%;
         top: 0;
         left: 0;
         border-radius: 4px;
         position: absolute;
         z-index: 1;
         height: 100%;
+        transition: width .25s;
+        will-change: width;
 
         &::after {
             content: "";
@@ -695,7 +702,8 @@ input {
         position: absolute;
         left: 60%;
         top: 0;
-        transform: translate(-50%, -130%); 
+        transform: translate(-50%, -130%);
+        min-width: 60px;
 
         &::before {
             content: "Twój wynik";

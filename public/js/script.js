@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     function getFormData(e) {
         e.preventDefault();
-        $(this).addClass('unactive');
+
         let formData = {
             flatType: $('select[name="flat-type"]').val(),
             postalCode: $('input[name="postal-code"]').val(),
@@ -17,91 +17,89 @@ $(document).ready(function () {
             area: parseInt($('input[name="area"]').val())
         };
 
-        // fetch('/flat/', {
-        //     method: 'post',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify(formData)
-        // })
-        //     .then(res => res.json());
+        if ( !formData.flatType || !formData.postalCode || !formData.price || !formData.area ) {
+            $('.wrong-data').show();
+        }
+        else {
+            $('.wrong-data').hide();
 
-        $('#data-loader').css('display','flex');
-        fetch('/get/' + formData.postalCode + '/' + formData.flatType, {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-        })
-            .then(response => {
-                if (response.status == 200) {
-                    response.json()
-                        .then(parsedReponse => {
-                            if(parsedReponse.minPrice == 0){
-                                $('.price-bar').hide();
-                                $('.turnOff').html('Brak danych');
-                                $('.big-paragraph').hide();
-                            }
-                            else {
-                                setMinMaxAndAverageValues(parsedReponse);
-                                $('.price-bar').show();
-                            }
-                            compareRent(e, formData);
-                            $('#data-loader').hide();
-                        })
-                        .catch(error => {
-                            console.log("Brak danych dla tego kodu pocztowego.");
-                        })
-                }
+            // fetch('/flat/', {
+            //     method: 'post',
+            //     headers: {'Content-Type': 'application/json'},
+            //     body: JSON.stringify(formData)
+            // })
+            //     .then(res => res.json());
+
+            $('#data-loader').css('display', 'flex');
+            fetch('/flat/' + formData.postalCode + '/' + formData.flatType, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
             })
+                .then(response => {
+                    if (response.status == 200) {
+                        response.json()
+                            .then(parsedReponse => {
+                                if (parsedReponse.minPrice == 0) {
+                                    $('.price-bar').hide();
+                                    $('.turnOff').html('Brak danych');
+                                    $('.big-paragraph').hide();
+                                }
+                                else {
+                                    setMinMaxAndAverageValues(parsedReponse);
+                                    $('.price-bar').show();
+                                }
+                                compareRent(e, formData);
+                                $('#data-loader').hide();
+                            })
+                            .catch(error => {
+                                console.log("Brak danych dla tego kodu pocztowego.");
+                            })
+                    }
+                });
+        }
     }
 
     function setMinMaxAndAverageValues(parsedResponse) {
-        $('.min-price span').attr('data-min', parsedResponse.minPrice).text(parsedResponse.minPrice.toFixed(2) + ' zł');
-        $('.max-price span').attr('data-max', parsedResponse.maxPrice).text(parsedResponse.maxPrice.toFixed(2) + ' zł');
-        $('.average').attr('data-avg', parsedResponse.avgPrice).text(parsedResponse.avgPrice.toFixed(2));
-
-        console.log($('.min-price span').data('min'));
+        $('.price-bar .min-price span').attr('data-min', parsedResponse.minPrice).text(parsedResponse.minPrice.toFixed(2) + ' zł');
+        $('.price-bar .max-price span').attr('data-max', parsedResponse.maxPrice).text(parsedResponse.maxPrice.toFixed(2) + ' zł');
+        $('.price-bar .average').attr('data-avg', parsedResponse.avgPrice).text(parsedResponse.avgPrice.toFixed(2));
     }
 
     function compareRent(e, formData) {
         e.preventDefault();
 
-        let average = $(".average").data("avg");
-        let min = $(".min-price span").data("min");
-        let max = $(".max-price span").data("max");
+        let average = parseFloat($(".average").attr("data-avg"));
+        let min = parseFloat($(".min-price span").attr("data-min"));
+        let max = parseFloat($(".max-price span").attr("data-max"));
 
-        let price = (formData.price / formData.area).toFixed(2);
-        $('.result .user-rent').text(price);
+        let price = (formData.price / formData.area);
+        $('.result .user-rent').text(price.toFixed(2));
         $('.avg-info').text(average.toFixed(2));
 
-        $('.bar .your-result').text(`${price}`);
+        $('.bar .your-result').text(`${price.toFixed(2)}`);
+
+        let percent = ((average - min) * 100 / (max - min));
+        let percentResult = ((price - min) * 100 / (max - min));
+        if (percentResult < 0) percentResult = 0;
+        if (percentResult > 100) percentResult = 100;
 
         if (price > average) {
-            let percent = ((average - min) * 100 / (max - min));
-            let percentResult = ((price - min) * 100 / (max - min));
-            if (percentResult < 0) percentResult = 0;
-            if (percentResult > 100) percentResult = 100;
-
             $('.compared').removeClass('good');
             $('.compared').addClass('bad');
             $('.big-paragraph').html('Twój czynsz wypada drogo na tle innych. Dowiedz się dlaczego');
-            $('.your-bar').css('width', percent + "%");
-            $('.average').css('left', percent + "%");
-            $('.your-result').css('left', percentResult + "%");
         }
         else if (average >= price) {
-            let percent = ((price - min) / (max - min)) * 100;
-            let percentAverage = ((average - min) / (max - min)) * 100;
-            if (percent < 0) percent = 0;
-            if (percent > max) percent = max;
-
             $('.compared').removeClass('bad');
             $('.compared').addClass('good');
             $('.big-paragraph').html('Twój czynsz wypada dobrze na tle innych.');
-            $('.your-bar').css('width', percent + "%");
-            $('.your-result').css('left', percent + "%");
-            $('.average').css('left', percentAverage + "%");
         }
         else {
             $('.big-paragraph').html('Wystąpił błąd');
         }
+
+        $('.your-bar').css('width', percent.toFixed(2) + "%");
+        $('.average').css('left', percent.toFixed(2) + "%");
+        $('.your-result').css('left', percentResult.toFixed(2) + "%");
 
         $('.compared').slideDown();
 
@@ -112,35 +110,60 @@ $(document).ready(function () {
 
     function analyseRent(e) {
         e.preventDefault();
-        $(this).addClass('unactive');
 
-        $('.price-analysis').slideDown();
+        let formData = {
+            flatType: $('select[name="flat-type"]').val(),
+            postalCode: $('input[name="postal-code"]').val(),
+            price: parseInt($('input[name="rent"]').val()),
+            area: parseInt($('input[name="area"]').val())
+        };
 
-        $('html, body').animate({
-            scrollTop: $("#price-analysis").offset().top
-        }, 500);
+        if ( !formData.flatType || !formData.postalCode || !formData.price || !formData.area ) {
+            $('.wrong-data').show();
+        }
+        else {
+            $('.wrong-data').hide();
+            $('#data-loader').css('display', 'flex');
+            fetch('/bills/' + formData.postalCode + '/' + formData.flatType, {
+                method: 'GET',
+                headers: {'Content-Type': 'application/json'},
+            })
+                .then(response => {
+                    if (response.status == 200) {
+                        response.json()
+                            .then(parsedResponse => {
+                                if (parsedResponse.minPrice == 0) {
+                                }
+                                else {
+                                    setSmallBarMinMaxAndAverageValues(parsedResponse);
+                                    calculateSmallChartsBarsLengths();
+                                }
+                                $('#data-loader').hide();
+                                $('.price-analysis').slideDown();
+                                $('html, body').animate({
+                                    scrollTop: $("#price-analysis").offset().top
+                                }, 500);s
+                            })
+                            .catch(error => {
+                                console.log("Brak danych dla tego kodu pocztowego.");
+                            })
+                    }
+                });
+        }
+    }
 
-        let analyseAverage = 4.5;
-        let analyseUserRent = 6.2;
-        let analyseMin = 1;
-        let analyseMax = 10;
-
-        let analyseAvgPercent = (analyseAverage / (analyseMax - analyseMin)) * 100;
-        let analyseUserPercent = (analyseUserRent / (analyseMax - analyseMin)) * 100;
-        if (analyseAvgPercent > 100) analyseAvgPercent = 100;
-        if (analyseUserPercent > 100) analyseUserPercent = 100;
-        if (analyseAvgPercent < 0) analyseAvgPercent = 0;
-        if (analyseUserPercent < 0) analyseUserPercent = 0;
-
-        $('.small-price-bar .average-bar').css('width', analyseAvgPercent + '%');
-        $('.small-price-bar .average').css('left', analyseAvgPercent + '%');
-        $('.small-price-bar .your-bar').css('width', analyseUserPercent + '%');
-        $('.small-price-bar .your-result').css('left', analyseUserPercent + '%');
-
+    function setSmallBarMinMaxAndAverageValues(parsedResponse) {
+        let smallBars = $('.small-price-bar');
+        for(let i = 0; i < smallBars.length; i++) {
+            $(smallBars[i]).find('.min-price span').attr('data-min', parsedResponse[i].minPrice);
+            $(smallBars[i]).find('.max-price span').attr('data-max', parsedResponse[i].maxPrice);
+            $(smallBars[i]).find('.average').attr('data-avg', parsedResponse[i].avgPrice);
+        }
     }
 
     $('#analyse').click(analyseRent);
     $('#compare').click(getFormData);
+
     $('.info').hover(showTooltip, hideTooltip);
 
     $('.scroll-down').click(function () {
@@ -156,4 +179,58 @@ $(document).ready(function () {
         }, 300);
         return false;
     });
+
+    $('.price-analysis .input-wrapper input').change(addUserBill);
+
+    function addUserBill() {
+        let val = $(this).val();
+        $(this).siblings('.small-price-bar').find('.your-result').attr('data-result', val);
+
+        calculateSmallChartsBarsLengths();
+    }
+
+    function calculateSmallChartsBarsLengths() {
+        let charts = $('.small-price-bar');
+        charts.each(function (i) {
+            let minPriceAttr = $(this).find('.min-price span').attr('data-min');
+            let minPrice = parseFloat( minPriceAttr ).toFixed(2);
+            let maxPriceAttr = $(this).find('.max-price span').attr('data-max');
+            let maxPrice = parseFloat( maxPriceAttr ).toFixed(2);
+            let avgPriceAttr = $(this).find('.average').attr('data-avg');
+            let avgPrice = parseFloat( avgPriceAttr ).toFixed(2);
+            let userResultAttr = $(this).find('.your-result').attr('data-result');
+            let userPrice = parseFloat( userResultAttr ).toFixed(2);
+
+            $(this).find('.min-price span').text(minPriceAttr + ' zł');
+            $(this).find('.max-price span').text(maxPriceAttr + ' zł');
+            $(this).find('.average').text(avgPriceAttr + ' zł');
+            $(this).find('.your-result').text(userPrice +' zł');
+
+            let avgLength = ((avgPrice - minPrice)/(maxPrice - minPrice)) * 100;
+            avgLength = parseFloat(avgLength)
+            let userBarLength = ((userPrice - minPrice)/(maxPrice - minPrice)) * 100;
+            userBarLength = parseFloat(userBarLength)
+
+            if(avgLength <= 0) avgLength = 0;
+            if(avgLength >= 100) avgLength = 100;
+            if(userBarLength <= 0) userBarLength = 0;
+            if(userBarLength >= 100) userBarLength = 100;
+
+            $(this).find('.average-bar').css('width', `${avgLength.toFixed(2)}%`);
+            $(this).find('.average').css('left', `${avgLength.toFixed(2)}%`);
+            $(this).find('.your-bar').css('width', `${userBarLength.toFixed(2)}%`);
+            $(this).find('.your-result').css('left', `${userBarLength.toFixed(2)}%`);
+
+            console.log(i,':',avgLength, userBarLength);
+            console.log(typeof(userBarLength));
+            if( avgLength > userBarLength ) {
+                $(this).find('.average-bar').css('z-index', '9');
+                $(this).find('.your-bar').css('z-index', '99');
+            }
+            else if( userBarLength > avgLength) {
+                $(this).find('.average-bar').css('z-index', '99');
+                $(this).find('.your-bar').css('z-index', '9');
+            }
+        });
+    }
 });

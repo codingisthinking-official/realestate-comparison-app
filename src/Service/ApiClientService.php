@@ -103,4 +103,12 @@ class ApiClientService
 
         return $billTypes;
     }
+
+    public function getFlatTypes(): array
+    {
+        $response = file_get_contents('flat_types.json');
+        $flatTypes = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\FlatTypes>', 'json');
+
+        return $flatTypes;
+    }
 }

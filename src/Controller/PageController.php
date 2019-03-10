@@ -22,21 +22,16 @@ class PageController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatTypesList = $cityService->getFlatTypes($repository);
-
         return $this->render('page/show.html.twig', [
             'page' => $page,
-            'type_list' => $flatTypesList,
+            'type_list' => $apiClientService->getFlatTypes(),
         ]);
     }
 
     public function recentCities(ApiClientService $apiClientService, $max = 10)
     {
-        $pageList = $apiClientService->getSortPages();
-
         return $this->render('page/recent_list.html.twig', [
-            'pageList' => $pageList,
+            'pageList' => $apiClientService->getSortPages(),
         ]);
     }
 

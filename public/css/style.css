@@ -216,6 +216,11 @@ form.contact textarea {
   margin-top: 70px;
 }
 
+.wrong-data {
+  text-align: center;
+  display: none;
+}
+
 .savings {
   font-size: 14px;
   padding-bottom: 10px;
@@ -427,7 +432,7 @@ input::placeholder {
   height: 100%;
   background: #48af10;
   border-radius: 4px;
-  width: 35%;
+  width: 0%;
   -webkit-transition: background-color .3s;
   transition: background-color .3s;
 }
@@ -679,13 +684,15 @@ input::placeholder {
 
 .small-price-bar .your-bar {
   background: #DBAE35;
-  width: 60%;
+  width: 0%;
   top: 0;
   left: 0;
   border-radius: 4px;
   position: absolute;
   z-index: 1;
   height: 100%;
+  transition: width .25s;
+  will-change: width;
 }
 
 .small-price-bar .your-bar::after {
@@ -732,6 +739,7 @@ input::placeholder {
   top: 0;
   -webkit-transform: translate(-50%, -130%);
           transform: translate(-50%, -130%);
+  min-width: 60px;
 }
 
 .small-price-bar .your-result::before {

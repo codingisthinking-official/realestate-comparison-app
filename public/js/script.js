@@ -161,8 +161,31 @@ $(document).ready(function () {
         }
     }
 
+    function postSmallFormData(e) {
+        e.preventDefault();
+        let dataArray = [];
+        let elements = $('.price-analysis .input-wrapper');
+        elements.each(function(id) {
+            let result = {};
+            result.value = $(this).find('input').val();
+            result.bill_type = $(this).attr('data-billid');
+            result.flat_type = $('#form select[name="flat-type"]').val();
+            result.postcode = $('#form input[name="postal-code"]').val();
+            dataArray.push(result);
+        });
+        for(let x = 0; x < dataArray.length; x++){
+            fetch('/bills/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(dataArray[x])
+            })
+                .then(res => res.json());
+        }
+    }
+
     $('#analyse').click(analyseRent);
     $('#compare').click(getFormData);
+    $('#export').click(postSmallFormData);
 
     $('.info').hover(showTooltip, hideTooltip);
 
@@ -201,9 +224,9 @@ $(document).ready(function () {
             let userResultAttr = $(this).find('.your-result').attr('data-result');
             let userPrice = parseFloat( userResultAttr ).toFixed(2);
 
-            $(this).find('.min-price span').text(minPriceAttr + ' zł');
-            $(this).find('.max-price span').text(maxPriceAttr + ' zł');
-            $(this).find('.average').text(avgPriceAttr + ' zł');
+            $(this).find('.min-price span').text(minPrice + ' zł');
+            $(this).find('.max-price span').text(maxPrice + ' zł');
+            $(this).find('.average').text(avgPrice + ' zł');
             $(this).find('.your-result').text(userPrice +' zł');
 
             let avgLength = ((avgPrice - minPrice)/(maxPrice - minPrice)) * 100;
@@ -221,8 +244,6 @@ $(document).ready(function () {
             $(this).find('.your-bar').css('width', `${userBarLength.toFixed(2)}%`);
             $(this).find('.your-result').css('left', `${userBarLength.toFixed(2)}%`);
 
-            console.log(i,':',avgLength, userBarLength);
-            console.log(typeof(userBarLength));
             if( avgLength > userBarLength ) {
                 $(this).find('.average-bar').css('z-index', '9');
                 $(this).find('.your-bar').css('z-index', '99');

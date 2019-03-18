@@ -3,18 +3,18 @@
     "id": 1,
     "title": "Gaz",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
-    "chart": 1
+    "chart": true
   },
   {
     "id": 2,
-    "title": "Woda",
+    "title": "Ulica",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
-    "chart": 1
+    "chart": false
   },
   {
     "id": 3,
     "title": "Prąd",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
-    "chart": 1
+    "chart": true
   }
 ]

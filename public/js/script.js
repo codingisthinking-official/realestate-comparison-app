@@ -153,11 +153,16 @@ $(document).ready(function () {
     }
 
     function setSmallBarMinMaxAndAverageValues(parsedResponse) {
-        let smallBars = $('.small-price-bar');
-        for(let i = 0; i < smallBars.length; i++) {
-            $(smallBars[i]).find('.min-price span').attr('data-min', parsedResponse[i].minPrice);
-            $(smallBars[i]).find('.max-price span').attr('data-max', parsedResponse[i].maxPrice);
-            $(smallBars[i]).find('.average').attr('data-avg', parsedResponse[i].avgPrice);
+        let smallContainer = $('#price-analysis .input-wrapper');
+        for(let i = 0; i < smallContainer.length; i++) {
+            if(parsedResponse[i].minPrice === parsedResponse[i].maxPrice) {
+                $(smallContainer[i]).find('.small-price-bar').text('Niewystarczająca ilość danych.');
+            }
+            else {
+                $(smallContainer[i]).find('.small-price-bar').find('.min-price span').attr('data-min', parsedResponse[i].minPrice);
+                $(smallContainer[i]).find('.small-price-bar').find('.max-price span').attr('data-max', parsedResponse[i].maxPrice);
+                $(smallContainer[i]).find('.small-price-bar').find('.average').attr('data-avg', parsedResponse[i].avgPrice);
+            }
         }
     }
 

@@ -86,6 +86,19 @@ class ApiClientService
         }
     }
 
+    public function findOnePageByTitle(string $title)
+    {
+        $response = $this->client->get('pages/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (pages)');
+        }
+        $pageList = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\Page>', 'json');
+        foreach ($pageList as $page) {
+            if ($page->getTitle() == $title) {
+                return $page;
+            }
+        }
+    }
     public function findWordingByKey(string $key)
     {
         $wordingList = $this->getWordings();
@@ -96,12 +109,12 @@ class ApiClientService
         }
     }
 
-    public function getBillTypes(): array
+    public function getBillTypes()
     {
         $response = file_get_contents('bill_types.json');
         $billTypes = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\BillTypes>', 'json');
 
-        return $billTypes;
+        return $this->sortByPosition($billTypes);
     }
 
     public function getFlatTypes(): array
@@ -110,5 +123,23 @@ class ApiClientService
         $flatTypes = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\FlatTypes>', 'json');
 
         return $flatTypes;
+    }
+
+    public function sortByPosition(array $array): array
+    {
+        $sortedArray = [];
+        $lengthOfArray = sizeof($array);
+        for ($x = 0; $x < $lengthOfArray; $x++) {
+            $min = 0;
+            for ($y = 0; $y < sizeof($array); $y++) {
+                if ($array[$min]->getPosition() > $array[$y]->getPosition()) {
+                    $min = $y;
+                }
+            }
+            array_push($sortedArray, $array[$min]);
+            array_splice($array, $min, 1);
+        }
+
+        return $sortedArray;
     }
 }

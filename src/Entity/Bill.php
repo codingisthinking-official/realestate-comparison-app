@@ -42,6 +42,11 @@ class Bill
     private $flatType;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $uuid;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -135,5 +140,21 @@ class Bill
     public function setFlatType($flatType): void
     {
         $this->flatType = $flatType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param mixed $uuid
+     */
+    public function setUuid($uuid): void
+    {
+        $this->uuid = $uuid;
     }
 }

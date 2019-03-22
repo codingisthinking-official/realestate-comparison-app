@@ -22,9 +22,14 @@ class BillTypes
     private $tooltip;
 
     /**
-     * @Type("boolean")
+     * @Type("string")
      */
-    private $chart;
+    private $type;
+
+    /**
+     * @Type("integer")
+     */
+    private $position;
 
     /**
      * @return mixed
@@ -53,8 +58,16 @@ class BillTypes
     /**
      * @return mixed
      */
-    public function getChart()
+    public function getType()
     {
-        return $this->chart;
+        return $this->type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
     }
 }

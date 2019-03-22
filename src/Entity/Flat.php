@@ -41,6 +41,16 @@ class Flat
      */
     private $city;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $uuid;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $state;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,5 +114,37 @@ class Flat
         $this->city = $city;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    /**
+     * @param mixed $uuid
+     */
+    public function setUuid($uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function setState($state): void
+    {
+        $this->state = $state;
     }
 }

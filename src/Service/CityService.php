@@ -4,8 +4,6 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
-use App\Entity\Bill;
-use App\Service\ApiClientService;
 
 class CityService
 {
@@ -89,7 +87,7 @@ class CityService
     {
         $billTypes = $this->apiClientService->getBillTypes();
         foreach ($billTypes as $billType) {
-            if($billType->getChart() == true){
+            if($billType->getType() == "chart"){
                 $minPrice = 0;
                 $sumPrice = 0;
                 $quantity = 0;

@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    let uuid = create_UUID();
+
     function showTooltip() {
         $(this).next('.tooltip').fadeIn(300);
     }
@@ -14,7 +16,8 @@ $(document).ready(function () {
             flatType: $('select[name="flat-type"]').val(),
             postalCode: $('input[name="postal-code"]').val(),
             price: parseInt($('input[name="rent"]').val()),
-            area: parseInt($('input[name="area"]').val())
+            area: parseInt($('input[name="area"]').val()),
+            uuid: uuid
         };
 
         if ( !formData.flatType || !formData.postalCode || !formData.price || !formData.area ) {
@@ -23,12 +26,12 @@ $(document).ready(function () {
         else {
             $('.wrong-data').hide();
 
-            // fetch('/flat/', {
-            //     method: 'post',
-            //     headers: {'Content-Type': 'application/json'},
-            //     body: JSON.stringify(formData)
-            // })
-            //     .then(res => res.json());
+            fetch('/flat/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            })
+                .then(res => res.json());
 
             $('#data-loader').css('display', 'flex');
             fetch('/flat/' + formData.postalCode + '/' + formData.flatType, {
@@ -176,6 +179,7 @@ $(document).ready(function () {
             result.bill_type = $(this).attr('data-billid');
             result.flat_type = $('#form select[name="flat-type"]').val();
             result.postcode = $('#form input[name="postal-code"]').val();
+            result.uuid = uuid;
             dataArray.push(result);
         });
         for(let x = 0; x < dataArray.length; x++){
@@ -186,35 +190,25 @@ $(document).ready(function () {
             })
                 .then(res => res.json());
         }
+
+        $('.added-bills').show();
     }
-
-    $('#analyse').click(analyseRent);
-    $('#compare').click(getFormData);
-    $('#export').click(postSmallFormData);
-
-    $('.info').hover(showTooltip, hideTooltip);
-
-    $('.scroll-down').click(function () {
-        $('html, body').animate({
-            scrollTop: $($(this).attr('href')).offset().top
-        }, 300);
-        return false;
-    });
-
-    $('.description .button').click(function () {
-        $('html, body').animate({
-            scrollTop: $($(this).attr('href')).offset().top
-        }, 300);
-        return false;
-    });
-
-    $('.price-analysis .input-wrapper input').change(addUserBill);
 
     function addUserBill() {
         let val = $(this).val();
         $(this).siblings('.small-price-bar').find('.your-result').attr('data-result', val);
 
         calculateSmallChartsBarsLengths();
+    }
+
+    function create_UUID(){
+        var dt = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (dt + Math.random()*16)%16 | 0;
+            dt = Math.floor(dt/16);
+            return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+        });
+        return uuid;
     }
 
     function calculateSmallChartsBarsLengths() {
@@ -259,4 +253,26 @@ $(document).ready(function () {
             }
         });
     }
+
+    $('#analyse').click(analyseRent);
+    $('#compare').click(getFormData);
+    $('#export').click(postSmallFormData);
+
+    $('.info').hover(showTooltip, hideTooltip);
+
+    $('.scroll-down').click(function () {
+        $('html, body').animate({
+            scrollTop: $($(this).attr('href')).offset().top
+        }, 300);
+        return false;
+    });
+
+    $('.description .button').click(function () {
+        $('html, body').animate({
+            scrollTop: $($(this).attr('href')).offset().top
+        }, 300);
+        return false;
+    });
+
+    $('.price-analysis .input-wrapper input').change(addUserBill);
 });

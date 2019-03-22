@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style type="text/css">
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20pt;
+            line-height: 40pt;
+        }
+        header {
+            background-color: #9596b3;
+            padding: 20px;
+        }
+        .container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class ="container">
+        <header>
+            <div style="text-align: center;">
+                <img src="{{ asset('images/logo.png') }}" alt="logo">
+            </div>
+        </header>
+        {{ cityInfo.description }}
+        <p>Dane przygotowane dla kodu pocztowego: {{ flat.postcode }}</p>
+            <table style="width:100%">
+                {% for bill in bills  %}
+                <tr>
+                    <th>{{ bill.billType }}</th>
+                    <th>{{ bill.value }}</th>
+                </tr>
+                {% endfor %}
+            </table>
+    </div>
+</body>
+</html>

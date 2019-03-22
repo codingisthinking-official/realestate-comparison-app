@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use phpDocumentor\Reflection\Project;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +36,7 @@ class LandingController extends AbstractController
         $city = $apiClientService->getOneCityByTitle($city);
 
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        if($city){
+        if ($city) {
             $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
         } else {
             return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => 5, 'avgPrice' => 25, 'maxPrice' => 55], 'json'));
@@ -60,6 +59,8 @@ class LandingController extends AbstractController
         $flat->setCity($cityService->getCityByPostcode($request->request->get('postalCode')));
         $flat->setType($request->request->get('flatType'));
         $flat->setCost($request->request->get('price'));
+        $flat->setUuid($request->request->get('uuid'));
+        $flat->setState(0);
 
         $entityManager->persist($flat);
         $entityManager->flush();
@@ -97,8 +98,69 @@ class LandingController extends AbstractController
         $bill->setCity($cityService->getCityByPostcode($request->request->get('postcode')));
         $bill->setBillType($request->request->get('bill_type'));
         $bill->setFlatType($request->request->get('flat_type'));
+        $bill->setUuid($request->request->get('uuid'));
+        Dump($request->request->get('uuid'));
 
         $entityManager->persist($bill);
+        $entityManager->flush();
+
+        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+    }
+
+    /**
+     * @Route("/info/", name="info.get")
+     * @Method({"GET"})
+     */
+    public function getInfo(SerializerInterface $serializer)
+    {
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+        $flatList = $repository->findBy(['state' => 0]);
+        $infoList = [];
+        foreach ($flatList as $flat) {
+            $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
+            $valueList = '';
+            for ($x = 0; $x < sizeof($repository); $x++) {
+                $valueList = $valueList.$repository[$x]->getBillType();
+                $valueList = $valueList.': ';
+                $valueList = $valueList.$repository[$x]->getValue().', ';
+            }
+            $info = [
+                'subject' => $flat->getUuid(),
+                'payload' => $valueList,
+                '_actions' => [
+                    'accept' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
+                    'delete' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'))
+                ]
+            ];
+            array_push($infoList, $info);
+        }
+        return new Response($serializer->serialize(['total_items' => sizeof($infoList), 'data' => $infoList], 'json'));
+    }
+
+    /**
+     * @Route("/info/{uuid}/{state}", name="info.state.set")
+     * @Method({"PATCH"})
+     */
+    public function setStateInfo(SerializerInterface $serializer, $uuid, $state)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+        $flat = $repository->findOneBy(['uuid' => $uuid]);
+        if (!$flat) {
+            throw $this->createNotFoundException(
+                'No flat found for this uuid: ' . $uuid
+            );
+        }
+        switch ($state) {
+            case "accept":
+                $flat->setState(1);
+                break;
+            case "delete":
+                $flat->setState(2);
+                break;
+        }
+        $entityManager->persist($flat);
         $entityManager->flush();
 
         return new Response($serializer->serialize(['status' => 'ok'], 'json'));

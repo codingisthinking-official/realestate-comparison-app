@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-xs-12">
 
-                    <form action="">
+                    <form action="" id="main-form">
                         <div class="row">
                             <div class="col-xs-4 align-right">
                                 <label for="flat-type"> {{ 'index.input-type'|toWording }}<span class="red">*</span>:
@@ -146,17 +146,21 @@
 
             <div class="expensive">
                 <p> {{ 'index.result_summary_header'|toWording }} </p>
-
-                <div class="added-bills" style="display: none;">
-                    <div class="row">
-                        <div class="col-sm-6 end-xs"> {{ 'index.result_summary_text'|toWording }} </div>
-                        <div class="col-sm-6 start-xs">
-                            <div class="bill-name"> nazwa_rachunku_1
-                                <span class="delete"> usuń X</span>
+                <div class="center-xs">
+                    <form action="">
+                        <div class="center-xs row">
+                            <div class="col-sm-6 cl-xs-12 align-right">
+                                <label>{{ 'index.result_summary_text'|toWording }}</label>
+                            </div>
+                            <div class="col-sm-6 col-xs-12 align-left">
+                                <input  class="start-xs file" type="file" id="addFile" name="file">
+                                <label  for="addFile" class="label-button"> Wybierz plik </label>
+                                <div class="added-files"></div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
+                <div class="red no-file-added"> {{ 'index.warning_empty'|toWording }} </div>
                 <div class=" center-xs">
                     <div class="col-xs-12">
                         <a href="#price-analysis" id="analyse"
@@ -175,8 +179,8 @@
                             <div class="col-md-6 col-xs-12">
                                 {% if bill.type == "chart" %}
                                     <label for="in1">{{ bill.title }}</label>
-                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
-                                        <input type="number" name="in1" placeholder="0">
+                                    <div class="input-wrapper" data-billId="{{ bill.slug }}">
+                                        <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?">
                                         <span class="info">?</span>
 
                                         <div class="tooltip">
@@ -202,7 +206,7 @@
                                     </div>
                                 {% elseif bill.type == "text" %}
                                     <label for="in1">{{ bill.title }}</label>
-                                    <div class="input-wrapper" data-billId="{{ bill.id }}">
+                                    <div class="input-wrapper" data-billId="{{ bill.slug }}">
                                         <input type="text" name="in1" placeholder="Wpisz nazwę">
                                         <span class="info">?</span>
 
@@ -211,7 +215,7 @@
                                         </div>
                                     </div>
                                 {% else %}
-                                    <div class="input-wrapper">
+                                    <div class="input-wrapper empty">
                                     </div>
                                 {% endif %}
                             </div>
@@ -219,16 +223,24 @@
                 </div>
                 <div class="row end-xs savings">
                     <div class="col-xs-12">
-                        <div class="red"> {{ 'index.avg_info'|toWording }} </div>
+                        <div class="red"> {{ 'index.avg_info'|toWording }} <span class="saving-amount">  </span> </div>
                     </div>
                 </div>
             </form>
+            <div class="empty-inputs red"> Uzupełnij wszystkie pola. </div>
 
             <br/>
             <br/>
             <div class=" center-xs">
                 <div class="col-xs-12">
                     <a href="#export" id="export" class="button yellow-bcg wide"> {{ 'btn.export_to_pdf'|toWording }} </a>
+                </div>
+            </div>
+            <div class="pdf-show" style="display:none;">
+                <div class="row">
+                    <div class="col-sm-6 end-xs"> {{ 'index.link_to_pdf'|toWording }} </div>
+                    <div class="col-sm-6 start-xs bill-pdf">
+                    </div>
                 </div>
             </div>
         </div>

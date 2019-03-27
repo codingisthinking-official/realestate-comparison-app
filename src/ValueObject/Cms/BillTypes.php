@@ -7,9 +7,9 @@ use JMS\Serializer\Annotation\Type;
 class BillTypes
 {
     /**
-     * @Type("integer")
+     * @Type("string")
      */
-    private $id;
+    private $slug;
 
     /**
      * @Type("string")
@@ -34,9 +34,9 @@ class BillTypes
     /**
      * @return mixed
      */
-    public function getId()
+    public function getSlug()
     {
-        return $this->id;
+        return $this->slug;
     }
 
     /**

@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500&amp;subset=latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&amp;subset=latin-ext" rel="stylesheet">
     <style type="text/css">
         * {
             -webkit-box-sizing: border-box;
@@ -17,36 +19,96 @@
             padding: 0;
         }
         body {
-            font-family: 'Roboto', sans-serif;
-            font-size: 20pt;
-            line-height: 40pt;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            line-height: 1.8;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         header {
-            background-color: #9596b3;
+            background-color: #0a1416;
             padding: 20px;
+            text-align: right;
+        }
+
+        h2 {
+            color: #0a1416;
+            text-transform: uppercase;
         }
         .container {
-            margin: 20px;
+            padding: 30px;
+            font-weight: 400;
+        }
+
+        table {
+            margin-top: 30px;
+            border-collapse: collapse;
+            font-weight: 400;
+        }
+
+        table tr:last-child td:first-child {
+            border-bottom-left-radius: 7px;
+        }
+
+        table tr:last-child td:last-child {
+            border-bottom-right-radius: 7px;
+        }
+
+        table tr:first-child th:first-child {
+            border-top-left-radius: 7px;
+        }
+
+        table tr:first-child th:last-child {
+            border-top-right-radius: 7px;
+        }
+
+        thead tr th {
+            background: #DBAE35;
+            padding: 7px 15px;
+            color: #fff;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 3px solid #b7912a;
+        }
+
+        tr:nth-child(odd) {
+            background: #eee;
+            border-radius: 5px;
+        }
+
+        td {
+            padding: 7px 15px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div>
+            <img src="{{ asset('images/logo.png') }}" alt="logo">
+        </div>
+    </header>
     <div class ="container">
-        <header>
-            <div style="text-align: center;">
-                <img src="{{ asset('images/logo.png') }}" alt="logo">
-            </div>
-        </header>
+        <h2> {{ flat.city }} </h2>
         {{ cityInfo.description }}
         <p>Dane przygotowane dla kodu pocztowego: {{ flat.postcode }}</p>
-            <table style="width:100%">
-                {% for bill in bills  %}
+        <table style="width:100%">
+            <thead>
                 <tr>
-                    <th>{{ bill.billType }}</th>
-                    <th>{{ bill.value }}</th>
+                    <th> Typ rachunku </th>
+                    <th> Twój wynik </th>
                 </tr>
-                {% endfor %}
-            </table>
+            </thead>
+            {% for bill in bills  %}
+            <tr>
+                <td>{{ bill.billType }}</td>
+                <td>{{ bill.value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </body>
 </html>

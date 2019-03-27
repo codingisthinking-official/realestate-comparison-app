@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Service\ApiClientService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\CityService;
 use App\Entity\Flat;
 use App\Entity\Bill;
 

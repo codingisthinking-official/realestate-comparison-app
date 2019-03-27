@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
+use App\Entity\Flat;
 
 class CityService
 {
@@ -25,7 +26,7 @@ class CityService
             $sumPrice = 0;
             $quantity = 0;
             $maxPrice = 0;
-            $flatList = $repository->findBy(['city' => $page->getTitle(), 'type' => $type]);
+            $flatList = $repository->findBy(['city' => $page->getTitle(), 'type' => $type, 'state' => 1]);
 
             foreach ($flatList as $flat) {
                 $pricePerSquareMeter = ($flat->getCost()) / ($flat->getSurface());
@@ -87,23 +88,27 @@ class CityService
     {
         $billTypes = $this->apiClientService->getBillTypes();
         foreach ($billTypes as $billType) {
-            if($billType->getType() == "chart"){
+            if ($billType->getType() == "chart") {
                 $minPrice = 0;
                 $sumPrice = 0;
                 $quantity = 0;
                 $maxPrice = 0;
-                $bills = $repository->findBy(['city' => $city->getTitle(), 'flatType' => $type, 'billType' => $billType->getId()]);
+                $bills = $repository->findBy(['city' => $city->getTitle(), 'flatType' => $type, 'billType' => $billType->getSlug()]);
 
                 foreach ($bills as $bill) {
-                    $price = $bill->getValue();
-                    if ($price >= $maxPrice) {
-                        $maxPrice = $price;
+                    $flat = $this->entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $bill->getUuid()]);
+                    if ($flat->getState() == 1) {
+                        $price = $bill->getValue();
+                        if ($price >= $maxPrice) {
+                            $maxPrice = $price;
+                        }
+                        if ($price < $minPrice or $minPrice == 0) {
+                            $minPrice = $price;
+                        }
+                        $quantity++;
+                        $sumPrice += $price;
+
                     }
-                    if ($price < $minPrice or $minPrice == 0) {
-                        $minPrice = $price;
-                    }
-                    $quantity++;
-                    $sumPrice += $price;
                 }
 
                 $billType->minPrice = $minPrice;

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -108,6 +109,32 @@ class LandingController extends AbstractController
     }
 
     /**
+     * @Route("/files/", name="files.post")
+     * @Method({"POST"})
+     */
+    public function postFiles(SerializerInterface $serializer, Request $request, CityService $cityService)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $file = $entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $request->request->get('uuid')]);
+
+        if (!$file) {
+            throw $this->createNotFoundException(
+                'City not found!'
+            );
+        }
+
+        Dump($request->files);
+
+        $file->setFiles($request->request->get('path'));
+        $entityManager->flush();
+
+        $entityManager->persist($file);
+        $entityManager->flush();
+
+        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+    }
+
+    /**
      * @Route("/info/", name="info.get")
      * @Method({"GET"})
      */
@@ -119,17 +146,19 @@ class LandingController extends AbstractController
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
             $valueList = '';
+            $valueList = $valueList.'City: '.$flat->getCity().', Postcode: '.$flat->getPostcode().', ';
             for ($x = 0; $x < sizeof($repository); $x++) {
-                $valueList = $valueList.$repository[$x]->getBillType();
-                $valueList = $valueList.': ';
-                $valueList = $valueList.$repository[$x]->getValue().', ';
+                $valueList = $valueList.$repository[$x]->getBillType().': '.$repository[$x]->getValue();
+                if($x < sizeof($repository)-1) {
+                    $valueList = $valueList.', ';
+                }
             }
             $info = [
                 'subject' => $flat->getUuid(),
                 'payload' => $valueList,
                 '_actions' => [
-                    'accept' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
-                    'delete' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'))
+                    'accept' => $_SERVER['HTTP_HOST'].$this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
+                    'delete' => $_SERVER['HTTP_HOST'].$this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'))
                 ]
             ];
             array_push($infoList, $info);

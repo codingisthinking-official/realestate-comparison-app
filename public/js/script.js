@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     function getFormData(e) {
         e.preventDefault();
-
+        $('#compare').addClass('unactive');
         let formData = {
             flatType: $('select[name="flat-type"]').val(),
             postalCode: $('input[name="postal-code"]').val(),
@@ -113,7 +113,8 @@ $(document).ready(function () {
 
     function analyseRent(e) {
         e.preventDefault();
-
+        $('#analyse').addClass('unactive');
+        postFile();
         let formData = {
             flatType: $('select[name="flat-type"]').val(),
             postalCode: $('input[name="postal-code"]').val(),
@@ -169,10 +170,26 @@ $(document).ready(function () {
         }
     }
 
+    function postFile() {
+        let file = {
+            path: $('.file').val(),
+            uuid: uuid
+        };
+
+        fetch('/files/', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(file)
+        })
+            .then(res => res.json());
+    }
+
     function postSmallFormData(e) {
         e.preventDefault();
+        $('#export').addClass('unactive');
+
         let dataArray = [];
-        let elements = $('.price-analysis .input-wrapper');
+        let elements = $('.price-analysis .input-wrapper:not(.empty)');
         elements.each(function(id) {
             let result = {};
             result.value = $(this).find('input').val();
@@ -191,7 +208,65 @@ $(document).ready(function () {
                 .then(res => res.json());
         }
 
-        $('.added-bills').show();
+        addBillsItem();
+        calculateSavings();
+    }
+
+    $('.file').change(addBillsItemList);
+
+    function addBillsItemList() {
+        let fileName = $(this).val();
+        let id = null;
+        for(let i = fileName.length-1; i >= 0; i--) {
+            if( fileName[i] == `\\` || fileName[i] == '/') {
+                id = i;
+                break;
+            }
+        }
+        fileName = fileName.substr(id+1);
+
+        let itemTemplate =
+            `<div class="bill-name"> ${fileName}
+            <span class="delete"> usuń X</span>
+        </div>`;
+        $('.added-files').append(itemTemplate);
+
+        $('.label-button').hide();
+        $('#addFile').hide();
+    }
+
+    $('#compared').on('click', '.delete', removeBillsItemList);
+    function removeBillsItemList() {
+        $(this).parent().remove();
+        if( $('.added-files').children().length == 0 ) {
+            $('.label-button').show();
+        }
+    }
+
+    function addBillsItem() {
+        let itemTemplate =
+        `<div class="bill-name"> <a class="bill-name" href="./bill/${uuid}" target="_blank"> podsumowanie_pdf </a> </div>`;
+
+        $('.pdf-show .bill-pdf').append(itemTemplate);
+        $('.pdf-show').show();
+    }
+
+    function calculateSavings() {
+        let monthlyDifference = 0;
+        let elements = $('.price-analysis .small-price-bar');
+
+        elements.each(function() {
+            let avg = $(this).find('.average').attr('data-avg');
+            avg = parseFloat(avg);
+            let result = $(this).find('.your-result').attr('data-result');
+            result = parseFloat(result);
+            let diff = result - avg;
+
+            monthlyDifference += diff;
+        });
+
+        (monthlyDifference * 12 > 0) ? $('.savings').show() : $('.savings').hide();
+        $('.saving-amount').text((monthlyDifference * 12).toFixed(2));
     }
 
     function addUserBill() {
@@ -254,9 +329,42 @@ $(document).ready(function () {
         });
     }
 
-    $('#analyse').click(analyseRent);
+    function isFileLoaded() {
+        if( $('.added-files').children().length == 0 ) {
+            $('.no-file-added').show();
+            return false;
+        }
+        else {
+            $('.no-file-added').hide();
+            return true;
+        }
+    }
+
+    function isDataTyped() {
+        let inputWrappers = $('#price-analysis .input-wrapper');
+        let full = true;
+        inputWrappers.each(function () {
+            if( $(this).find('input').val() == '' || $(this).find('input').val() == ' ') {
+                full = false;
+            }
+        });
+        return full;
+    }
+
     $('#compare').click(getFormData);
-    $('#export').click(postSmallFormData);
+    $('#main-form').submit(getFormData);
+    $('#analyse').click(function(e) {
+        let okay = isFileLoaded();
+        if( okay ) analyseRent(e);
+    });
+    $('#export').click(function (e) {
+        let okay = isDataTyped();
+        if( okay ) {
+            postSmallFormData(e);
+            $('.empty-inputs').hide();
+        }
+        else $('.empty-inputs').show();
+    });
 
     $('.info').hover(showTooltip, hideTooltip);
 

@@ -236,6 +236,7 @@ form {
 .savings {
     font-size: 14px;
     padding-bottom: 10px;
+    display: none;
 }
 
 .red {
@@ -558,6 +559,11 @@ input {
 
 .added-bills {
     margin-bottom: 30px;
+    display: none;
+
+    a {
+        color: #000;
+    }
 }
 
 .price-analysis {

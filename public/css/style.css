@@ -40,6 +40,10 @@ h1 {
   text-align: right;
 }
 
+.align-left {
+  text-align: left;
+}
+
 .no-padding {
   padding: 0;
 }
@@ -91,6 +95,10 @@ header .row, header nav {
   cursor: initial;
   background: #f1f5ff;
   pointer-events: none;
+}
+
+.no-file-added, .empty-inputs {
+  display: none;
 }
 
 .red-bcg {
@@ -224,6 +232,7 @@ form.contact textarea {
 .savings {
   font-size: 14px;
   padding-bottom: 10px;
+  display: none;
 }
 
 .red {
@@ -346,7 +355,15 @@ input::-ms-input-placeholder {
 input::placeholder {
   font-weight: 400;
 }
-
+.file {
+  box-shadow: none;
+  border: none;
+  padding: 0 0 0 0;
+  text-indent: 0;
+  height: fit-content;
+  font-weight: 400;
+  outline: none;
+}
 .tooltip {
   position: absolute;
   top: 0;
@@ -580,8 +597,57 @@ input::placeholder {
   margin-bottom: 50px;
 }
 
+.expensive label {
+  transform: none;
+  top: 0;
+}
+
+.label-button {
+  position: relative;
+  color: #fff;
+  background: #ccc;
+  padding: 5px 15px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.label-button::after {
+  content: "Nie wybrano pliku";
+  position: absolute;
+  color: #000;
+  text-transform: none;
+  font-weight: 600;
+  padding-left: 20px;
+  left: 100%;
+  text-align: left;
+  top: 50%;
+  width: 200px;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.file {
+  display: none;
+}
+
 .added-bills {
   margin-bottom: 30px;
+  display: none;
+}
+
+.added-bills a {
+  color: #000;
+}
+
+.added-bills .delete {
+  cursor: pointer;
 }
 
 .price-analysis {
@@ -1049,6 +1115,10 @@ h3 {
   min-width: 350px;
 }
 
+#export {
+  margin-bottom: 50px;
+}
+
 @media (max-width: 1440px) {
   .description {
     margin: 70px 0;
@@ -1120,6 +1190,7 @@ h3 {
   .description p {
     padding: 0;
   }
+
   .description .button {
     margin-top: 15px;
   }

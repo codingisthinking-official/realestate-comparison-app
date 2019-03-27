@@ -1,27 +1,27 @@
 [
   {
-    "id": 1,
+    "slug": "gas",
     "title": "Gaz",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
     "type": "chart",
     "position": 3
   },
   {
-    "id": 2,
+    "slug": "street",
     "title": "Ulica",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
     "type": "text",
     "position": 0
   },
   {
-    "id": 3,
+    "slug": "electricity",
     "title": "Prąd",
     "tooltip": "Ceny znacząco różnią się w poszczególnych miastach.",
     "type": "chart",
     "position": 4
   },
   {
-    "id": 4,
+    "slug": "",
     "title": "",
     "tooltip": "",
     "type": "empty space",

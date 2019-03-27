@@ -32,7 +32,7 @@ class Bill
     private $city;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="text")
      */
     private $billType;
 

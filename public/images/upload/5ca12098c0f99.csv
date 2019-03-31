@@ -1,9 +1,0 @@
-id,title,tooltip,chart
-1,Gaz,Ceny znacząco różnią się w poszczególnych miastach.,TRUE
-2,Woda,Ceny znacząco różnią się w poszczególnych miastach.,FALSE
-3,Prąd,Ceny znacząco różnią się w poszczególnych miastach.,FALSE
-4,Czynsz,Ceny znacząco różnią się w poszczególnych miastach.,TRUE
-5,Śmieci,Ceny znacząco różnią się w poszczególnych miastach.,TRUE
-6,Ogrzewanie,Ceny znacząco różnią się w poszczególnych miastach.,FALSE
-7,Sprzątanie,Ceny znacząco różnią się w poszczególnych miastach.,TRUE
-8,Garaż,Ceny znacząco różnią się w poszczególnych miastach.,FALSE

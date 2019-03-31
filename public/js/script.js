@@ -20,7 +20,7 @@ $(document).ready(function () {
             uuid: uuid
         };
 
-        if ( !formData.flatType || !formData.postalCode || !formData.price || !formData.area ) {
+        if (!formData.flatType || !formData.postalCode || !formData.price || !formData.area) {
             $('.wrong-data').show();
         }
         else {
@@ -55,7 +55,6 @@ $(document).ready(function () {
                                 $('#data-loader').hide();
                             })
                             .catch(error => {
-                                console.log("Brak danych dla tego kodu pocztowego.");
                             })
                     }
                 });
@@ -122,7 +121,7 @@ $(document).ready(function () {
             area: parseInt($('input[name="area"]').val())
         };
 
-        if ( !formData.flatType || !formData.postalCode || !formData.price || !formData.area ) {
+        if (!formData.flatType || !formData.postalCode || !formData.price || !formData.area) {
             $('.wrong-data').show();
         }
         else {
@@ -146,10 +145,10 @@ $(document).ready(function () {
                                 $('.price-analysis').slideDown();
                                 $('html, body').animate({
                                     scrollTop: $("#price-analysis").offset().top
-                                }, 500);s
+                                }, 500);
+                                s
                             })
                             .catch(error => {
-                                console.log("Brak danych dla tego kodu pocztowego.");
                             })
                     }
                 });
@@ -158,8 +157,8 @@ $(document).ready(function () {
 
     function setSmallBarMinMaxAndAverageValues(parsedResponse) {
         let smallContainer = $('#price-analysis .input-wrapper');
-        for(let i = 0; i < smallContainer.length; i++) {
-            if(parsedResponse[i].minPrice === parsedResponse[i].maxPrice) {
+        for (let i = 0; i < smallContainer.length; i++) {
+            if (parsedResponse[i].minPrice === parsedResponse[i].maxPrice) {
                 $(smallContainer[i]).find('.small-price-bar').text('Niewystarczająca ilość danych.');
             }
             else {
@@ -171,17 +170,17 @@ $(document).ready(function () {
     }
 
     function postFile() {
-        let file = {
-            path: $('.file').val(),
-            uuid: uuid
-        };
+        const files = document.querySelector('#addFile').files;
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append('file', files[i]);
+        }
 
         fetch('/files/', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(file)
+            headers: {'uuid': uuid},
+            body: formData
         })
-            .then(res => res.json());
     }
 
     function postSmallFormData(e) {
@@ -190,7 +189,8 @@ $(document).ready(function () {
 
         let dataArray = [];
         let elements = $('.price-analysis .input-wrapper:not(.empty)');
-        elements.each(function(id) {
+        let responsesNumber = 0;
+        elements.each(function (id) {
             let result = {};
             result.value = $(this).find('input').val();
             result.bill_type = $(this).attr('data-billid');
@@ -199,16 +199,25 @@ $(document).ready(function () {
             result.uuid = uuid;
             dataArray.push(result);
         });
-        for(let x = 0; x < dataArray.length; x++){
+        for (let x = 0; x < dataArray.length; x++) {
+            $('#data-loader').css('display', 'flex');
             fetch('/bills/', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(dataArray[x])
             })
-                .then(res => res.json());
+                .then(res => {
+                    res.json();
+                    responsesNumber++;
+                })
+                .then(res => {
+                    if (responsesNumber === dataArray.length) {
+                        addBillsItem();
+                        $('#data-loader').hide();
+                    }
+                });
         }
 
-        addBillsItem();
         calculateSavings();
     }
 
@@ -217,13 +226,13 @@ $(document).ready(function () {
     function addBillsItemList() {
         let fileName = $(this).val();
         let id = null;
-        for(let i = fileName.length-1; i >= 0; i--) {
-            if( fileName[i] == `\\` || fileName[i] == '/') {
+        for (let i = fileName.length - 1; i >= 0; i--) {
+            if (fileName[i] == `\\` || fileName[i] == '/') {
                 id = i;
                 break;
             }
         }
-        fileName = fileName.substr(id+1);
+        fileName = fileName.substr(id + 1);
 
         let itemTemplate =
             `<div class="bill-name"> ${fileName}
@@ -236,16 +245,17 @@ $(document).ready(function () {
     }
 
     $('#compared').on('click', '.delete', removeBillsItemList);
+
     function removeBillsItemList() {
         $(this).parent().remove();
-        if( $('.added-files').children().length == 0 ) {
+        if ($('.added-files').children().length == 0 || document.querySelector('#addFile').files.length == 0) {
             $('.label-button').show();
         }
     }
 
     function addBillsItem() {
         let itemTemplate =
-        `<div class="bill-name"> <a class="bill-name" href="./bill/${uuid}" target="_blank"> podsumowanie_pdf </a> </div>`;
+            `<div class="bill-name"> <a class="bill-name" href="./bill/${uuid}" target="_blank"> podsumowanie_pdf </a> </div>`;
 
         $('.pdf-show .bill-pdf').append(itemTemplate);
         $('.pdf-show').show();
@@ -255,7 +265,7 @@ $(document).ready(function () {
         let monthlyDifference = 0;
         let elements = $('.price-analysis .small-price-bar');
 
-        elements.each(function() {
+        elements.each(function () {
             let avg = $(this).find('.average').attr('data-avg');
             avg = parseFloat(avg);
             let result = $(this).find('.your-result').attr('data-result');
@@ -276,12 +286,12 @@ $(document).ready(function () {
         calculateSmallChartsBarsLengths();
     }
 
-    function create_UUID(){
+    function create_UUID() {
         var dt = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = (dt + Math.random()*16)%16 | 0;
-            dt = Math.floor(dt/16);
-            return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = (dt + Math.random() * 16) % 16 | 0;
+            dt = Math.floor(dt / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
         });
         return uuid;
     }
@@ -290,39 +300,39 @@ $(document).ready(function () {
         let charts = $('.small-price-bar');
         charts.each(function (i) {
             let minPriceAttr = $(this).find('.min-price span').attr('data-min');
-            let minPrice = parseFloat( minPriceAttr ).toFixed(2);
+            let minPrice = parseFloat(minPriceAttr).toFixed(2);
             let maxPriceAttr = $(this).find('.max-price span').attr('data-max');
-            let maxPrice = parseFloat( maxPriceAttr ).toFixed(2);
+            let maxPrice = parseFloat(maxPriceAttr).toFixed(2);
             let avgPriceAttr = $(this).find('.average').attr('data-avg');
-            let avgPrice = parseFloat( avgPriceAttr ).toFixed(2);
+            let avgPrice = parseFloat(avgPriceAttr).toFixed(2);
             let userResultAttr = $(this).find('.your-result').attr('data-result');
-            let userPrice = parseFloat( userResultAttr ).toFixed(2);
+            let userPrice = parseFloat(userResultAttr).toFixed(2);
 
             $(this).find('.min-price span').text(minPrice + ' zł');
             $(this).find('.max-price span').text(maxPrice + ' zł');
             $(this).find('.average').text(avgPrice + ' zł');
-            $(this).find('.your-result').text(userPrice +' zł');
+            $(this).find('.your-result').text(userPrice + ' zł');
 
-            let avgLength = ((avgPrice - minPrice)/(maxPrice - minPrice)) * 100;
+            let avgLength = ((avgPrice - minPrice) / (maxPrice - minPrice)) * 100;
             avgLength = parseFloat(avgLength)
-            let userBarLength = ((userPrice - minPrice)/(maxPrice - minPrice)) * 100;
+            let userBarLength = ((userPrice - minPrice) / (maxPrice - minPrice)) * 100;
             userBarLength = parseFloat(userBarLength)
 
-            if(avgLength <= 0) avgLength = 0;
-            if(avgLength >= 100) avgLength = 100;
-            if(userBarLength <= 0) userBarLength = 0;
-            if(userBarLength >= 100) userBarLength = 100;
+            if (avgLength <= 0) avgLength = 0;
+            if (avgLength >= 100) avgLength = 100;
+            if (userBarLength <= 0) userBarLength = 0;
+            if (userBarLength >= 100) userBarLength = 100;
 
             $(this).find('.average-bar').css('width', `${avgLength.toFixed(2)}%`);
             $(this).find('.average').css('left', `${avgLength.toFixed(2)}%`);
             $(this).find('.your-bar').css('width', `${userBarLength.toFixed(2)}%`);
             $(this).find('.your-result').css('left', `${userBarLength.toFixed(2)}%`);
 
-            if( avgLength > userBarLength ) {
+            if (avgLength > userBarLength) {
                 $(this).find('.average-bar').css('z-index', '9');
                 $(this).find('.your-bar').css('z-index', '99');
             }
-            else if( userBarLength > avgLength) {
+            else if (userBarLength > avgLength) {
                 $(this).find('.average-bar').css('z-index', '99');
                 $(this).find('.your-bar').css('z-index', '9');
             }
@@ -330,7 +340,7 @@ $(document).ready(function () {
     }
 
     function isFileLoaded() {
-        if( $('.added-files').children().length == 0 ) {
+        if ($('.added-files').children().length == 0) {
             $('.no-file-added').show();
             return false;
         }
@@ -344,7 +354,7 @@ $(document).ready(function () {
         let inputWrappers = $('#price-analysis .input-wrapper');
         let full = true;
         inputWrappers.each(function () {
-            if( $(this).find('input').val() == '' || $(this).find('input').val() == ' ') {
+            if ($(this).find('input').val() == '' || $(this).find('input').val() == ' ') {
                 full = false;
             }
         });
@@ -353,13 +363,13 @@ $(document).ready(function () {
 
     $('#compare').click(getFormData);
     $('#main-form').submit(getFormData);
-    $('#analyse').click(function(e) {
+    $('#analyse').click(function (e) {
         let okay = isFileLoaded();
-        if( okay ) analyseRent(e);
+        if (okay) analyseRent(e);
     });
     $('#export').click(function (e) {
         let okay = isDataTyped();
-        if( okay ) {
+        if (okay) {
             postSmallFormData(e);
             $('.empty-inputs').hide();
         }

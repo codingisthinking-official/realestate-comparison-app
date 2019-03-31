@@ -99,6 +99,7 @@ class ApiClientService
             }
         }
     }
+
     public function findWordingByKey(string $key)
     {
         $wordingList = $this->getWordings();

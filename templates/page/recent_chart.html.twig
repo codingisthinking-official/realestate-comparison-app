@@ -24,7 +24,8 @@
                     {{ page.minPrice|number_format(2, '.', ',') }}zł
                 </td>
                 <td class="{% if loop.index == 1 %}canvas-holder {% endif %}chart-cell">
-                    {% if loop.index == 1 %}<canvas height="603" class="can"></canvas>{% endif %}
+                    {% if loop.index == 1 %}
+                        <canvas height="603" class="can"></canvas>{% endif %}
                     <div class="chart-bar">
                         <div class="chart-point"><span>{{ page.avgPrice|number_format(2, '.', ',') }}zł</span></div>
                     </div>

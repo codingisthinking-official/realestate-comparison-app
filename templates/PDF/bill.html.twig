@@ -18,6 +18,7 @@
             margin: 0;
             padding: 0;
         }
+
         body {
             font-family: 'Montserrat', sans-serif;
             font-size: 16px;
@@ -26,6 +27,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+
         header {
             background-color: #0a1416;
             padding: 20px;
@@ -36,6 +38,7 @@
             color: #0a1416;
             text-transform: uppercase;
         }
+
         .container {
             padding: 30px;
             font-weight: 400;
@@ -83,32 +86,66 @@
             padding: 7px 15px;
             font-size: 14px;
         }
+
+        .red {
+            color: #DB4335;
+        }
+
+        @media (max-width: 1250px) {
+            .wrapper {
+                padding: 0 30px;
+            }
+        }
+
+        .wrapper {
+            max-width: 1170px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div>
-            <img src="{{ asset('images/logo.png') }}" alt="logo">
-        </div>
-    </header>
-    <div class ="container">
-        <h2> {{ flat.city }} </h2>
-        {{ cityInfo.description }}
-        <p>Dane przygotowane dla kodu pocztowego: {{ flat.postcode }}</p>
-        <table style="width:100%">
-            <thead>
-                <tr>
-                    <th> Typ rachunku </th>
-                    <th> Twój wynik </th>
-                </tr>
-            </thead>
-            {% for bill in bills  %}
-            <tr>
-                <td>{{ bill.billType }}</td>
-                <td>{{ bill.value }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+<header>
+    <div>
+        <img src="{{ asset('images/logo.png') }}" alt="logo">
     </div>
+</header>
+<div class="container wrapper">
+    <h2> {{ flat.city }} </h2>
+    {{ cityInfo.description }}
+    <p>Dane przygotowane dla kodu pocztowego: {{ flat.postcode }}</p>
+    <table style="width:100%">
+        <thead>
+        <tr>
+            <th> Typ rachunku</th>
+            <th> Twój wynik</th>
+            <th> Średnia</th>
+        </tr>
+        </thead>
+
+        {% set sum = 0 %}
+        {% for bill_info in bill_list %}
+            {% if bill_info.type != "empty space" %}
+                <tr>
+                    <td>{{ bill_info.title }}</td>
+                    {% for bill in bills %}
+                        {% if bill.billType == bill_info.slug %}
+                            <td>{{ bill.value }}</td>
+                            <td>
+                                {% if bill_info.type == "text" %}
+                                    -
+                                {% elseif bill_info.type == "chart" %}
+                                    {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
+                                    {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    <p class="red">Przesunięcie kosztów do średniej powoduje oszczędność roczną
+        około {{ (sum*12)|number_format(2, ',', '.') }} złotych!</p>
+</div>
 </body>
 </html>

@@ -25,7 +25,7 @@ $(document).ready(function () {
     function drawChart() {
         let can = $(".can");
         for (let x = 0; x < can.length; x++) {
-            let width =$(".can").width();
+            let width = $(".can").width();
             let points = [];
             let tableRows = [...$(`.table-${x + 1} tbody tr`)];
             document.getElementsByClassName("can")[x].height = tableRows.length * 68;

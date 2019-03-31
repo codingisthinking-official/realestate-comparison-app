@@ -15,7 +15,7 @@ class BillTypes
      * @Type("string")
      */
     private $title;
-    
+
     /**
      * @Type("string")
      */

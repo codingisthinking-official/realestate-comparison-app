@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -114,21 +113,26 @@ class LandingController extends AbstractController
      */
     public function postFiles(SerializerInterface $serializer, Request $request, CityService $cityService)
     {
+        Dump($request);
         $entityManager = $this->getDoctrine()->getManager();
-        $file = $entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $request->request->get('uuid')]);
+        $city = $entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $request->headers->get('uuid')]);
 
-        if (!$file) {
+        if (!$city) {
             throw $this->createNotFoundException(
                 'City not found!'
             );
         }
+        var_dump($request->files->all());
+        $file = $request->files->get('file');
+        $filename = uniqid() . "." . $file->getClientOriginalExtension();
+        $webPath = $this->getParameter('kernel.project_dir');
+        $path = $webPath . "/public/images/upload";
+        $file->move($path, $filename);
+        $status = array('status' => "success", "fileUploaded" => true);
 
-        Dump($request->files);
+        $city->setFiles($filename);
 
-        $file->setFiles($request->request->get('path'));
-        $entityManager->flush();
-
-        $entityManager->persist($file);
+        $entityManager->persist($city);
         $entityManager->flush();
 
         return new Response($serializer->serialize(['status' => 'ok'], 'json'));
@@ -146,19 +150,19 @@ class LandingController extends AbstractController
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
             $valueList = '';
-            $valueList = $valueList.'City: '.$flat->getCity().', Postcode: '.$flat->getPostcode().', ';
+            $valueList = $valueList . 'City: ' . $flat->getCity() . ', Postcode: ' . $flat->getPostcode() . ', ';
             for ($x = 0; $x < sizeof($repository); $x++) {
-                $valueList = $valueList.$repository[$x]->getBillType().': '.$repository[$x]->getValue();
-                if($x < sizeof($repository)-1) {
-                    $valueList = $valueList.', ';
+                $valueList = $valueList . $repository[$x]->getBillType() . ': ' . $repository[$x]->getValue();
+                if ($x < sizeof($repository) - 1) {
+                    $valueList = $valueList . ', ';
                 }
             }
             $info = [
                 'subject' => $flat->getUuid(),
                 'payload' => $valueList,
                 '_actions' => [
-                    'accept' => $_SERVER['HTTP_HOST'].$this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
-                    'delete' => $_SERVER['HTTP_HOST'].$this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'))
+                    'accept' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
+                    'delete' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'))
                 ]
             ];
             array_push($infoList, $info);

@@ -8,60 +8,64 @@
     <title>{% block title %}{{ 'title'|toWording }}{% endblock %}</title>
 
     {% block stylesheets %}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:400,500,600,700&amp;subset=latin-ext">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:400,500,600,700&amp;subset=latin-ext">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+              type="text/css">
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {% endblock %}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
 </head>
 <body {% block bodyType %}{% endblock %}>
-    <header>
-        <div class="wrapper">
-            <div class="row">
-                <div class="col-xs-6 logo">
-                    <a href="{{ path('homepage') }}"> <img src="{{ asset('images/logo.png') }}" alt="logo"></a>
-                </div>
-                <div class="col-xs-6 align-right">
-                    <a href="{{ path('contact') }}" class="button red-bcg"> 
-                        <img src="{{ asset('images/envelope.png') }}" alt="koperta"> <span> {{ 'header.message'|toWording }} </span>
-                    </a>
-                </div>
+<header>
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-xs-6 logo">
+                <a href="{{ path('homepage') }}"> <img src="{{ asset('images/logo.png') }}" alt="logo"></a>
             </div>
-            <div class="row claim">
-                <div class="col-sm-8 col-md-7 col-lg-6">
-                    <div class="description">
-                        <h1> {{ 'header.first_line'|toWording }} </h2>
+            <div class="col-xs-6 align-right">
+                <a href="{{ path('contact') }}" class="button red-bcg">
+                    <img src="{{ asset('images/envelope.png') }}" alt="koperta">
+                    <span> {{ 'header.message'|toWording }} </span>
+                </a>
+            </div>
+        </div>
+        <div class="row claim">
+            <div class="col-sm-8 col-md-7 col-lg-6">
+                <div class="description">
+                    <h1> {{ 'header.first_line'|toWording }} </h2>
                         <p> {{ 'header.description'|toWording }}</p>
                         <a href="#form" class="button yellow-bcg"> {{ "header.button" | toWording }} </a>
-                    </div>
-                </div>
-            </div>
-            <nav>
-                <ul>
-                    {{ render(controller(
-                        'App\\Controller\\PageController::recentCities',
-                        { 'max': 8 }
-                    )) }}
-                </ul>
-            </nav>
-            <a href="#form" class="button red-bcg scroll-down"> <img src="{{ asset('images/arrow-down.png') }}" alt="strzłka w dół"> </a>
-        </div>
-        <div class="overlay"></div>
-    </header>
-    {% block body %}{% endblock %}
-    <footer>
-        <div class="wrapper">
-            <div class="row center-xs">
-                <div class="col-xs-8 col-md-2">
-                    <div class="logo"> <img src="{{ asset('images/logo.png') }}" alt="logo"> </div>
-                    <p> {{ 'footer.link' | toWording }}</p>
                 </div>
             </div>
         </div>
-        <div class="overlay"></div>
-    </footer>
-    {% block javascripts %}{% endblock %}
+        <nav>
+            <ul>
+                {{ render(controller(
+                    'App\\Controller\\PageController::recentCities',
+                    { 'max': 8 }
+                )) }}
+            </ul>
+        </nav>
+        <a href="#form" class="button red-bcg scroll-down"> <img src="{{ asset('images/arrow-down.png') }}"
+                                                                 alt="strzłka w dół"> </a>
+    </div>
+    <div class="overlay"></div>
+</header>
+{% block body %}{% endblock %}
+<footer>
+    <div class="wrapper">
+        <div class="row center-xs">
+            <div class="col-xs-8 col-md-2">
+                <div class="logo"><img src="{{ asset('images/logo.png') }}" alt="logo"></div>
+                <p> {{ 'footer.link' | toWording }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="overlay"></div>
+</footer>
+{% block javascripts %}{% endblock %}
 </body>
 </html>

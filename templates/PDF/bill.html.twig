@@ -129,13 +129,19 @@
                     <td>{{ bill_info.title }}</td>
                     {% for bill in bills %}
                         {% if bill.billType == bill_info.slug %}
-                            <td>{{ bill.value }}</td>
+                            <td>
+                                {{ bill.value }}
+                            </td>
                             <td>
                                 {% if bill_info.type == "text" %}
                                     -
                                 {% elseif bill_info.type == "chart" %}
-                                    {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
-                                    {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
+                                    {% if bill_price[loop.parent.loop.index0].avgPrice == 0 %}
+                                        Brak danych
+                                    {% else %}
+                                        {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
+                                        {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         {% endif %}

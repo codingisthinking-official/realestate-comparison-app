@@ -55,7 +55,7 @@
                             </div>
                             <div class="col-xs-8">
                                 <div class="input-wrapper">
-                                    <input type="number" name="rent">
+                                    <input type="number" name="rent" min="0">
                                     <span class="info">?</span>
 
                                     <div class="tooltip">
@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-xs-8">
                                 <div class="input-wrapper">
-                                    <input type="number" name="area">
+                                    <input type="number" name="area" min="0">
                                     <span class="info">?</span>
 
                                     <div class="tooltip">
@@ -180,7 +180,7 @@
                             {% if bill.type == "chart" %}
                                 <label for="in1">{{ bill.title }}</label>
                                 <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                                    <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?">
+                                    <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?" min="0">
                                     <span class="info">?</span>
 
                                     <div class="tooltip">

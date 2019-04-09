@@ -548,6 +548,7 @@ input::placeholder {
 .good .big-paragraph {
     color: #48af10;
     font-weight: 600;
+    margin-bottom: 50px;
 }
 
 .bad {
@@ -1290,6 +1291,7 @@ h3 {
     .small-price-bar {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
+        padding-top: 60px;
     }
 
     .small-price-bar .min-price:before, .small-price-bar .max-price:before {
@@ -1298,7 +1300,7 @@ h3 {
     }
 
     .small-price-bar .min-price {
-        top: -10px;
+        top: -50px;
     }
 
     .small-price-bar .max-price {

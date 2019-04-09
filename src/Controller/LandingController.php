@@ -113,7 +113,6 @@ class LandingController extends AbstractController
      */
     public function postFiles(SerializerInterface $serializer, Request $request, CityService $cityService)
     {
-        Dump($request);
         $entityManager = $this->getDoctrine()->getManager();
         $city = $entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $request->headers->get('uuid')]);
 
@@ -133,67 +132,6 @@ class LandingController extends AbstractController
         $city->setFiles($filename);
 
         $entityManager->persist($city);
-        $entityManager->flush();
-
-        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
-    }
-
-    /**
-     * @Route("/info/", name="info.get")
-     * @Method({"GET"})
-     */
-    public function getInfo(SerializerInterface $serializer)
-    {
-        $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatList = $repository->findBy(['state' => 0]);
-        $infoList = [];
-        foreach ($flatList as $flat) {
-            $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
-            $valueList = '';
-            $valueList = $valueList . 'City: ' . $flat->getCity() . ', Postcode: ' . $flat->getPostcode() . ', ';
-            for ($x = 0; $x < sizeof($repository); $x++) {
-                $valueList = $valueList . $repository[$x]->getBillType() . ': ' . $repository[$x]->getValue();
-                if ($x < sizeof($repository) - 1) {
-                    $valueList = $valueList . ', ';
-                }
-            }
-            $info = [
-                'subject' => $flat->getUuid(),
-                'payload' => $valueList,
-                '_actions' => [
-                    'accept' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
-                    'delete' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'))
-                ]
-            ];
-            array_push($infoList, $info);
-        }
-        return new Response($serializer->serialize(['total_items' => sizeof($infoList), 'data' => $infoList], 'json'));
-    }
-
-    /**
-     * @Route("/info/{uuid}/{state}", name="info.state.set")
-     * @Method({"PATCH"})
-     */
-    public function setStateInfo(SerializerInterface $serializer, $uuid, $state)
-    {
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flat = $repository->findOneBy(['uuid' => $uuid]);
-        if (!$flat) {
-            throw $this->createNotFoundException(
-                'No flat found for this uuid: ' . $uuid
-            );
-        }
-        switch ($state) {
-            case "accept":
-                $flat->setState(1);
-                break;
-            case "delete":
-                $flat->setState(2);
-                break;
-        }
-        $entityManager->persist($flat);
         $entityManager->flush();
 
         return new Response($serializer->serialize(['status' => 'ok'], 'json'));

@@ -101,6 +101,207 @@
             max-width: 1170px;
             margin: 0 auto;
         }
+
+        /*wykresy*/
+        .max-price {
+            text-align: right;
+            position: relative;
+        }
+
+        .small-price-bar {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            color: #200c0a;
+            max-width: 100%;
+            margin: 40px 0;
+            padding-top: 40px;
+        }
+
+        .small-price-bar .min-price {
+            padding-right: 10px;
+            position: relative;
+        }
+
+        .small-price-bar .min-price:before {
+            content: "Najtańszy";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 0;
+            -webkit-transform: translateY(-250%);
+            transform: translateY(-250%);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: Montserrat;
+        }
+
+        .small-price-bar .max-price {
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .small-price-bar .max-price:before {
+            content: "Najdroższy";
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            -webkit-transform: translateY(-250%);
+            transform: translateY(-250%);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: Montserrat;
+        }
+
+        .small-price-bar .average-bar {
+            background: #DB4335;
+            width: 45%;
+            height: 100%;
+            border-radius: 4px;
+            position: relative;
+            z-index: 9;
+            max-width: 100%;
+        }
+
+        .small-price-bar .average-bar:after {
+            content: "";
+            position: absolute;
+            border-radius: 9px;
+            background: #DB4335;
+            width: 9px;
+            height: 9px;
+            border: 2px solid #fff;
+            top: 50%;
+            left: 100%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .small-price-bar .your-bar {
+            background: #DBAE35;
+            width: 0%;
+            top: 0;
+            left: 0;
+            border-radius: 4px;
+            position: absolute;
+            z-index: 1;
+            height: 100%;
+            transition: width .25s;
+            max-width: 100%;
+            will-change: width;
+        }
+
+        .small-price-bar .your-bar::after {
+            content: "";
+            width: 18px;
+            height: 18px;
+            border-radius: 20px;
+            background: #DBAE35;
+            border: 2px solid #fff;
+            left: 100%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            position: absolute;
+            display: block;
+        }
+
+        .small-price-bar .average {
+            font-weight: 600;
+            color: #DB4335;
+            font-size: 14px;
+            position: absolute;
+            left: 45%;
+            top: 0;
+            -webkit-transform: translate(-50%, 60%);
+            transform: translate(-50%, 60%);
+        }
+
+        .small-price-bar .average:after {
+            content: "Średnia";
+            display: block;
+            left: 50%;
+            -webkit-transform: translate(-50%, -20%);
+            transform: translate(-50%, -20%);
+            position: absolute;
+        }
+
+        .small-price-bar .your-result {
+            font-weight: 600;
+            color: #DBAE35;
+            font-size: 14px;
+            position: absolute;
+            left: 60%;
+            top: 0;
+            -webkit-transform: translate(-50%, -130%);
+            transform: translate(-50%, -130%);
+            min-width: 60px;
+        }
+
+        .small-price-bar .your-result::before {
+            content: "Twój wynik";
+            display: block;
+            left: 50%;
+            -webkit-transform: translate(-50%, -80%);
+            transform: translate(-50%, -80%);
+            top: 0;
+            position: absolute;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        .small-bar {
+            height: 8px;
+            border-radius: 4px;
+            width: auto;
+            -webkit-box-flex: 1;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+            position: relative;
+            background: #f1f5ff;
+        }
+
+        @media (max-width: 768px) {
+            .min-price, .max-price {
+                width: 100%;
+            }
+
+            .max-price {
+                margin-top: 45px;
+            }
+
+            .small-price-bar {
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                padding-top: 60px;
+            }
+
+            .small-price-bar .min-price:before, .small-price-bar .max-price:before {
+                -webkit-transform: translateY(-100%);
+                transform: translateY(-100%);
+            }
+
+            .small-price-bar .min-price {
+                top: -50px;
+            }
+
+            .small-price-bar .max-price {
+                top: 10px;
+            }
+
+            .compared .bar {
+                margin-top: 45px;
+            }
+
+            .small-bar {
+                width: 100%;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -113,45 +314,76 @@
     <h2> {{ flat.city }} </h2>
     {{ cityInfo.description }}
     <p>Dane przygotowane dla kodu pocztowego: {{ flat.postcode }}</p>
-    <table style="width:100%">
-        <thead>
-        <tr>
-            <th> Typ rachunku</th>
-            <th> Twój wynik</th>
-            <th> Średnia</th>
-        </tr>
-        </thead>
+    {% set sum = 0 %}
+    {% for bill_info in bill_list %}
+        {% if bill_info.type != "empty space" %}
+            <h2>{{ bill_info.title }}</h2>
+            {% for bill in bills %}
+                {% if bill.billType == bill_info.slug %}
+                    {% if bill_info.type == "text" %}
+                        {{ bill.value }}<br/>
+                    {% elseif bill_info.type == "chart" %}
+                        {% if bill_price[loop.parent.loop.index0].avgPrice == 0 %}
+                            Brak danych
+                        {% else %}
+                            <div class="small-price-bar">
+                                <div class="min-price">
+                                    <span> {{ bill_price[loop.parent.loop.index0].minPrice|number_format(2, ',', '.') }}
+                                        zł</span>
+                                </div>
 
-        {% set sum = 0 %}
-        {% for bill_info in bill_list %}
-            {% if bill_info.type != "empty space" %}
-                <tr>
-                    <td>{{ bill_info.title }}</td>
-                    {% for bill in bills %}
-                        {% if bill.billType == bill_info.slug %}
-                            <td>
-                                {{ bill.value }}
-                            </td>
-                            <td>
-                                {% if bill_info.type == "text" %}
-                                    -
-                                {% elseif bill_info.type == "chart" %}
-                                    {% if bill_price[loop.parent.loop.index0].avgPrice == 0 %}
-                                        Brak danych
+                                <div class="small-bar">
+                                    <div class="average-bar"
+                                         style="width:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
+                                    <div class="your-bar"
+                                         style="width:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
+                                    {% if (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
+                                        <div class="your-result"
+                                             style="left:100%;"> {{ bill.value|number_format(2, ',', '.') }}zł
+                                        </div>
+                                    {% elseif (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
+                                        <div class="your-result"
+                                             style="left:0;"> {{ bill.value|number_format(2, ',', '.') }}zł
+                                        </div>
                                     {% else %}
-                                        {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
-                                        {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
+                                        <div class="your-result"
+                                             style="left:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill.value|number_format(2, ',', '.') }}
+                                            zł
+                                        </div>
                                     {% endif %}
-                                {% endif %}
-                            </td>
+
+                                    {% if (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
+                                        <div class="average"
+                                             style="left:100%;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}zł
+                                        </div>
+                                    {% elseif (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
+                                        <div class="average"
+                                             style="left:0;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}zł
+                                        </div>
+                                    {% else %}
+                                        <div class="average"
+                                             style="left:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
+                                            zł
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="max-price">
+                                    <span> {{ bill_price[loop.parent.loop.index0].maxPrice|number_format(2, ',', '.') }}
+                                        zł</span>
+                                </div>
+                            </div>
+                            {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
                         {% endif %}
-                    {% endfor %}
-                </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-    <p class="red">Przesunięcie kosztów do średniej powoduje oszczędność roczną
-        około {{ (sum*12)|number_format(2, ',', '.') }} złotych!</p>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+    {% if sum > 0 %}
+        <p class="red">Przesunięcie kosztów do średniej powoduje oszczędność roczną
+            około {{ (sum*12)|number_format(2, ',', '.') }} złotych!</p>
+    {% endif %}
 </div>
 </body>
 </html>

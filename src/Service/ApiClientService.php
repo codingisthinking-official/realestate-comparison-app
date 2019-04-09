@@ -118,6 +118,20 @@ class ApiClientService
         return $this->sortByPosition($billTypes);
     }
 
+    public function findTitleOfBillTypeBySlug(string $slug)
+    {
+        $response = file_get_contents('bill_types.json');
+        $billTypeList = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\BillTypes>', 'json');
+
+        foreach ($billTypeList as $billType) {
+            if ($billType->getSlug() == $slug) {
+                return $billType->getTitle();
+            }
+        }
+
+        return $slug;
+    }
+
     public function getFlatTypes(): array
     {
         $response = file_get_contents('flat_types.json');

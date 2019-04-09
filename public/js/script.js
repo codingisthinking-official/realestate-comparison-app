@@ -11,7 +11,6 @@ $(document).ready(function () {
 
     function getFormData(e) {
         e.preventDefault();
-        $('#compare').addClass('unactive');
         let formData = {
             flatType: $('select[name="flat-type"]').val(),
             postalCode: $('input[name="postal-code"]').val(),
@@ -25,6 +24,7 @@ $(document).ready(function () {
         }
         else {
             $('.wrong-data').hide();
+            $('#compare').addClass('unactive');
 
             fetch('/flat/', {
                 method: 'POST',
@@ -89,11 +89,13 @@ $(document).ready(function () {
             $('.compared').removeClass('good');
             $('.compared').addClass('bad');
             $('.big-paragraph').html('Twój czynsz wypada drogo na tle innych. Dowiedz się dlaczego');
+            $('.compared .expensive').show();
         }
         else if (average >= price) {
             $('.compared').removeClass('bad');
             $('.compared').addClass('good');
             $('.big-paragraph').html('Twój czynsz wypada dobrze na tle innych.');
+            $('.compared .expensive').hide();
         }
         else {
             $('.big-paragraph').html('Wystąpił błąd');
@@ -112,7 +114,6 @@ $(document).ready(function () {
 
     function analyseRent(e) {
         e.preventDefault();
-        $('#analyse').addClass('unactive');
         postFile();
         let formData = {
             flatType: $('select[name="flat-type"]').val(),
@@ -126,6 +127,7 @@ $(document).ready(function () {
         }
         else {
             $('.wrong-data').hide();
+            $('#analyse').addClass('unactive');
             $('#data-loader').css('display', 'flex');
             fetch('/bills/' + formData.postalCode + '/' + formData.flatType, {
                 method: 'GET',
@@ -185,8 +187,6 @@ $(document).ready(function () {
 
     function postSmallFormData(e) {
         e.preventDefault();
-        $('#export').addClass('unactive');
-
         let dataArray = [];
         let elements = $('.price-analysis .input-wrapper:not(.empty)');
         let responsesNumber = 0;
@@ -213,6 +213,7 @@ $(document).ready(function () {
                 .then(res => {
                     if (responsesNumber === dataArray.length) {
                         addBillsItem();
+                        $('#data-loader').hide();
                         $('#data-loader').hide();
                     }
                 });
@@ -372,6 +373,7 @@ $(document).ready(function () {
         if (okay) {
             postSmallFormData(e);
             $('.empty-inputs').hide();
+            $('#export').addClass('unactive');
         }
         else $('.empty-inputs').show();
     });

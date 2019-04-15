@@ -14,3 +14,6 @@
 /web/vendors/
 .idea
 .DS_Store
+public/uploads/
+/var/cache/
+/var/log

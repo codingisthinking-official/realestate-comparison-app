@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,30 +25,29 @@ class AdminController extends AbstractController
     public function getInfo(SerializerInterface $serializer, ApiClientService $apiClientService)
     {
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatList = $repository->findBy(['state' => 0], [
+        $flatList = $repository->findBy([], [
             'id' => 'DESC'
         ]);
         $infoList = [];
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
-            $valueList = '';
-            $valueList = $valueList . 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode();
+            $valueList = '<strong>';
+            $valueList = $valueList . 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . '</strong><br><br>';
             for ($x = 0; $x < sizeof($repository); $x++) {
-                if ($x == 0) {
-                    $valueList = $valueList . ', ';
-                }
-                $valueList = $valueList . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
+                $valueList = $valueList  .'<small>' . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
                 if ($x < sizeof($repository) - 1) {
-                    $valueList = $valueList . ', ';
-                }
+                    $valueList = $valueList . '<br> ';
+		}
+		$valueList .= '</small>';
             }
             $info = [
                 'subject' => $flat->getUuid(),
                 'payload' => $valueList,
+		'status' => $flat->getState() == 0 ? 'Niezaakceptowane': 'Zaakceptowany',
                 '_actions' => [
-                    'accept' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
-                    'delete' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete')),
-                    'edit' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit')),
+                    'accept' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL),
+                    'delete' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL),
+                    'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
                     'file' => $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
                 ]
             ];

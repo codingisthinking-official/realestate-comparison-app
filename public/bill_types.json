@@ -21,6 +21,13 @@
     "position": 4
   },
   {
+    "slug": "water",
+    "title": "Woda",
+    "tooltip": "Cena wody.",
+    "type": "chart",
+    "position": 5
+  },
+  {
     "slug": "",
     "title": "",
     "tooltip": "",

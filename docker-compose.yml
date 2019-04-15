@@ -37,7 +37,7 @@ services:
     environment:
       - APP_ENV=prod
       - API_URL=http://realestate.wiseweb.pl/api/
-      - DATABASE_DSN=mysql://test:test@realestate-mysql:3306/test
+      - DATABASE_URL=mysql://test:test@realestate-mysql:3306/test
 
   composer:
     restart: 'no'

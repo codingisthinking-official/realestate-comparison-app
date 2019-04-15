@@ -27,25 +27,6 @@ class LandingController extends AbstractController
     }
 
     /**
-     * @Route("/flat/{postCode}/{flatType}", name="flat.get")
-     * @Method({"GET"})
-     */
-    public function getCityValues(SerializerInterface $serializer, CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType)
-    {
-        $city = $cityService->getCityByPostcode($postCode);
-        $city = $apiClientService->getOneCityByTitle($city);
-
-        $repository = $this->getDoctrine()->getRepository(Flat::class);
-        if ($city) {
-            $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
-        } else {
-            return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => 5, 'avgPrice' => 25, 'maxPrice' => 55], 'json'));
-        }
-
-        return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => $cityWithValues[0]->minPrice, 'avgPrice' => $cityWithValues[0]->avgPrice, 'maxPrice' => $cityWithValues[0]->maxPrice], 'json'));
-    }
-
-    /**
      * @Route("/flat/", name="flat.post")
      * @Method({"POST"})
      */
@@ -65,7 +46,26 @@ class LandingController extends AbstractController
         $entityManager->persist($flat);
         $entityManager->flush();
 
-        return new Response($serializer->serialize(['status' => 'ok', 'request' => $request], 'json'));
+        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+    }
+
+    /**
+     * @Route("/flat/{postCode}/{flatType}", name="flat.get")
+     * @Method({"GET"})
+     */
+    public function getCityValues(SerializerInterface $serializer, CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType)
+    {
+        $city = $cityService->getCityByPostcode($postCode);
+        $city = $apiClientService->getOneCityByTitle($city);
+
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+        if ($city) {
+            $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
+        } else {
+            return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => 5, 'avgPrice' => 25, 'maxPrice' => 55], 'json'));
+        }
+
+        return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => $cityWithValues[0]->minPrice, 'avgPrice' => $cityWithValues[0]->avgPrice, 'maxPrice' => $cityWithValues[0]->maxPrice], 'json'));
     }
 
     /**

@@ -31,7 +31,7 @@ class AdminController extends AbstractController
         $infoList = [];
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
-            $valueList = '<strong>';
+            $valueList = '<strong style="font-weight: 400; text-decoration: underline;">';
             $valueList = $valueList . 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . '</strong><br><br>';
             for ($x = 0; $x < sizeof($repository); $x++) {
                 $valueList = $valueList  .'<small>' . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
@@ -40,16 +40,18 @@ class AdminController extends AbstractController
 		}
 		$valueList .= '</small>';
             }
+
+	    $actions = [
+                'accept' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL),
+                'delete' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL),
+                'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
+                'file' => $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
+	    ];
             $info = [
                 'subject' => $flat->getUuid(),
                 'payload' => $valueList,
-		'status' => $flat->getState() == 0 ? 'Niezaakceptowane': 'Zaakceptowany',
-                '_actions' => [
-                    'accept' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL),
-                    'delete' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL),
-                    'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
-                    'file' => $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
-                ]
+		'status' => $flat->getState() == 0 ? 'Not accepted': '<span style="color: #1ba356; font-weight: 600;">Accepted</span>',
+                '_actions' => $actions,
             ];
             array_push($infoList, $info);
         }

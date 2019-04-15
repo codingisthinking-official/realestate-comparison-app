@@ -112,16 +112,24 @@ class ApiClientService
 
     public function getBillTypes()
     {
-        $response = file_get_contents('bill_types.json');
-        $billTypes = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\BillTypes>', 'json');
+        $response = $this->client->get('price_parameters/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (price parameters)');
+        }
+
+        $billTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\BillTypes>', 'json');
 
         return $this->sortByPosition($billTypes);
     }
 
     public function findTitleOfBillTypeBySlug(string $slug)
     {
-        $response = file_get_contents('bill_types.json');
-        $billTypeList = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\BillTypes>', 'json');
+        $response = $this->client->get('price_parameters/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (price parameters)');
+        }
+
+        $billTypeList = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\BillTypes>', 'json');
 
         foreach ($billTypeList as $billType) {
             if ($billType->getSlug() == $slug) {
@@ -134,10 +142,32 @@ class ApiClientService
 
     public function getFlatTypes(): array
     {
-        $response = file_get_contents('flat_types.json');
-        $flatTypes = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\FlatTypes>', 'json');
+        $response = $this->client->get('type_of_buildings/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (type of buildings)');
+        }
+
+        $flatTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
 
         return $flatTypes;
+    }
+
+    public function findTitleOfFlatTypeById(string $id)
+    {
+        $response = $this->client->get('type_of_buildings/');
+        if ($response->getStatusCode() != 200) {
+            throw new \RuntimeException('Can not connect to the API (type of buildings)');
+        }
+
+        $flatTypeList = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
+
+        foreach ($flatTypeList as $flatType) {
+            if ($flatType->getId() == $id) {
+                return $flatType->getTitle();
+            }
+        }
+
+        return $id;
     }
 
     public function sortByPosition(array $array): array

@@ -11,8 +11,6 @@ $(document).ready(function () {
         let canvas = document.getElementsByClassName("can")[canva];
         let ctx = canvas.getContext("2d");
 
-        console.log(pointsStart, pointsEnd, canva);
-
         ctx.beginPath();
         ctx.setLineDash([2, 2]);
         ctx.strokeStyle = "#200c0a";
@@ -39,7 +37,6 @@ $(document).ready(function () {
 
             $(tableRows[0]).find('.chart-point').css({left: points[0] + "%"});
             for (let y = 1; y < tableRows.length; y++) {
-                console.log(width);
                 drawLine([width * (points[y] / 100), 34 + 68 * y], [width * (points[y - 1] / 100), 35 + 68 * (y - 1)], x);
                 $(tableRows[y]).find('.chart-point').css({left: points[y] + "%"});
             }

@@ -99,7 +99,6 @@ class LandingController extends AbstractController
         $bill->setBillType($request->request->get('bill_type'));
         $bill->setFlatType($request->request->get('flat_type'));
         $bill->setUuid($request->request->get('uuid'));
-        Dump($request->request->get('uuid'));
 
         $entityManager->persist($bill);
         $entityManager->flush();
@@ -121,7 +120,7 @@ class LandingController extends AbstractController
                 'City not found!'
             );
         }
-        var_dump($request->files->all());
+
         $file = $request->files->get('file');
         $filename = uniqid() . "." . $file->getClientOriginalExtension();
         $webPath = $this->getParameter('kernel.project_dir');

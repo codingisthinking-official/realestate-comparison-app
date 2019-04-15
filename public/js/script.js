@@ -25,6 +25,9 @@ $(document).ready(function () {
         else {
             $('.wrong-data').hide();
             $('#compare').addClass('unactive');
+            $('#form').find('input').attr('disabled','disabled');
+            $('#form').find('select').attr('disabled','disabled');
+
 
             fetch('/flat/', {
                 method: 'POST',
@@ -128,6 +131,8 @@ $(document).ready(function () {
         else {
             $('.wrong-data').hide();
             $('#analyse').addClass('unactive');
+            $('#compared').find('input').attr('disabled','disabled');
+            $('#compared').find('select').attr('disabled','disabled');
             $('#data-loader').css('display', 'flex');
             fetch('/bills/' + formData.postalCode + '/' + formData.flatType, {
                 method: 'GET',
@@ -374,6 +379,8 @@ $(document).ready(function () {
             postSmallFormData(e);
             $('.empty-inputs').hide();
             $('#export').addClass('unactive');
+            $('#price-analysis').find('input').attr('disabled','disabled');
+            $('#price-analysis').find('select').attr('disabled','disabled');
         }
         else $('.empty-inputs').show();
     });

@@ -54,8 +54,6 @@ class Flat
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     *
-     * @Assert\File(mimeTypes={ "application/pdf" })
      */
     private $files = null;
 

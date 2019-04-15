@@ -31,7 +31,7 @@ class AdminController extends AbstractController
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
             $valueList = '';
-            $valueList = $valueList . 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode();
+            $valueList = $valueList . 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ mieszkania: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType());
             for ($x = 0; $x < sizeof($repository); $x++) {
                 if ($x == 0) {
                     $valueList = $valueList . ', ';
@@ -48,7 +48,7 @@ class AdminController extends AbstractController
                     'accept' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
                     'delete' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete')),
                     'edit' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit')),
-                    'file' => $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
+                    'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
                 ]
             ];
             array_push($infoList, $info);

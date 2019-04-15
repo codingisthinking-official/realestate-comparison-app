@@ -5,6 +5,7 @@ namespace App\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
 use App\Entity\Flat;
+use App\Entity\Postcode;
 
 class CityService
 {
@@ -74,14 +75,9 @@ class CityService
 
     public function getCityByPostcode(string $code): string
     {
-        $response = file_get_contents('postcode.json');
-        $postcodeList = $this->serializer->deserialize($response, 'array<App\ValueObject\Cms\Postcode>', 'json');
-        foreach ($postcodeList as $postcode) {
-            if ($postcode->getPostcode() == $code) {
-                return $postcode->getCity();
-            }
-        }
-        return $code;
+        $postcode = $this->entityManager->getRepository(Postcode::class)->findOneBy(['postcode' => $code]);
+
+        return $postcode ->getCity();
     }
 
     public function createBillsTabByCity(object $city, $repository, string $type): array

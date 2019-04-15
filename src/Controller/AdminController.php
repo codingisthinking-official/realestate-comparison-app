@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use JMS\Serializer\SerializerInterface;
-use App\Service\CityService;
 use App\Service\ApiClientService;
 use App\Entity\Flat;
 use App\Form\FlatType;
@@ -89,7 +88,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(FlatType::class, $city);
 
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
 
             $manager->persist($city);
@@ -112,7 +111,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(BillType::class, $bill);
 
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $manager = $this->getDoctrine()->getManager();
 
             $manager->persist($bill);
@@ -124,6 +123,7 @@ class AdminController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
     /**
      * @Route("/info/{uuid}/{state}", name="info.state.set")
      * @Method({"PATCH"})

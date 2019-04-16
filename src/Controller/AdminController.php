@@ -146,7 +146,7 @@ class AdminController extends AbstractController
      * @Route("/info/{uuid}/{state}", name="info.state.set")
      * @Method({"PATCH"})
      */
-    public function setStateInfo(SerializerInterface $serializer, $uuid, $state)
+    public function setStateInfo(Request $request, SerializerInterface $serializer, $uuid, $state)
     {
         $entityManager = $this->getDoctrine()->getManager();
 
@@ -168,6 +168,7 @@ class AdminController extends AbstractController
         $entityManager->persist($flat);
         $entityManager->flush();
 
-        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
     }
 }

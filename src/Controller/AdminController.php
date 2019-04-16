@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,32 +24,49 @@ class AdminController extends AbstractController
     public function getInfo(SerializerInterface $serializer, ApiClientService $apiClientService)
     {
         $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatList = $repository->findBy(['state' => 0], [
+        $flatList = $repository->findBy([], [
             'id' => 'DESC'
         ]);
         $infoList = [];
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
-            $valueList = '';
-            $valueList = $valueList . 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ mieszkania: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType());
+            $valueList = '<span style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
+            $valueList .= 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType()) .'</span><br><br><small>';
             for ($x = 0; $x < sizeof($repository); $x++) {
-                if ($x == 0) {
-                    $valueList = $valueList . ', ';
-                }
                 $valueList = $valueList . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
                 if ($x < sizeof($repository) - 1) {
-                    $valueList = $valueList . ', ';
+                    $valueList = $valueList . '<br>';
                 }
-            }
+	    }
+
+	    $valueList .= '</small>';
+	    $status = '<span style="color: #b0cc37">Not accepted</span>';
+
+	    $actions = [
+                'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
+                'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
+            ];
+
+	    if ($flat->getState() == 0) {
+                $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);
+                $actions['reject'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL);
+	    }
+
+	    if ($flat->getState() == 1) { 
+		$status = '<span style="color: green">Accepted</span>';
+                $actions['reject'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL);
+	    }
+
+	    if ($flat->getState() == 2) {
+		$status = '<span style="color: red">Rejected</span>';
+                $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);
+	    }
+
             $info = [
                 'subject' => $flat->getUuid(),
+		'status' => $status,
                 'payload' => $valueList,
-                '_actions' => [
-                    'accept' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept')),
-                    'delete' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete')),
-                    'edit' => $_SERVER['HTTP_HOST'] . $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit')),
-                    'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
-                ]
+                '_actions' => $actions,
             ];
             array_push($infoList, $info);
         }

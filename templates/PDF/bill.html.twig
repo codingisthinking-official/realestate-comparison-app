@@ -323,7 +323,7 @@
                     {% if bill_info.type == "text" %}
                         {{ bill.value }}<br/>
                     {% elseif bill_info.type == "chart" %}
-                        {% if bill_price[loop.parent.loop.index0].avgPrice == 0 %}
+                        {% if bill_price[loop.parent.loop.index0].minPrice == bill_price[loop.parent.loop.index0].maxPrice %}
                             Brak danych
                         {% else %}
                             <div class="small-price-bar">

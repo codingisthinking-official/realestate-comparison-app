@@ -267,6 +267,13 @@ label {
   margin: 25px 0;
 }
 
+.input-wrapper.wrapper-checkbox {
+  input[type=checkbox] {
+    width: auto !important;
+    min-width: unset;
+  }
+}
+
 .info {
   display: block;
   position: absolute;

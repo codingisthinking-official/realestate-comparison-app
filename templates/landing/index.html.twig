@@ -177,10 +177,28 @@
                 <div class="row">
                     {% for bill in bills %}
                         <div class="col-md-6 col-xs-12">
-                            {% if bill.type == "chart" %}
+                            {% if bill.type == "rate" %}
                                 <label for="in1">{{ bill.title }}</label>
                                 <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                                    <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?" min="0">
+                                    <div class="rateYo"></div>
+                                    <input type="hidden" name="in1" placeholder="0"
+                                        pattern="[0-9]+([\.,][0-9]+)?" min="0">
+                                </div>
+                            {% elseif bill.type == "checkboxes" %}
+                                <label for="in1">{{ bill.title }}</label>
+                                <div class="input-wrapper wrapper-checkbox" data-billId="{{ bill.slug }}">
+                                    {% for option in bill.options|split(',') %}
+                                        <div>
+                                            <input id="{{ bill.slug }}-op-{{ loop.index }}" type="checkbox" name="in1[]" value="{{ option }}">
+                                            <label for="{{ bill.slug }}-op-{{ loop.index }}">{{ option }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% elseif bill.type == "chart" %}
+                                <label for="in1">{{ bill.title }}</label>
+                                <div class="input-wrapper" data-billId="{{ bill.slug }}">
+                                    <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                                           min="0">
                                     <span class="info">?</span>
 
                                     <div class="tooltip">

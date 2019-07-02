@@ -27,6 +27,11 @@ class BillTypes
     private $type;
 
     /**
+     * @Type("string")
+     */
+    private $options;
+
+    /**
      * @Type("integer")
      */
     private $position;
@@ -45,6 +50,11 @@ class BillTypes
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**

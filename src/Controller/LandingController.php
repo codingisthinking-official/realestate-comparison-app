@@ -53,7 +53,10 @@ class LandingController extends AbstractController
      * @Route("/flat/{postCode}/{flatType}", name="flat.get")
      * @Method({"GET"})
      */
-    public function getCityValues(SerializerInterface $serializer, CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType)
+    public function getCityValues(
+        SerializerInterface $serializer, CityService $cityService, ApiClientService $apiClientService,
+        $postCode, $flatType
+    )
     {
         $city = $cityService->getCityByPostcode($postCode);
         $city = $apiClientService->getOneCityByTitle($city);
@@ -62,10 +65,17 @@ class LandingController extends AbstractController
         if ($city) {
             $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
         } else {
-            return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => 5, 'avgPrice' => 25, 'maxPrice' => 55], 'json'));
+            return new Response($serializer->serialize([
+                'status' => 'ok', 'minPrice' => 5,
+                'avgPrice' => 25, 'maxPrice' => 55
+            ], 'json'));
         }
 
-        return new Response($serializer->serialize(['status' => 'ok', 'minPrice' => $cityWithValues[0]->minPrice, 'avgPrice' => $cityWithValues[0]->avgPrice, 'maxPrice' => $cityWithValues[0]->maxPrice], 'json'));
+        return new Response($serializer->serialize([
+            'status' => 'ok', 'minPrice' => $cityWithValues[0]->minPrice,
+            'avgPrice' => $cityWithValues[0]->avgPrice,
+            'maxPrice' => $cityWithValues[0]->maxPrice
+        ], 'json'));
     }
 
     /**
@@ -113,7 +123,9 @@ class LandingController extends AbstractController
     public function postFiles(SerializerInterface $serializer, Request $request, CityService $cityService)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $city = $entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $request->headers->get('uuid')]);
+        $city = $entityManager->getRepository(Flat::class)->findOneBy([
+            'uuid' => $request->headers->get('uuid')
+        ]);
 
         if (!$city) {
             throw $this->createNotFoundException(
@@ -123,11 +135,9 @@ class LandingController extends AbstractController
 
         $file = $request->files->get('file');
         $filename = uniqid() . "." . $file->getClientOriginalExtension();
-        $webPath = $this->getParameter('kernel.project_dir');
-        $path = $webPath . "/public/images/upload";
-        $file->move($path, $filename);
-        $status = array('status' => "success", "fileUploaded" => true);
+        $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
 
+        $file->move($path, $filename);
         $city->setFiles($filename);
 
         $entityManager->persist($city);

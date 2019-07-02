@@ -10,7 +10,7 @@ class Wording
      * @Type("string")
      */
     private $title;
-    
+
     /**
      * @Type("string")
      */

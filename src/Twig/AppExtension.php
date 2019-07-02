@@ -23,7 +23,7 @@ class AppExtension extends AbstractExtension
     }
 
     public function toWording($word)
-    {   
+    {
         $wording = $this->apiClientService->findWordingByKey($word);
 
         if ($wording) {

@@ -11,7 +11,7 @@
                     <a href="#"> {{ page.title }} </a>
                 </div>
             </div>
-            
+
         </div>
     </section>
 
@@ -30,14 +30,17 @@
 
                 <div class="col-md-5 col-sm-12">
                     <div class="image-border">
-                        <img src="{{ page.photo }}" alt="zdjęcie">
+                        <img src="http://realestate.wiseweb.pl/{{ page.photo }}" alt="zdjęcie">
                     </div>
                 </div>
 
                 <div class="col-xs-12">
                     <ul class="social-media">
-                        <li> <a href="{{ 'page.facebook'|toWording }}"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a> </li>
-                        <li> <a href="{{ 'page.twitter'|toWording }}"> <img src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a> </li>
+                        <li>
+                            <a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]={{ app.request.uri }}/&p[images][1]={{ app.request.uri }}/}&p[title]={{ page.title }}&p[summary]=zajawka”"
+                               target="_blank"> <img src="{{ asset('images/fb-icon.jpg') }}" alt="facebook"> </a></li>
+                        <li><a href="https://twitter.com/intent/tweet?url={{ app.request.uri }}" target="_blank"> <img
+                                        src="{{ asset('images/tw-icon.jpg') }}" alt="twitter"> </a></li>
                     </ul>
                 </div>
             </div>
@@ -54,10 +57,10 @@
                     </div>
                     <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
                         <div class="input-wrapper">
-                            <select name="flat-type">
-                                <option value="typ1"> Typ 1</option>
-                                <option value="typ2"> Typ 2</option>
-                                <option value="typ3"> Typ 3</option>
+                            <select name="flat-type" id="select-flat-type">
+                                {% for type in type_list %}
+                                    <option value="{{ type.id }}">{{ type.title }}</option>
+                                {% endfor %}
                             </select>
                             <span class="info">?</span>
 
@@ -69,15 +72,10 @@
                 </div>
             </form>
             <div class="cities">
-                <table>
-                    <thead>
-                        <th></th>
-                        <th> {{ 'page.chart_cheapest'|toWording }} </th>
-                        <th class='av'> {{ 'page.chart_avg'|toWording }} </th>
-                        <th class="red"> {{ 'page.chart_expansive'|toWording }} </th>
-                    </thead>
-                    <tbody>{{ render(controller('App\\Controller\\PageController::recentChart',{ 'active': page.slug  } )) }} </tbody>
-                </table>
+                {{ render(controller(
+                    'App\\Controller\\PageController::recentChart',
+                    { 'active': page.slug  }
+                )) }}
             </div>
         </div>
     </section>
@@ -85,4 +83,5 @@
         <div class="wrapper"> {{ 'page.wrapper'|toWording }} </div>
     </section>
 {% endblock %}
-{% block javascripts %}<script src="{{ asset('js/canvasChart.js') }}"></script>{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/canvasChart.js') }}"></script>{% endblock %}

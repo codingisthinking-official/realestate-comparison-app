@@ -1,5 +1,18 @@
 version: "3"
 services:
+  mysql:
+    image: mariadb:10.2
+    container_name: realestate-mysql
+    working_dir: /application
+    volumes:
+      - .:/application
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    ports:
+      - "3308:3306"
 
   webserver:
     image: nginx:alpine
@@ -10,9 +23,9 @@ services:
       - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./phpdocker/nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
     ports:
-      - "83:80"
-      - "81:81"
-      - "443:443"
+      - "84:80"
+      - "82:81"
+      - "444:443"
 
   php-fpm:
     build: phpdocker/php-fpm
@@ -24,6 +37,9 @@ services:
     environment:
       - APP_ENV=dev
       - API_URL=http://realestate.wiseweb.pl/api/
+      - DATABASE_URL=mysql://test:test@realestate-mysql:3306/test
+      - MAILER_GMAIL_USERNAME=matixe
+      - MAILER_GMAIL_PASSWORD=C7BY8H3WYsg2hept72
 
   composer:
     restart: 'no'

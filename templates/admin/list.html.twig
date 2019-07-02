@@ -1,0 +1,59 @@
+{% extends 'admin.html.twig' %}
+{% block title %}Lista{% endblock %}
+{% block body %}
+    <table class="table table-striped word-wrap">
+        <thead>
+        <th>Koszt</th>
+        <th>Powierzchnia</th>
+        <th>Kod pocztowy</th>
+        <th>Miasto</th>
+        <th>Opcje</th>
+        </thead>
+
+        <tbody id="flat">
+        <tr id="{{ flat.id }}">
+            <td>{{ flat.cost }}</td>
+            <td>{{ flat.surface }}</td>
+            <td>{{ flat.postcode }}</td>
+            <td>{{ flat.city }}</td>
+            <td>
+                <a href="{{ path('info.flat.edit', {uuid: flat.uuid}) }}">
+                    <button class="btn btn-primary btn-sm">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="table table-striped word-wrap">
+        <thead>
+        <th>Rachunek</th>
+        <th>Slug</th>
+        <th>Wartość</th>
+        <th>Opcje</th>
+        </thead>
+
+        <tbody id="flat">
+        {% for bill_info in bill_list %}
+        {% for bill in bills %}
+            {% if bill.billType == bill_info.slug %}
+            <tr id="{{ bill.id }}">
+                <td>{{ bill_info.title }}</td>
+                <td>{{ bill.billType }}</td>
+                <td>{{ bill.value }}</td>
+                <td>
+                    <a href="{{ path('info.bill.edit', {uuid: bill.uuid, type: bill.billType}) }}">
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

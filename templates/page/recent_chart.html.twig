@@ -1,21 +1,38 @@
-{% for page in pageList %}
-    <tr{% if activePage == page.slug %} class='active'{% endif %}>
-        <td>
-            {{ page.title }}
-            <span class="info">?</span>
-            <div class="tooltip">
-                <div class="content">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore unde, aspernatur quos nam optio nemo aliquam distinctio quis esse mollitia ab aut laudantium minus quam. Magnam sequi perspiciatis veritatis repellendus!
-                </div>
-            </div>
-        </td>
-        <td data-min="1">
-            1,00 zł
-        </td>
-        <td class="canvas-holder chart-cell">
-            <canvas height="603" id="can"> </canvas>
-            <div class="chart-bar"><div class="chart-point"><span>5,00zł</span></div> </div>
-        </td>
-        <td> 7,00 zł</td>
-    </tr>
+{% for type in types %}
+    <table class="chart table-{{ loop.index }}" {% if loop.index != 1 %}style="display:none;"{% endif %}>
+        <thead>
+        <th></th>
+        <th> {{ 'page.chart_cheapest'|toWording }} </th>
+        <th class='av'> {{ 'page.chart_avg'|toWording }} </th>
+        <th class="red"> {{ 'page.chart_expansive'|toWording }} </th>
+        </thead>
+        <tbody>
+        {% for page in type %}
+            <tr{% if activePage == page.slug %} class='active'{% endif %} data-min="{{ page.minPrice }}"
+                                                                          data-avg="{{ page.avgPrice }}"
+                                                                          data-max="{{ page.maxPrice }}">
+                <td>
+                    {{ page.title }}
+                    <span class="info">?</span>
+                    <div class="tooltip">
+                        <div class="content">
+                            Miasto tętniące życiem.
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {{ page.minPrice|number_format(2, '.', ',') }}zł
+                </td>
+                <td class="{% if loop.index == 1 %}canvas-holder {% endif %}chart-cell">
+                    {% if loop.index == 1 %}
+                        <canvas height="603" class="can"></canvas>{% endif %}
+                    <div class="chart-bar">
+                        <div class="chart-point"><span>{{ page.avgPrice|number_format(2, '.', ',') }}zł</span></div>
+                    </div>
+                </td>
+                <td> {{ page.maxPrice|number_format(2, '.', ',') }}zł</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endfor %}

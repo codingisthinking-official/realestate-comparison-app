@@ -13,3 +13,21 @@ RUN apt-get update \
 RUN apt-get update \
     && apt-get -y install git \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+
+RUN apt-get update -qq && apt-get install -y -qq curl supervisor nginx git wget
+
+# install npm
+RUN apt-get update -qq && apt-get install -y -qq npm
+RUN rm -rf /usr/bin/node
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+
+RUN apt-get install -y wget rsync
+
+# Install wkhtmltox with deps
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+ tar xf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+ rsync -av wkhtmltox/* / && \
+ chmod u+x /bin/wkhtmltoimage /bin/wkhtmltopdf && \
+ rm wkhtmltox-0.12.3_linux-generic-amd64.tar.xz
+
+RUN apt-get update -qq && apt-get install -y -qq libxrender1

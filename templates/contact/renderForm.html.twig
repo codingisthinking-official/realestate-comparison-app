@@ -7,49 +7,57 @@
         <div class="wrapper">
             <div class="row">
                 <div class="col-xs-12">
-                    <a href="index.html"> Strona główna </a>
-                    <a href="#"> Kontakt </a>
+                    <a href="{{ url('homepage') }}">Strona główna</a>
+                    <a href="{{ url('contact') }}">Kontakt</a>
                 </div>
             </div>
-            
         </div>
     </section>
-
     <section>
         <div class="wrapper">
             <div class="row">
                 <div class="col-xs-12 cl-md-7 col-lg-6">
-                    <h1 class="red"> {{ 'contact.header'|toWording }}</h1>
-                    <p class='no-padding'> {{ 'contact.content'|toWording }} </p>
+                    <h1 class="red">{{ 'contact.header'|toWording }}</h1>
+                    {% if not sent %}
+                        <p class='no-padding'> {{ 'contact.content'|toWording }} </p>
+                    {% endif %}
                 </div>
                 <div class="col-xs-12">
-
-                    <form action="" class='contact'>
-                        <div class="row">
-                            <div class="col-md-4 col-sm-12">
-                                <input type="text" placeholder="{{ 'contact.input-content-name'|toWording }}">
+                    {% if not sent %}
+                        <form method="post" action="" class='contact'>
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12">
+                                    <input type="text" name="name"
+                                        placeholder="{{ 'contact.input-content-name'|toWording }}">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <input type="tel" name="phone"
+                                        placeholder="{{ 'contact.input-content-phone'|toWording }}">
+                                </div>
+                                <div class="col-md-4 col-sm-12">
+                                    <input type="email" name="email"
+                                        placeholder="{{ 'contact.input-content-mail'|toWording }}">
+                                </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
-                                <input type="tel" placeholder="{{ 'contact.input-content-phone'|toWording }}">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <textarea name="message"
+                                              placeholder="{{ 'contact.input-content-message'|toWording }}"
+                                              rows="1"></textarea>
+                                </div>
                             </div>
-                            <div class="col-md-4 col-sm-12">
-                                <input type="email" placeholder="{{ 'contact.input-content-mail'|toWording }}">
+                            <div class="align--right">
+                                <button type="submit"
+                                        class="button yellow-bcg">{{ 'contact.button-send'|toWording }}</button>
                             </div>
+                        </form>
+                    {% else %}
+                        <div class="alert">Dziękujemy za wysłanie do nas wiadomości. Odezwiemy się najszybciej jak to
+                            możliwe.
                         </div>
-
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <textarea name="message" id="" placeholder="{{ 'contact.input-content-message'|toWording }}" rows="1"></textarea>
-                            </div>
-                        </div>
-                    </form>
+                    {% endif %}
                 </div>
+                </form>
             </div>
-            <div class="end-xs">
-                <div class="col-xs-12">
-                    <a href="#" class="button yellow-bcg "> {{ 'contact.button-send'|toWording }} </a>
-                </div>
-            </div>
-        </div>
     </section>
 {% endblock %}

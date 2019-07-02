@@ -1,5 +1,18 @@
-$(document).ready(function() {
+$(document).ready(function () {
     let uuid = create_UUID();
+
+    $(".rateYo").rateYo({
+        spacing   : "5px",
+        fullStar: true,
+        multiColor: {
+
+            "startColor": "#FF0000",
+            "endColor"  : "#00FF00"
+        },
+        onSet: function (rating, rateYoInstance) {
+            $(this).parent().find('input[type=hidden]').val(rating);
+        }
+    });
 
     function showTooltip() {
         $(this).next('.tooltip').fadeIn(300);
@@ -45,23 +58,24 @@ $(document).ready(function() {
                 },
             })
                 .then(response => {
-                if (response.status == 200) {
-                response.json()
-                    .then(parsedReponse => {
-                    if (parsedReponse.minPrice == 0) {
-                    $('.price-bar').hide();
-                    $('.turnOff').html('b/d');
-                    $('.big-paragraph').hide();
-                } else {
-                    setMinMaxAndAverageValues(parsedReponse);
-                    $('.price-bar').show();
-                }
-                compareRent(e, formData);
-                $('#data-loader').hide();
-            })
-            .catch(error => {})
-            }
-        });
+                    if (response.status == 200) {
+                        response.json()
+                            .then(parsedReponse => {
+                                if (parsedReponse.minPrice == 0) {
+                                    $('.price-bar').hide();
+                                    $('.turnOff').html('b/d');
+                                    $('.big-paragraph').hide();
+                                } else {
+                                    setMinMaxAndAverageValues(parsedReponse);
+                                    $('.price-bar').show();
+                                }
+                                compareRent(e, formData);
+                                $('#data-loader').hide();
+                            })
+                            .catch(error => {
+                            })
+                    }
+                });
         }
     }
 
@@ -139,23 +153,25 @@ $(document).ready(function() {
                 },
             })
                 .then(response => {
-                if (response.status == 200) {
-                response.json()
-                    .then(parsedResponse => {
-                    if (parsedResponse.minPrice == 0) {} else {
-                    setSmallBarMinMaxAndAverageValues(parsedResponse);
-                    calculateSmallChartsBarsLengths();
-                }
-                $('#data-loader').hide();
-                $('.price-analysis').slideDown();
-                $('html, body').animate({
-                    scrollTop: $("#price-analysis").offset().top
-                }, 500);
-                s
-            })
-            .catch(error => {})
-            }
-        });
+                    if (response.status == 200) {
+                        response.json()
+                            .then(parsedResponse => {
+                                if (parsedResponse.minPrice == 0) {
+                                } else {
+                                    setSmallBarMinMaxAndAverageValues(parsedResponse);
+                                    calculateSmallChartsBarsLengths();
+                                }
+                                $('#data-loader').hide();
+                                $('.price-analysis').slideDown();
+                                $('html, body').animate({
+                                    scrollTop: $("#price-analysis").offset().top
+                                }, 500);
+                                s
+                            })
+                            .catch(error => {
+                            })
+                    }
+                });
         }
     }
 
@@ -163,7 +179,7 @@ $(document).ready(function() {
         let smallContainer = $('#price-analysis .input-wrapper');
         for (let i = 0; i < smallContainer.length; i++) {
             if (parsedResponse[i].minPrice === parsedResponse[i].maxPrice) {
-                $(smallContainer[i]).find('.small-price-bar').text('Niestety, nie mamy wystarczającej ilości danych, aby określić, czy nie przepłacasz. Zostaw nam swoje dane a my odezwiemy się do Ciebie później!.');
+                $(smallContainer[i]).find('.small-price-bar').hide();
             } else {
                 $(smallContainer[i]).find('.small-price-bar').find('.min-price span').attr('data-min', parsedResponse[i].minPrice);
                 $(smallContainer[i]).find('.small-price-bar').find('.max-price span').attr('data-max', parsedResponse[i].maxPrice);
@@ -193,7 +209,7 @@ $(document).ready(function() {
         let dataArray = [];
         let elements = $('.price-analysis .input-wrapper:not(.empty)');
         let responsesNumber = 0;
-        elements.each(function(id) {
+        elements.each(function (id) {
             let result = {};
             result.value = $(this).find('input').val();
             result.bill_type = $(this).attr('data-billid');
@@ -211,17 +227,17 @@ $(document).ready(function() {
                 },
                 body: JSON.stringify(dataArray[x])
             })
-                .then(res => {
+            .then(res => {
                 res.json();
-            responsesNumber++;
-        })
-        .then(res => {
+                responsesNumber++;
+            })
+            .then(res => {
                 if (responsesNumber === dataArray.length) {
-                addBillsItem();
-                $('#data-loader').hide();
-                $('#data-loader').hide();
-            }
-        });
+                    addBillsItem();
+                    $('#data-loader').hide();
+                    $('#data-loader').hide();
+                }
+            });
         }
 
         calculateSavings();
@@ -271,7 +287,7 @@ $(document).ready(function() {
         let monthlyDifference = 0;
         let elements = $('.price-analysis .small-price-bar');
 
-        elements.each(function() {
+        elements.each(function () {
             let avg = $(this).find('.average').attr('data-avg');
             avg = parseFloat(avg);
             let result = $(this).find('.your-result').attr('data-result');
@@ -281,7 +297,7 @@ $(document).ready(function() {
             monthlyDifference += diff;
         });
 
-        (monthlyDifference * 12 > 0) ? $('.savings').show(): $('.savings').hide();
+        (monthlyDifference * 12 > 0) ? $('.savings').show() : $('.savings').hide();
         $('.saving-amount').text((monthlyDifference * 12).toFixed(2));
     }
 
@@ -294,7 +310,7 @@ $(document).ready(function() {
 
     function create_UUID() {
         var dt = new Date().getTime();
-        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (dt + Math.random() * 16) % 16 | 0;
             dt = Math.floor(dt / 16);
             return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -304,7 +320,7 @@ $(document).ready(function() {
 
     function calculateSmallChartsBarsLengths() {
         let charts = $('.small-price-bar');
-        charts.each(function(i) {
+        charts.each(function (i) {
             let minPriceAttr = $(this).find('.min-price span').attr('data-min');
             let minPrice = parseFloat(minPriceAttr).toFixed(2);
             let maxPriceAttr = $(this).find('.max-price span').attr('data-max');
@@ -357,7 +373,7 @@ $(document).ready(function() {
     function isDataTyped() {
         let inputWrappers = $('#price-analysis .input-wrapper');
         let full = true;
-        inputWrappers.each(function() {
+        inputWrappers.each(function () {
             if ($(this).find('input').val() == '' || $(this).find('input').val() == ' ') {
                 full = false;
             }
@@ -367,11 +383,11 @@ $(document).ready(function() {
 
     $('#compare').click(getFormData);
     $('#main-form').submit(getFormData);
-    $('#analyse').click(function(e) {
+    $('#analyse').click(function (e) {
         let okay = isFileLoaded();
         if (okay) analyseRent(e);
     });
-    $('#export').click(function(e) {
+    $('#export').click(function (e) {
         let okay = isDataTyped();
         if (okay) {
             postSmallFormData(e);
@@ -384,14 +400,14 @@ $(document).ready(function() {
 
     $('.info').hover(showTooltip, hideTooltip);
 
-    $('.scroll-down').click(function() {
+    $('.scroll-down').click(function () {
         $('html, body').animate({
             scrollTop: $($(this).attr('href')).offset().top
         }, 300);
         return false;
     });
 
-    $('.description .button').click(function() {
+    $('.description .button').click(function () {
         $('html, body').animate({
             scrollTop: $($(this).attr('href')).offset().top
         }, 300);

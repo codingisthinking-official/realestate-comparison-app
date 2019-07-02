@@ -7,8 +7,8 @@
         <div class="wrapper">
             <div class="row">
                 <div class="col-xs-12">
-                    <a href="{{ path('homepage') }}">Strona główna</a>
-                    <a href="#">Kontakt</a>
+                    <a href="{{ url('homepage') }}">Strona główna</a>
+                    <a href="{{ url('contact') }}">Kontakt</a>
                 </div>
             </div>
         </div>
@@ -27,29 +27,37 @@
                         <form method="post" action="" class='contact'>
                             <div class="row">
                                 <div class="col-md-4 col-sm-12">
-                                    <input type="text" placeholder="{{ 'contact.input-content-name'|toWording }}">
+                                    <input type="text" name="name"
+                                        placeholder="{{ 'contact.input-content-name'|toWording }}">
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <input type="tel" placeholder="{{ 'contact.input-content-phone'|toWording }}">
+                                    <input type="tel" name="phone"
+                                        placeholder="{{ 'contact.input-content-phone'|toWording }}">
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <input type="email" placeholder="{{ 'contact.input-content-mail'|toWording }}">
+                                    <input type="email" name="email"
+                                        placeholder="{{ 'contact.input-content-mail'|toWording }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <textarea name="message" placeholder="{{ 'contact.input-content-message'|toWording }}" rows="1"></textarea>
+                                    <textarea name="message"
+                                              placeholder="{{ 'contact.input-content-message'|toWording }}"
+                                              rows="1"></textarea>
                                 </div>
                             </div>
                             <div class="align--right">
-                                <button type="submit" class="button yellow-bcg">{{ 'contact.button-send'|toWording }}</button>
+                                <button type="submit"
+                                        class="button yellow-bcg">{{ 'contact.button-send'|toWording }}</button>
                             </div>
                         </form>
                     {% else %}
-                        <div class="alert">Dziękujemy za wysłanie do nas wiadomości. Odezwiemy się najszybciej jak to możliwe.</div>
+                        <div class="alert">Dziękujemy za wysłanie do nas wiadomości. Odezwiemy się najszybciej jak to
+                            możliwe.
+                        </div>
                     {% endif %}
                 </div>
+                </form>
             </div>
-        </div>
     </section>
 {% endblock %}

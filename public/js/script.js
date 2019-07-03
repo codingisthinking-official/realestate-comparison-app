@@ -9,6 +9,7 @@ $(document).ready(function () {
             "startColor": "#FF0000",
             "endColor"  : "#00FF00"
         },
+        starWidth: '60px',
         onSet: function (rating, rateYoInstance) {
             $(this).parent().find('input[type=hidden]').val(rating);
         }
@@ -129,7 +130,9 @@ $(document).ready(function () {
     }
 
     function analyseRent(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         postFile();
         let formData = {
             flatType: $('select[name="flat-type"]').val(),
@@ -143,48 +146,49 @@ $(document).ready(function () {
         } else {
             $('.wrong-data').hide();
             $('#analyse').addClass('unactive');
+
             $('#compared').find('input').attr('disabled', 'disabled');
             $('#compared').find('select').attr('disabled', 'disabled');
+
             $('#data-loader').css('display', 'flex');
             fetch('/bills/' + formData.postalCode + '/' + formData.flatType, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-            })
-                .then(response => {
-                    if (response.status == 200) {
-                        response.json()
-                            .then(parsedResponse => {
-                                if (parsedResponse.minPrice == 0) {
-                                } else {
-                                    setSmallBarMinMaxAndAverageValues(parsedResponse);
-                                    calculateSmallChartsBarsLengths();
-                                }
-                                $('#data-loader').hide();
-                                $('.price-analysis').slideDown();
-                                $('html, body').animate({
-                                    scrollTop: $("#price-analysis").offset().top
-                                }, 500);
-                                s
-                            })
-                            .catch(error => {
-                            })
-                    }
-                });
+            }).then(response => {
+                if (response.status == 200) {
+                    response.json()
+                        .then(parsedResponse => {
+                            parsedResponse.forEach(function(item) {
+                                setPriceParameterValues(item);
+                                calculateSmallChartsBarsLengths();
+                            });
+
+                            $('#data-loader').hide();
+                            $('.price-analysis').slideDown();
+                            $('html, body').animate({
+                                scrollTop: $("#price-analysis").offset().top
+                            }, 500);
+                        });
+                }
+            });
         }
     }
 
-    function setSmallBarMinMaxAndAverageValues(parsedResponse) {
-        let smallContainer = $('#price-analysis .input-wrapper');
-        for (let i = 0; i < smallContainer.length; i++) {
-            if (parsedResponse[i].minPrice === parsedResponse[i].maxPrice) {
-                $(smallContainer[i]).find('.small-price-bar').hide();
-            } else {
-                $(smallContainer[i]).find('.small-price-bar').find('.min-price span').attr('data-min', parsedResponse[i].minPrice);
-                $(smallContainer[i]).find('.small-price-bar').find('.max-price span').attr('data-max', parsedResponse[i].maxPrice);
-                $(smallContainer[i]).find('.small-price-bar').find('.average').attr('data-avg', parsedResponse[i].avgPrice);
-            }
+    function setPriceParameterValues(item) {
+        let smallContainer = $('#price-analysis .input-wrapper[data-billId="' + item.slug + '"]');
+
+        if (!smallContainer) {
+            throw "Could not found price item component for: " + item.slug;
+        }
+
+        if (item.min_price === item.max_price) {
+            smallContainer.find('.small-price-bar').hide();
+        } else {
+            smallContainer.find('.small-price-bar').find('.min-price span').attr('data-min', item.min_price);
+            smallContainer.find('.small-price-bar').find('.max-price span').attr('data-max', item.max_price);
+            smallContainer.find('.small-price-bar').find('.average').attr('data-avg', item.avg_price);
         }
     }
 
@@ -206,39 +210,58 @@ $(document).ready(function () {
 
     function postSmallFormData(e) {
         e.preventDefault();
-        let dataArray = [];
+
         let elements = $('.price-analysis .input-wrapper:not(.empty)');
-        let responsesNumber = 0;
+        let result = {
+            'uuid': uuid,
+            'flat_type': $('#form select[name="flat-type"]').val(),
+            'post_code': $('#form input[name="postal-code"]').val(),
+            'elements': []
+        };
+
         elements.each(function (id) {
-            let result = {};
-            result.value = $(this).find('input').val();
-            result.bill_type = $(this).attr('data-billid');
-            result.flat_type = $('#form select[name="flat-type"]').val();
-            result.postcode = $('#form input[name="postal-code"]').val();
-            result.uuid = uuid;
-            dataArray.push(result);
+            let data = null;
+            switch ($(this).parent().attr('data-type')) {
+                case 'text':
+                case 'chart':
+                case 'rate':
+                    data = {
+                        'value': $(this).find('input').val(),
+                        'key': $(this).attr('data-billid'),
+                        'type': $(this).parent().attr('data-type')
+                    };
+                    break;
+                case 'checkboxes':
+                    let checked = [];
+                    $(this).find('input[type=checkbox]:checked').each(function() {
+                        checked.push($(this).val());
+                    });
+                    data = {
+                        'value': checked.join(','),
+                        'key': $(this).attr('data-billid'),
+                        'type': $(this).parent().attr('data-type')
+                    };
+                    break;
+                default:
+                    throw "Unknown type : " + $(this).parent().attr('data-type');
+            }
+
+            result.elements.push(data);
         });
-        for (let x = 0; x < dataArray.length; x++) {
-            $('#data-loader').css('display', 'flex');
-            fetch('/bills/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dataArray[x])
-            })
-            .then(res => {
-                res.json();
-                responsesNumber++;
-            })
-            .then(res => {
-                if (responsesNumber === dataArray.length) {
-                    addBillsItem();
-                    $('#data-loader').hide();
-                    $('#data-loader').hide();
-                }
-            });
-        }
+
+        $('#data-loader').css('display', 'flex');
+
+        fetch('/bills/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(result)
+        })
+        .then(res => {
+            addBillsItem();
+            $('#data-loader').hide();
+        });
 
         calculateSavings();
     }
@@ -256,12 +279,8 @@ $(document).ready(function () {
         }
         fileName = fileName.substr(id + 1);
 
-        let itemTemplate =
-            `<div class="bill-name"> ${fileName}
-            <span class="delete"> usuń X</span>
-        </div>`;
+        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete"> usuń X</span></div>`;
         $('.added-files').append(itemTemplate);
-
         $('.label-button').hide();
         $('#addFile').hide();
     }
@@ -276,8 +295,7 @@ $(document).ready(function () {
     }
 
     function addBillsItem() {
-        let itemTemplate =
-            `<div class="bill-name"> <a class="bill-name" href="./bill/${uuid}" target="_blank"> podsumowanie_pdf </a> </div>`;
+        let itemTemplate = `<div class="bill-name"> <a class="bill-name" href="./bill/${uuid}" target="_blank">podsumowanie_pdf</a></div>`;
 
         $('.pdf-show .bill-pdf').append(itemTemplate);
         $('.pdf-show').show();
@@ -320,7 +338,7 @@ $(document).ready(function () {
 
     function calculateSmallChartsBarsLengths() {
         let charts = $('.small-price-bar');
-        charts.each(function (i) {
+        charts.each(function () {
             let minPriceAttr = $(this).find('.min-price span').attr('data-min');
             let minPrice = parseFloat(minPriceAttr).toFixed(2);
             let maxPriceAttr = $(this).find('.max-price span').attr('data-max');
@@ -336,14 +354,25 @@ $(document).ready(function () {
             $(this).find('.your-result').text(userPrice + ' zł');
 
             let avgLength = ((avgPrice - minPrice) / (maxPrice - minPrice)) * 100;
-            avgLength = parseFloat(avgLength)
+            avgLength = parseFloat(avgLength);
             let userBarLength = ((userPrice - minPrice) / (maxPrice - minPrice)) * 100;
-            userBarLength = parseFloat(userBarLength)
+            userBarLength = parseFloat(userBarLength);
 
-            if (avgLength <= 0) avgLength = 0;
-            if (avgLength >= 100) avgLength = 100;
-            if (userBarLength <= 0) userBarLength = 0;
-            if (userBarLength >= 100) userBarLength = 100;
+            if (avgLength <= 0) {
+                avgLength = 0;
+            }
+
+            if (avgLength >= 100) {
+                avgLength = 100;
+            }
+
+            if (userBarLength <= 0) {
+                userBarLength = 0;
+            }
+
+            if (userBarLength >= 100) {
+                userBarLength = 100;
+            }
 
             $(this).find('.average-bar').css('width', `${avgLength.toFixed(2)}%`);
             $(this).find('.average').css('left', `${avgLength.toFixed(2)}%`);

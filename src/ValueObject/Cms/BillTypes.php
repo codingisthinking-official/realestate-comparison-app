@@ -37,6 +37,58 @@ class BillTypes
     private $position;
 
     /**
+     * @Type("integer")
+     */
+    protected $minPrice;
+
+    /**
+     * @Type("integer")
+     */
+    protected $avgPrice;
+
+    /**
+     * @Type("integer")
+     */
+    protected $maxPrice;
+
+    public function __construct()
+    {
+        $this->minPrice = null;
+        $this->maxPrice = null;
+        $this->avgPrice = null;
+    }
+
+    public function setMinPrice($minPrice): void
+    {
+        $this->minPrice = $minPrice;
+    }
+
+    public function setAvgPrice($avgPrice): void
+    {
+        $this->avgPrice = $avgPrice;
+    }
+
+    public function setMaxPrice($maxPrice): void
+    {
+        $this->maxPrice = $maxPrice;
+    }
+
+    public function getAvgPrice()
+    {
+        return $this->avgPrice;
+    }
+
+    public function getMaxPrice()
+    {
+        return $this->maxPrice;
+    }
+
+    public function getMinPrice()
+    {
+        return $this->minPrice;
+    }
+
+    /**
      * @return mixed
      */
     public function getSlug()

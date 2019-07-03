@@ -22,9 +22,14 @@ class PdfController extends AbstractController
                 'No flat found for this uuid: ' . $uuid
             );
         }
+
         $bills = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $uuid]);
         $repository = $this->getDoctrine()->getRepository(Bill::class);
-        $billsTab = $cityService->createBillsTabByCity($apiClientService->getOneCityByTitle($flat->getCity()), $repository, $flat->getType());
+
+        $billsTab = $cityService->createBillsTabByCity(
+            $apiClientService->getOneCityByTitle($flat->getCity())
+            , $repository, $flat->getType()
+        );
 
         return $this->render('PDF/bill.html.twig', [
             'flat' => $flat,

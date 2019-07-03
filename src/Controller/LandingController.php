@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -66,13 +67,16 @@ class LandingController extends AbstractController
             $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
         } else {
             return new Response($serializer->serialize([
-                'status' => 'ok', 'minPrice' => 5,
-                'avgPrice' => 25, 'maxPrice' => 55
+                'status' => 'ok',
+                'minPrice' => 5,
+                'avgPrice' => 25,
+                'maxPrice' => 55
             ], 'json'));
         }
 
         return new Response($serializer->serialize([
-            'status' => 'ok', 'minPrice' => $cityWithValues[0]->minPrice,
+            'status' => 'ok',
+            'minPrice' => $cityWithValues[0]->minPrice,
             'avgPrice' => $cityWithValues[0]->avgPrice,
             'maxPrice' => $cityWithValues[0]->maxPrice
         ], 'json'));
@@ -82,16 +86,18 @@ class LandingController extends AbstractController
      * @Route("/bills/{postCode}/{flatType}", name="bills.get")
      * @Method({"GET"})
      */
-    public function getBills(CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType)
+    public function getBills(
+        CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType,
+        SerializerInterface $serializer
+    )
     {
         $city = $cityService->getCityByPostcode($postCode);
         $city = $apiClientService->getOneCityByTitle($city);
         $repository = $this->getDoctrine()->getRepository(Bill::class);
 
-        $billsTab = $cityService->createBillsTabByCity($city, $repository, $flatType);
-        $json = json_encode($billsTab);
-
-        return new Response($json);
+        return new Response(
+            $serializer->serialize($cityService->createBillsTabByCity($city, $repository, $flatType), 'json')
+        , 200);
     }
 
     /**
@@ -102,18 +108,23 @@ class LandingController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
 
-        $bill = new Bill();
-        $bill->setValue($request->request->get('value'));
-        $bill->setPostcode($request->request->get('postcode'));
-        $bill->setCity($cityService->getCityByPostcode($request->request->get('postcode')));
-        $bill->setBillType($request->request->get('bill_type'));
-        $bill->setFlatType($request->request->get('flat_type'));
-        $bill->setUuid($request->request->get('uuid'));
+        $requestData = json_decode($request->getContent(), true);
 
-        $entityManager->persist($bill);
-        $entityManager->flush();
+        $city = $cityService->getCityByPostcode($requestData['post_code']);
+        foreach ($requestData['elements'] as $element) {
+            $bill = new Bill();
+            $bill->setValue($element['value']);
+            $bill->setBillType($element['key']);
+            $bill->setPostcode($requestData['post_code']);
+            $bill->setFlatType($requestData['flat_type']);
+            $bill->setUuid($requestData['uuid']);
+            $bill->setCity($city);
 
-        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+            $entityManager->persist($bill);
+            $entityManager->flush();
+        }
+
+        return new JsonResponse(['status' => 'ok'], 200);
     }
 
     /**

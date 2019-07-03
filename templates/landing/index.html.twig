@@ -2,195 +2,195 @@
 
 {% block title %}{{ 'title.default'|toWording }}{% endblock %}
 {% block body %}
-    <section id="form">
-        <div class="wrapper">
-            <div class="row">
-                <div class="col-xs-12">
-                    <p class="big-padding"> {{ 'index.first-line'|toWording }} </p>
-                </div>
-                <div class="col-xs-12">
-
-                    <form action="" id="main-form">
-                        <div class="row">
-                            <div class="col-xs-4 align-right">
-                                <label for="flat-type"> {{ 'index.input-type'|toWording }}<span class="red">*</span>:
-                                </label>
-                            </div>
-                            <div class="col-xs-8">
-                                <div class="input-wrapper">
-                                    <select name="flat-type">
-                                        {% for type in type_list %}
-                                            <option value="{{ type.id }}">{{ type.title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <span class="info">?</span>
-                                    <div class="tooltip">
-                                        <div class="content"> {{ 'index.input-type-tooltip'|toWording }} </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xs-4 align-right">
-                                <label for="postal-code"> {{ 'index.input-postcode'|toWording }} <span
-                                            class="red">*</span>: </label>
-                            </div>
-                            <div class="col-xs-8">
-                                <div class="input-wrapper">
-                                    <input type="text" name="postal-code" maxlength="6">
-                                    <span class="info">?</span>
-
-                                    <div class="tooltip">
-                                        <div class="content"> {{ 'index.input-postcode-tooltip'|toWording }} </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xs-4 align-right">
-                                <label for="rent"> {{ 'index.input-cost'|toWording }} <span class="red">*</span>:
-                                </label>
-                            </div>
-                            <div class="col-xs-8">
-                                <div class="input-wrapper">
-                                    <input type="number" name="rent" min="0">
-                                    <span class="info">?</span>
-
-                                    <div class="tooltip">
-                                        <div class="content"> {{ 'index.input-cost-tooltip'|toWording }} </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xs-4 align-right">
-                                <label for="area"> Powierzchnia w m<sup>2</sup><span class="red">*</span>: </label>
-                            </div>
-                            <div class="col-xs-8">
-                                <div class="input-wrapper">
-                                    <input type="number" name="area" min="0">
-                                    <span class="info">?</span>
-
-                                    <div class="tooltip">
-                                        <div class="content"> {{ 'index.input-msquare-tooltip'|toWording }} </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wrong-data red">
-                            Formularz wypełniono niepoprawnie.
-                        </div>
-                    </form>
-
-                    <div class="row end-xs">
-                        <div class="col-xs-12">
-                            <span class="red"> * - dane wymagane </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class=" center-xs">
-                <div class="col-xs-12">
-                    <a href="#" id="compare" class="button yellow-bcg wide"> {{ 'index.button_compare'|toWording }} </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div id="data-loader">
-        <div class="loader-text"> Proszę czekać, trwa ładowanie danych...</div>
-        <div class="sk-circle">
-            <div class="sk-circle1 sk-child"></div>
-            <div class="sk-circle2 sk-child"></div>
-            <div class="sk-circle3 sk-child"></div>
-            <div class="sk-circle4 sk-child"></div>
-            <div class="sk-circle5 sk-child"></div>
-            <div class="sk-circle6 sk-child"></div>
-            <div class="sk-circle7 sk-child"></div>
-            <div class="sk-circle8 sk-child"></div>
-            <div class="sk-circle9 sk-child"></div>
-            <div class="sk-circle10 sk-child"></div>
-            <div class="sk-circle11 sk-child"></div>
-            <div class="sk-circle12 sk-child"></div>
-        </div>
-    </div>
-
-    <section class="compared bad" id="compared">
-        <div class="wrapper">
-            <div class="result">
-                <span> <b> {{ 'index.result'|toWording }} <span
-                                class="user-rent">15</span> zł/m<sup>2</sup>   </b> {{ 'index.result_avg'|toWording }}
-                    <span class="turnOff"> <span class="avg-info">10</span> zł/m<sup>2</sup></span> </span>
-            </div>
-            <div class="price-bar">
-                <div class="min-price">
-                    {{ 'index.cheapest'|toWording }} <br/>
-                    <span data-min="5"> 5zł </span>
-                </div>
-
-                <div class="bar">
-                    <div class="your-bar"></div>
-                    <div class="your-result"> 15zł</div>
-                    <div class="average" data-avg="10"> 10zł</div>
-                </div>
-
-                <div class="max-price">
-                    {{ 'index.the_most_expensive'|toWording }} <br/>
-                    <span data-max="50"> 50zł </span>
-                </div>
-            </div>
-            <p class="big-paragraph"> {{ 'index.result_comment_bad'|toWording }} </p>
-
-            <div class="expensive">
-                <p> {{ 'index.result_summary_header'|toWording }} </p>
-                <div class="center-xs" id="file">
-                    <form action="">
-                        <div class="center-xs row">
-                            <div class="col-sm-6 cl-xs-12 align-right">
-                                <label>{{ 'index.result_summary_text'|toWording }}</label>
-                            </div>
-                            <div class="col-sm-6 col-xs-12 align-left">
-                                <input class="start-xs file" type="file" id="addFile" name="file">
-                                <label for="addFile" class="label-button"> Wybierz plik </label>
-                                <div class="added-files"></div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="red no-file-added"> {{ 'index.warning_empty'|toWording }} </div>
-                <div class=" center-xs">
+        <section id="form">
+            <div class="wrapper">
+                <div class="row">
                     <div class="col-xs-12">
-                        <a href="#price-analysis" id="analyse"
-                           class="button yellow-bcg wide"> {{ 'index.button_analyse'|toWording }} </a>
+                        <p class="big-padding"> {{ 'index.first-line'|toWording }} </p>
+                    </div>
+                    <div class="col-xs-12">
+                        <form action="" id="main-form">
+                            <div class="row">
+                                <div class="col-xs-4 align-right">
+                                    <label for="flat-type"> {{ 'index.input-type'|toWording }}<span class="red">*</span>:
+                                    </label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <div class="input-wrapper">
+                                        <select name="flat-type">
+                                            {% for type in type_list %}
+                                                <option value="{{ type.id }}">{{ type.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="info">?</span>
+                                        <div class="tooltip">
+                                            <div class="content"> {{ 'index.input-type-tooltip'|toWording }} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4 align-right">
+                                    <label for="postal-code"> {{ 'index.input-postcode'|toWording }} <span
+                                                class="red">*</span>: </label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <div class="input-wrapper">
+                                        <input type="text" name="postal-code" value="42-200" maxlength="6">
+                                        <span class="info">?</span>
+
+                                        <div class="tooltip">
+                                            <div class="content"> {{ 'index.input-postcode-tooltip'|toWording }} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4 align-right">
+                                    <label for="rent"> {{ 'index.input-cost'|toWording }} <span class="red">*</span>:
+                                    </label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <div class="input-wrapper">
+                                        <input type="number" name="rent" min="0" value="350">
+                                        <span class="info">?</span>
+
+                                        <div class="tooltip">
+                                            <div class="content"> {{ 'index.input-cost-tooltip'|toWording }} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4 align-right">
+                                    <label for="area"> Powierzchnia w m<sup>2</sup><span class="red">*</span>: </label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <div class="input-wrapper">
+                                        <input type="number" name="area" value="45" min="0">
+                                        <span class="info">?</span>
+                                        <div class="tooltip">
+                                            <div class="content"> {{ 'index.input-msquare-tooltip'|toWording }} </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wrong-data red">
+                                Formularz wypełniono niepoprawnie.
+                            </div>
+                        </form>
+                        <div class="row end-xs">
+                            <div class="col-xs-12">
+                                <span class="red"> * - dane wymagane </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="center-xs">
+                    <div class="col-xs-12">
+                        <a href="#" id="compare" class="button yellow-bcg wide"> {{ 'index.button_compare'|toWording }} </a>
                     </div>
                 </div>
             </div>
+        </section>
+        <div id="data-loader">
+            <div class="loader-text"> Proszę czekać, trwa ładowanie danych...</div>
+            <div class="sk-circle">
+                <div class="sk-circle1 sk-child"></div>
+                <div class="sk-circle2 sk-child"></div>
+                <div class="sk-circle3 sk-child"></div>
+                <div class="sk-circle4 sk-child"></div>
+                <div class="sk-circle5 sk-child"></div>
+                <div class="sk-circle6 sk-child"></div>
+                <div class="sk-circle7 sk-child"></div>
+                <div class="sk-circle8 sk-child"></div>
+                <div class="sk-circle9 sk-child"></div>
+                <div class="sk-circle10 sk-child"></div>
+                <div class="sk-circle11 sk-child"></div>
+                <div class="sk-circle12 sk-child"></div>
+            </div>
         </div>
-    </section>
-
+        <section class="compared bad" id="compared">
+            <div class="wrapper">
+                <div class="result">
+                    <span>
+                        <b>
+                            {{ 'index.result'|toWording }}
+                            <span class="user-rent">15</span> zł/m<sup>2</sup>
+                        </b>
+                        {{ 'index.result_avg'|toWording }}
+                        <span class="turnOff">
+                            <span class="avg-info">10</span> zł/m<sup>2</sup>
+                        </span>
+                    </span>
+                </div>
+                <div class="price-bar">
+                    <div class="min-price">
+                        {{ 'index.cheapest'|toWording }} <br/>
+                        <span data-min="5"> 5zł </span>
+                    </div>
+                    <div class="bar">
+                        <div class="your-bar"></div>
+                        <div class="your-result"> 15zł</div>
+                        <div class="average" data-avg="10"> 10zł</div>
+                    </div>
+                    <div class="max-price">
+                        {{ 'index.the_most_expensive'|toWording }}<br/>
+                        <span data-max="50">50zł</span>
+                    </div>
+                </div>
+                <p class="big-paragraph">{{ 'index.result_comment_bad'|toWording }}</p>
+                <div class="expensive">
+                    <p> {{ 'index.result_summary_header'|toWording }} </p>
+                    <div class="center-xs" id="file">
+                        <form action="">
+                            <div class="center-xs row">
+                                <div class="col-sm-6 cl-xs-12 align-right">
+                                    <label>{{ 'index.result_summary_text'|toWording }}</label>
+                                </div>
+                                <div class="col-sm-6 col-xs-12 align-left">
+                                    <input class="start-xs file" type="file" id="addFile" name="file">
+                                    <label for="addFile" class="label-button"> Wybierz plik </label>
+                                    <div class="added-files"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="red no-file-added">{{ 'index.warning_empty'|toWording }}<br><br></div>
+                    <div class="btn-analyse center-xs">
+                        <div class="col-xs-12">
+                            <a href="#price-analysis" id="analyse"
+                               class="button yellow-bcg wide"> {{ 'index.button_analyse'|toWording }} </a>
+                            <br>
+                            <br>
+                            {{ 'index.contact_form'|toWording|raw }}
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     <section class="price-analysis" id="price-analysis">
         <div class="wrapper">
             <form action="">
                 <div class="row">
                     {% for bill in bills %}
-                        <div class="col-md-6 col-xs-12">
+                        <div class="col-md-6 col-xs-12" data-type="{{ bill.type }}">
                             {% if bill.type == "rate" %}
                                 <label for="in1">{{ bill.title }}</label>
                                 <div class="input-wrapper" data-billId="{{ bill.slug }}">
                                     <div class="rateYo"></div>
                                     <input type="hidden" name="in1" placeholder="0"
-                                        pattern="[0-9]+([\.,][0-9]+)?" min="0">
+                                           pattern="[0-9]+([\.,][0-9]+)?" min="0">
                                 </div>
                             {% elseif bill.type == "checkboxes" %}
                                 <label for="in1">{{ bill.title }}</label>
                                 <div class="input-wrapper wrapper-checkbox" data-billId="{{ bill.slug }}">
                                     {% for option in bill.options|split(',') %}
                                         <div>
-                                            <input id="{{ bill.slug }}-op-{{ loop.index }}" type="checkbox" name="in1[]" value="{{ option }}">
-                                            <label for="{{ bill.slug }}-op-{{ loop.index }}">{{ option }}</label>
+                                            <input id="{{ bill.slug }}-op-{{ loop.index }}" type="checkbox" name="in1[]"
+                                                   value="{{ option }}">
+                                            <label for="{{ bill.slug }}-op-{{ loop.index }}">{{ option|capitalize }}</label>
                                         </div>
                                     {% endfor %}
                                 </div>

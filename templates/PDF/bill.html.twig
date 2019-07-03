@@ -315,74 +315,94 @@
     {{ cityInfo.description }}
     <p>Dane przygotowane dla kodu pocztowego: {{ flat.postcode }}</p>
     {% set sum = 0 %}
-    {% for bill_info in bill_list %}
-        {% if bill_info.type != "empty space" %}
-            <h2>{{ bill_info.title }}</h2>
-            {% for bill in bills %}
-                {% if bill.billType == bill_info.slug %}
-                    {% if bill_info.type == "text" %}
-                        {{ bill.value }}<br/>
-                    {% elseif bill_info.type == "chart" %}
-                        {% if bill_price[loop.parent.loop.index0].minPrice == bill_price[loop.parent.loop.index0].maxPrice %}
-                            Brak danych
-                        {% else %}
-                            <div class="small-price-bar">
-                                <div class="min-price">
-                                    <span> {{ bill_price[loop.parent.loop.index0].minPrice|number_format(2, ',', '.') }}
-                                        zł</span>
-                                </div>
-
-                                <div class="small-bar">
-                                    <div class="average-bar"
-                                         style="width:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
-                                    <div class="your-bar"
-                                         style="width:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
-                                    {% if (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
-                                        <div class="your-result"
-                                             style="left:100%;"> {{ bill.value|number_format(2, ',', '.') }}zł
-                                        </div>
-                                    {% elseif (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
-                                        <div class="your-result"
-                                             style="left:0;"> {{ bill.value|number_format(2, ',', '.') }}zł
-                                        </div>
-                                    {% else %}
-                                        <div class="your-result"
-                                             style="left:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill.value|number_format(2, ',', '.') }}
-                                            zł
-                                        </div>
-                                    {% endif %}
-
-                                    {% if (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
-                                        <div class="average"
-                                             style="left:100%;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}zł
-                                        </div>
-                                    {% elseif (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
-                                        <div class="average"
-                                             style="left:0;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}zł
-                                        </div>
-                                    {% else %}
-                                        <div class="average"
-                                             style="left:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
-                                            zł
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <div class="max-price">
-                                    <span> {{ bill_price[loop.parent.loop.index0].maxPrice|number_format(2, ',', '.') }}
-                                        zł</span>
-                                </div>
+    {% for billInfo in bill_list if (billInfo.type != 'empty space') %}
+        {% for bill in bills %}
+            {% if bill.billType == billInfo.slug %}
+                {% if billInfo.type == "rate" %}
+                    <strong>{{ billInfo.title }}:</strong>
+                    {% for star in range(1, bill.value) %}
+                        <i class="fa fa-star" aria-hidden="true" style="color: red;"></i>
+                    {% endfor %}
+                    {% for star in range(bill.value + 1, 5) %}
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    {% endfor %}
+                    <br/>
+                {% elseif billInfo.type == "checkboxes" %}
+                    <strong>{{ billInfo.title }}:</strong>
+                    <br>
+                    {% for option in bill.value|split(',') %}
+                        - {{ option|capitalize }}{% if not loop.last %},<br>{% endif %}
+                    {% endfor %}
+                    <br>
+                {% elseif billInfo.type == "text" %}
+                    <strong>{{ billInfo.title }}:</strong> {{ bill.value }}<br/>
+                {% elseif billInfo.type == "chart" %}
+                    <h2>{{ billInfo.title }}</h2>
+                    {% if
+                        bill_price[loop.parent.loop.index0].minPrice == bill_price[loop.parent.loop.index0].maxPrice
+                    %}
+                        Brak danych
+                    {% else %}
+                        <div class="small-price-bar">
+                            <div class="min-price">
+                                <span> {{ bill_price[loop.parent.loop.index0].minPrice|number_format(2, ',', '.') }}
+                                    zł</span>
                             </div>
-                            {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
-                        {% endif %}
+
+                            <div class="small-bar">
+                                <div class="average-bar"
+                                     style="width:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
+                                <div class="your-bar"
+                                     style="width:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
+                                {% if (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
+                                    <div class="your-result"
+                                         style="left:100%;"> {{ bill.value|number_format(2, ',', '.') }}zł
+                                    </div>
+                                {% elseif (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
+                                    <div class="your-result"
+                                         style="left:0;"> {{ bill.value|number_format(2, ',', '.') }}zł
+                                    </div>
+                                {% else %}
+                                    <div class="your-result"
+                                         style="left:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill.value|number_format(2, ',', '.') }}
+                                        zł
+                                    </div>
+                                {% endif %}
+
+                                {% if (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
+                                    <div class="average"
+                                         style="left:100%;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}zł
+                                    </div>
+                                {% elseif (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
+                                    <div class="average"
+                                         style="left:0;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}zł
+                                    </div>
+                                {% else %}
+                                    <div class="average"
+                                         style="left:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill_price[loop.parent.loop.index0].avgPrice|number_format(2, ',', '.') }}
+                                        zł
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="max-price">
+                                <span>
+                                    {{ bill_price[loop.parent.loop.index0].maxPrice|number_format(2, ',', '.') }} zł
+                                </span>
+                            </div>
+                        </div>
+                        {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
                     {% endif %}
                 {% endif %}
-            {% endfor %}
-        {% endif %}
+            {% endif %}
+        {% endfor %}
     {% endfor %}
+    {{ sum }}
     {% if sum > 0 %}
-        <p class="red">Przesunięcie kosztów do średniej powoduje oszczędność roczną
-            około {{ (sum*12)|number_format(2, ',', '.') }} złotych!</p>
+        <p class="red">
+            Przesunięcie kosztów do średniej powoduje
+            oszczędność roczną około {{ (sum*12)|number_format(2, ',', '.') }} złotych!
+        </p>
     {% endif %}
 </div>
 </body>

@@ -83,16 +83,24 @@ class CityService
     public function createBillsTabByCity(object $city, $repository, string $type): array
     {
         $billTypes = $this->apiClientService->getBillTypes();
+
         foreach ($billTypes as $billType) {
-            if ($billType->getType() == "chart") {
+            if ($billType->getType() == 'chart') {
                 $minPrice = 0;
                 $sumPrice = 0;
                 $quantity = 0;
                 $maxPrice = 0;
-                $bills = $repository->findBy(['city' => $city->getTitle(), 'flatType' => $type, 'billType' => $billType->getSlug()]);
+
+                $bills = $repository->findBy([
+                    'city' => $city->getTitle(),
+                    'flatType' => $type,
+                    'billType' => $billType->getSlug()
+                ]);
 
                 foreach ($bills as $bill) {
-                    $flat = $this->entityManager->getRepository(Flat::class)->findOneBy(['uuid' => $bill->getUuid()]);
+                    $flat = $this->entityManager->getRepository(Flat::class)->findOneBy([
+                        'uuid' => $bill->getUuid()
+                    ]);
                     if ($flat->getState() == 1) {
                         $price = $bill->getValue();
                         if ($price >= $maxPrice) {
@@ -103,17 +111,18 @@ class CityService
                         }
                         $quantity++;
                         $sumPrice += $price;
-
                     }
                 }
 
-                $billType->minPrice = $minPrice;
+                $billType->setMinPrice($minPrice);
+
                 if ($quantity != 0) {
-                    $billType->avgPrice = $sumPrice / $quantity;
+                    $billType->setAvgPrice($sumPrice / $quantity);
                 } else {
-                    $billType->avgPrice = $sumPrice;
+                    $billType->setAvgPrice($sumPrice);
                 }
-                $billType->maxPrice = $maxPrice;
+
+                $billType->setMaxPrice($maxPrice);
             }
         }
 

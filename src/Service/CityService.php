@@ -20,6 +20,42 @@ class CityService
         $this->apiClientService = $apiClientService;
     }
 
+    public function addPriceValuesByZipCode(string $postcode, $repository, string $type)
+    {
+        $minPrice = 0;
+        $sumPrice = 0;
+        $quantity = 0;
+        $maxPrice = 0;
+        $flatList = $repository->findBy(['postcode' => $postcode, 'type' => $type, 'state' => 1]);
+
+        if (count($flatList) < 20) {
+            return false;
+        }
+
+        $page = new \stdClass();
+        foreach ($flatList as $flat) {
+            $pricePerSquareMeter = ($flat->getCost()) / ($flat->getSurface());
+            if ($pricePerSquareMeter >= $maxPrice) {
+                $maxPrice = $pricePerSquareMeter;
+            }
+            if ($pricePerSquareMeter < $minPrice or $minPrice == 0) {
+                $minPrice = $pricePerSquareMeter;
+            }
+            $quantity++;
+            $sumPrice += $pricePerSquareMeter;
+        }
+
+        $page->minPrice = $minPrice;
+        if ($quantity != 0) {
+            $page->avgPrice = $sumPrice / $quantity;
+        } else {
+            $page->avgPrice = $sumPrice;
+        }
+        $page->maxPrice = $maxPrice;
+
+        return [$page];
+    }
+
     public function addPriceValues(array $pageList, $repository, string $type): array
     {
         foreach ($pageList as $page) {
@@ -77,7 +113,7 @@ class CityService
     {
         $postcode = $this->entityManager->getRepository(Postcode::class)->findOneBy(['postcode' => $code]);
 
-        return $postcode ->getCity();
+        return $postcode->getCity();
     }
 
     public function createBillsTabByCity(object $city, $repository, string $type): array

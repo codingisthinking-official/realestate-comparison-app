@@ -1,6 +1,9 @@
 {% extends 'admin.html.twig' %}
 {% block title %}Lista{% endblock %}
 {% block body %}
+    <br>
+    <h1>Informacje podstawowe</h1>
+    <br>
     <table class="table table-striped word-wrap">
         <thead>
         <th>Koszt</th>
@@ -26,34 +29,31 @@
         </tr>
         </tbody>
     </table>
-    <table class="table table-striped word-wrap">
-        <thead>
-        <th>Rachunek</th>
-        <th>Slug</th>
-        <th>Wartość</th>
-        <th>Opcje</th>
-        </thead>
-
-        <tbody id="flat">
-        {% for bill_info in bill_list %}
-        {% for bill in bills %}
-            {% if bill.billType == bill_info.slug %}
-            <tr id="{{ bill.id }}">
-                <td>{{ bill_info.title }}</td>
-                <td>{{ bill.billType }}</td>
-                <td>{{ bill.value }}</td>
-                <td>
-                    <a href="{{ path('info.bill.edit', {uuid: bill.uuid, type: bill.billType}) }}">
-                        <button class="btn btn-primary btn-sm">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                    </a>
-                </td>
-            </tr>
-            {% endif %}
-        {% endfor %}
-        {% endfor %}
-        </tbody>
-    </table>
+    <br>
+    <h1>Składowe czynszu</h1>
+    <br>
+    <form method="POST">
+        <table class="table table-striped word-wrap">
+            <tbody id="flat">
+            {% for bill_info in bill_list %}
+                {% for bill in bills %}
+                    {% if bill.billType == bill_info.slug %}
+                        <tr id="{{ bill.id }}">
+                            <td><strong>{{ bill_info.title }}</strong> ({{ bill.billType }})</td>
+                            <td>
+                                <input class="form-control" type="text"
+                                   name="{{ bill.billType }}" value="{{ bill.value }}" />
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-right">
+            <input type="submit" value="Zapisz nowe wartości" class="btn btn-default"/>
+        </div>
+        <br><br>
+    </form>
 
 {% endblock %}

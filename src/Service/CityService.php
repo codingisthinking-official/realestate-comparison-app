@@ -20,6 +20,19 @@ class CityService
         $this->apiClientService = $apiClientService;
     }
 
+    public function calculateAverageValueForCityAndTypeAndSlug($repository, string $city, string $type, string $slug)
+    {
+        $results = array_map(function($result) {
+            return $result->getValue();
+        }, $repository->findBy(['city' => $city, 'flatType' => $type, 'billType' => $slug,]));
+
+        if (count($results) === 0) {
+            return false;
+        }
+
+        return array_sum($results) / count($results);
+    }
+
     public function addPriceValuesByZipCode(string $postcode, $repository, string $type)
     {
         $minPrice = 0;

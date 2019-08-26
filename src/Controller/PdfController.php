@@ -31,7 +31,30 @@ class PdfController extends AbstractController
             , $repository, $flat->getType()
         );
 
+        $averageItems = array_filter(array_map(function($tab) use ($cityService, $repository, $flat) {
+            $avg = $cityService->calculateAverageValueForCityAndTypeAndSlug(
+                $repository, $flat->getCity(), $flat->getType(), $tab->getSlug()
+            );
+
+            if (!$tab->getDisplayAverage()) {
+                return false;
+            }
+
+            return [
+                'slug' => $tab->getSlug(),
+                'avg' => $avg,
+            ];
+        }, $billsTab), function($tab) {
+            return false !== $tab;
+        });
+
+        $averageItemsMap = [];
+        foreach ($averageItems as $item) {
+            $averageItemsMap[$item['slug']] = $item['avg'];
+        }
+
         return $this->render('PDF/bill.html.twig', [
+            'averageItemsMap' => $averageItemsMap,
             'flat' => $flat,
             'bills' => $bills,
             'bill_list' => $apiClientService->getBillTypes(),

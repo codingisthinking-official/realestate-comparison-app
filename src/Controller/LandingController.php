@@ -28,6 +28,17 @@ class LandingController extends AbstractController
     }
 
     /**
+     * @Route("/iframe", name="homepage.iframe")
+     */
+    public function iframe(ApiClientService $apiClientService)
+    {
+        return $this->render('landing/index-iframe.html.twig', [
+            'type_list' => $apiClientService->getFlatTypes(),
+            'bills' => $apiClientService->getBillTypes(),
+        ]);
+    }
+
+    /**
      * @Route("/flat/", name="flat.post")
      * @Method({"POST"})
      */
@@ -64,7 +75,11 @@ class LandingController extends AbstractController
 
         $repository = $this->getDoctrine()->getRepository(Flat::class);
         if ($city) {
-            $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
+            $cityWithValues = $cityService->addPriceValuesByZipCode($postCode, $repository, $flatType);
+
+            if (false === $cityWithValues) {
+                $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
+            }
         } else {
             return new Response($serializer->serialize([
                 'status' => 'ok',

@@ -4,12 +4,13 @@ $(document).ready(function () {
     $(".rateYo").rateYo({
         spacing   : "5px",
         fullStar: true,
+        numStars: 10,
         multiColor: {
 
             "startColor": "#FF0000",
             "endColor"  : "#00FF00"
         },
-        starWidth: '60px',
+        starWidth: '40px',
         onSet: function (rating, rateYoInstance) {
             $(this).parent().find('input[type=hidden]').val(rating);
         }

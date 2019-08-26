@@ -643,6 +643,10 @@ input {
     -webkit-transform: none;
     transform: none;
     padding-left: 30px;
+    .req {
+      font-weight: 400;
+      color: #ff0000;
+    }
   }
   .input-wrapper {
     padding-left: 0;

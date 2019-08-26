@@ -51,6 +51,21 @@ class BillTypes
      */
     protected $maxPrice;
 
+    /**
+     * @Type("boolean")
+     */
+    protected $fieldRequired;
+
+    /**
+     * @Type("boolean")
+     */
+    protected $autocomplete;
+
+    /**
+     * @Type("boolean")
+     */
+    protected $displayAverage;
+
     public function __construct()
     {
         $this->minPrice = null;
@@ -131,5 +146,20 @@ class BillTypes
     public function getPosition()
     {
         return $this->position;
+    }
+
+    public function getAutocomplete()
+    {
+        return $this->autocomplete;
+    }
+
+    public function getDisplayAverage()
+    {
+        return $this->displayAverage;
+    }
+
+    public function getFieldRequired()
+    {
+        return $this->fieldRequired;
     }
 }

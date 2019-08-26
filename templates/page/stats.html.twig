@@ -1,0 +1,42 @@
+{% extends 'base-iframe.html.twig' %}
+
+{% block title %}{{ 'title.city'|toWording }}{% endblock %}
+{% block bodyType %} class='subpage' {% endblock %}
+{% block body %}
+    <section class="comparision smaller-padding">
+        <div class="wrapper">
+            <form action="">
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-12">
+                        <label for="flat-type"> {{ 'page.input-type'|toWording }} </label>
+                    </div>
+                    <div class="col-lg-10 col-md-9 col-sm-8 col-xs-12">
+                        <div class="input-wrapper">
+                            <select name="flat-type" id="select-flat-type">
+                                {% for type in type_list %}
+                                    <option value="{{ type.id }}">{{ type.title }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="info">?</span>
+
+                            <div class="tooltip">
+                                <div class="content"> {{ 'page.input-type-tooltip'|toWording }} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="cities">
+                {{ render(controller(
+                    'App\\Controller\\PageController::recentChart',
+                    { 'active': page.slug  }
+                )) }}
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="wrapper"> {{ 'page.wrapper'|toWording }} </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/canvasChart.js') }}"></script>{% endblock %}

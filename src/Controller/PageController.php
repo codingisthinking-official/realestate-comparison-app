@@ -14,7 +14,7 @@ class PageController extends AbstractController
     /**
      * @Route("/page/{page}/", name="page")
      */
-    public function show(string $page, ApiClientService $apiClientService, CityService $cityService, Request $request)
+    public function show(string $page, ApiClientService $apiClientService)
     {
         $page = $apiClientService->findOnePageBySlug($page);
 
@@ -23,6 +23,24 @@ class PageController extends AbstractController
         }
 
         return $this->render('page/show.html.twig', [
+            'page' => $page,
+            'type_list' => $apiClientService->getFlatTypes(),
+        ]);
+    }
+
+    /**
+     * @Route("/stats/{city}/", name="stats")
+     */
+    public function stats(string $city, ApiClientService $apiClientService)
+    {
+        $page = $apiClientService->findOnePageBySlug($city);
+
+        if (!$page) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('page/stats.html.twig', [
+            'city' => $city,
             'page' => $page,
             'type_list' => $apiClientService->getFlatTypes(),
         ]);

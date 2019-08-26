@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -76,7 +77,9 @@ class AdminController extends AbstractController
     /**
      * @Route("/info/{uuid}/edit/", name="info.edit")
      */
-    public function editListInfo(ApiClientService $apiClientService, SerializerInterface $serializer, $uuid)
+    public function editListInfo(
+        Request $request, ApiClientService $apiClientService, EntityManagerInterface $entityManager, $uuid
+    )
     {
         $repository = $this->getDoctrine()->getRepository(Flat::class);
         $flat = $repository->findOneBy(['uuid' => $uuid]);
@@ -84,6 +87,29 @@ class AdminController extends AbstractController
             throw $this->createNotFoundException(
                 'No flat found for this uuid: ' . $uuid
             );
+        }
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
+
+            foreach ($data as $billType => $value) {
+                $bill = $entityManager->getRepository(Bill::class)->findOneBy(['uuid' => $uuid, 'billType' => $billType]);
+
+                if ($bill->getValue() == $value) {
+                    continue;
+                }
+
+                if ($bill) {
+                    $bill->setValue($value);
+                } else {
+                    continue;
+                }
+
+                $entityManager->persist($bill);
+                $entityManager->flush();
+            }
+
+            return $this->redirectToRoute('info.edit', ['uuid' => $uuid]);
         }
 
         $repository = $this->getDoctrine()->getRepository(Bill::class);

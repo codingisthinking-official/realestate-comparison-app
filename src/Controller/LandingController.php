@@ -21,9 +21,16 @@ class LandingController extends AbstractController
      */
     public function index(ApiClientService $apiClientService)
     {
+        $bills = $apiClientService->getBillTypes();
+
+        $groups = array_unique(array_map(function($bill) {
+            return $bill->getGroupName();
+        }, $bills));
+
         return $this->render('landing/index.html.twig', [
             'type_list' => $apiClientService->getFlatTypes(),
-            'bills' => $apiClientService->getBillTypes(),
+            'bills' => $bills,
+            'groups' => $groups,
         ]);
     }
 
@@ -32,9 +39,16 @@ class LandingController extends AbstractController
      */
     public function iframe(ApiClientService $apiClientService)
     {
+        $bills = $apiClientService->getBillTypes();
+
+        $groups = array_unique(array_map(function($bill) {
+            return $bill->getGroupName();
+        }, $bills));
+
         return $this->render('landing/index-iframe.html.twig', [
             'type_list' => $apiClientService->getFlatTypes(),
-            'bills' => $apiClientService->getBillTypes(),
+            'bills' => $bills,
+            'groups' => $groups,
         ]);
     }
 

@@ -15,6 +15,10 @@ class BillTypes
      * @Type("string")
      */
     private $title;
+    /**
+     * @Type("string")
+     */
+    private $groupName;
 
     /**
      * @Type("string")
@@ -66,11 +70,17 @@ class BillTypes
      */
     protected $displayAverage;
 
+    /**
+     * @Type("array")
+     */
+    protected $autoCompleteOptions;
+
     public function __construct()
     {
         $this->minPrice = null;
         $this->maxPrice = null;
         $this->avgPrice = null;
+        $this->autoCompleteOptions = [];
     }
 
     public function setMinPrice($minPrice): void
@@ -140,6 +150,11 @@ class BillTypes
         return $this->type;
     }
 
+    public function getGroupName()
+    {
+        return $this->groupName;
+    }
+
     /**
      * @return mixed
      */
@@ -161,5 +176,15 @@ class BillTypes
     public function getFieldRequired()
     {
         return $this->fieldRequired;
+    }
+
+    public function setAutoCompleteOptions($autoCompleteOptions): void
+    {
+        $this->autoCompleteOptions = $autoCompleteOptions;
+    }
+
+    public function getAutoCompleteOptions()
+    {
+        return $this->autoCompleteOptions;
     }
 }

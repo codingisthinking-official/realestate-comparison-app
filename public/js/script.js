@@ -161,6 +161,7 @@ $(document).ready(function () {
                 if (response.status == 200) {
                     response.json()
                         .then(parsedResponse => {
+                            window.AVAILABLE_TAGS = parsedResponse;
                             parsedResponse.forEach(function(item) {
                                 setPriceParameterValues(item);
                                 calculateSmallChartsBarsLengths();
@@ -403,11 +404,21 @@ $(document).ready(function () {
     function isDataTyped() {
         let inputWrappers = $('#price-analysis .input-wrapper');
         let full = true;
+        let wrongInputs = [];
+
         inputWrappers.each(function () {
-            if ($(this).find('input').val() == '' || $(this).find('input').val() == ' ') {
+            if ($(this).find('input[required]').length && $(this).find('input[required]').val().trim() == '') {
                 full = false;
+                wrongInputs.push($(this));
             }
         });
+
+        if (wrongInputs.length > 0) {
+            $([document.documentElement, document.body]).animate({
+                scrollTop: wrongInputs[0].offset().top - 40
+            }, 2000);
+        }
+
         return full;
     }
 

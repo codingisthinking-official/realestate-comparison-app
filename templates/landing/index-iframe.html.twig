@@ -174,64 +174,9 @@
         <div class="wrapper">
             <form action="">
                 <div class="row">
-                    {% for bill in bills %}
-                        <div class="col-md-6 col-xs-12" data-type="{{ bill.type }}">
-                            {% if bill.type == "rate" %}
-                                <label for="in1">{{ bill.title }}</label>
-                                <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                                    <div class="rateYo"></div>
-                                    <input type="hidden" name="in1" placeholder="0"
-                                           pattern="[0-9]+([\.,][0-9]+)?" min="0">
-                                </div>
-                            {% elseif bill.type == "checkboxes" %}
-                                <label for="in1">{{ bill.title }}</label>
-                                <div class="input-wrapper wrapper-checkbox" data-billId="{{ bill.slug }}">
-                                    {% for option in bill.options|split(',') %}
-                                        <div>
-                                            <input id="{{ bill.slug }}-op-{{ loop.index }}" type="checkbox" name="in1[]"
-                                                   value="{{ option }}">
-                                            <label for="{{ bill.slug }}-op-{{ loop.index }}">{{ option|capitalize }}</label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% elseif bill.type == "chart" %}
-                                <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
-                                <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                                    <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
-                                           min="0">
-                                    <span class="info">?</span>
-                                    <div class="tooltip">
-                                        <div class="content">{{ bill.tooltip }}</div>
-                                    </div>
-                                    <div class="small-price-bar">
-                                        <div class="min-price">
-                                            <span> 1,00 zł</span>
-                                        </div>
-                                        <div class="small-bar">
-                                            <div class="average-bar"></div>
-                                            <div class="your-bar"></div>
-                                            <div class="your-result" data-result="0"> 6,20zł</div>
-                                            <div class="average"> 4,50zł</div>
-                                        </div>
-                                        <div class="max-price">
-                                            <span> 8,00 zł</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% elseif bill.type == "text" %}
-                                <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
-                                <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                                    <input type="text" name="in1" placeholder="Wpisz nazwę" {{ bill.fieldRequired ? 'required' : '' }}>
-                                    <span class="info">?</span>
-                                    <div class="tooltip">
-                                        <div class="content">{{ bill.tooltip }}</div>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="input-wrapper empty">
-                                </div>
-                            {% endif %}
-                        </div>
+                    {% for group in groups %}
+                        <h3 style="width: 100%; margin: 20px 0; display: block;">{{ ('layout.group.' ~ group)|toWording }}</h3>
+                        {% include 'landing/_bills.html.twig' with {'group': group}%}
                     {% endfor %}
                 </div>
                 <div class="row end-xs savings">

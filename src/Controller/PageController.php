@@ -65,6 +65,7 @@ class PageController extends AbstractController
             array_push($types, $cityService->addPriceValues($pageList, $repository, $flatType));
         }
 
+
         return $this->render('page/recent_chart.html.twig', [
             'types' => $types,
             'activePage' => $active,

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\ValueObject\Cms\BillTypes;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
 use App\Entity\Flat;
@@ -133,7 +134,21 @@ class CityService
     {
         $billTypes = $this->apiClientService->getBillTypes();
 
+        /** @var BillTypes $billType */
         foreach ($billTypes as $billType) {
+            if ($billType->getType() == 'text' && $billType->getAutocomplete()) {
+                $bills = $repository->findBy([
+                    'city' => $city->getTitle(),
+                    'flatType' => $type,
+                    'billType' => $billType->getSlug()
+                ]);
+
+                $values = array_unique(array_map(function($val) {
+                    return $val->getValue();
+                }, $bills));
+
+                $billType->setAutoCompleteOptions($values);
+            }
             if ($billType->getType() == 'chart') {
                 $minPrice = 0;
                 $sumPrice = 0;
@@ -146,21 +161,27 @@ class CityService
                     'billType' => $billType->getSlug()
                 ]);
 
+                $billType->setAutoCompleteOptions(['test', '123']);
+
                 foreach ($bills as $bill) {
                     $flat = $this->entityManager->getRepository(Flat::class)->findOneBy([
-                        'uuid' => $bill->getUuid()
+                        'uuid' => $bill->getUuid(),
+                        'state' => 1,
                     ]);
-                    if ($flat->getState() == 1) {
-                        $price = $bill->getValue();
-                        if ($price >= $maxPrice) {
-                            $maxPrice = $price;
-                        }
-                        if ($price < $minPrice or $minPrice == 0) {
-                            $minPrice = $price;
-                        }
-                        $quantity++;
-                        $sumPrice += $price;
+
+                    if (!$flat) {
+                        continue;
                     }
+
+                    $price = $bill->getValue();
+                    if ($price >= $maxPrice) {
+                        $maxPrice = $price;
+                    }
+                    if ($price < $minPrice or $minPrice == 0) {
+                        $minPrice = $price;
+                    }
+                    $quantity++;
+                    $sumPrice += $price;
                 }
 
                 $billType->setMinPrice($minPrice);

@@ -21,7 +21,7 @@
             {% elseif bill.type == "chart" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
             <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                <input type="number" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                <input type="number" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
                        min="0" {{ bill.fieldRequired ? 'required' : '' }}>
                 <span class="info">?</span>
                 <div class="tooltip">
@@ -45,7 +45,7 @@
             {% elseif bill.type == "text" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
             <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                <input id="bill__{{ bill.slug }}" type="text" name="in1" placeholder="Wpisz nazwę"
+                <input id="bill__{{ bill.slug }}" type="text" name="in1" placeholder=""
                         {{ bill.fieldRequired ? 'required' : '' }}>
                 <span class="info">?</span>
                 <div class="tooltip">

@@ -143,6 +143,28 @@ $(document).ready(function () {
             area: parseInt($('input[name="area"]').val())
         };
 
+        var calculateEarnings = {};
+        calculateEarnings.$elTotalSpace = $('#bill__building_space');
+        calculateEarnings.$elPercentageOfHouse = $('#bill__udzial');
+        calculateEarnings.$elAdministratorEarnings = $('#bill__oplata_administracja');
+
+        calculateEarnings.changeAdministratorEarnings = function() {
+            console.log(
+                parseInt($('#bill__building_space').val()) / parseInt($('#bill__udzial').val())
+            );
+        };
+
+        calculateEarnings.init = function() {
+            calculateEarnings.$elTotalSpace.keyup(function() {
+                calculateEarnings.changeAdministratorEarnings();
+            });
+            calculateEarnings.$elPercentageOfHouse.keyup(function() {
+                calculateEarnings.changeAdministratorEarnings();
+            });
+        };
+
+        calculateEarnings.init();
+
         if (!formData.flatType || !formData.postalCode || !formData.price || !formData.area) {
             $('.wrong-data').show();
         } else {

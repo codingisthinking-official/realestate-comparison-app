@@ -141,6 +141,7 @@ class AdminController extends AbstractController
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);
     }
+
     /**
      * @Route("/infos/{page}/{status}/", name="info.get")
      * @Method({"GET"})
@@ -229,5 +230,102 @@ class AdminController extends AbstractController
             'total_items' => $totalItemCount,
             'data' => $infoList
         ], 'json'));
+    }
+
+
+    /**
+     * @Route("/infos/accepted/csv/", name="info.get")
+     * @Method({"GET"})
+     */
+    public function getInfoCSV(Request $request, ApiClientService $apiClientService)
+    {
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+
+        $flats = $repository->findBy([
+            'state' => 1,
+        ], [
+            'id' => 'DESC',
+        ]);
+
+        $globalHeaders = [];
+        foreach ($flats as $flat) {
+            $headers = [];
+            $tmp = [
+                'id' => $flat->getId(), 'ip' => $flat->getIp(), 'cost' => $flat->getCost(),
+                'surface' => $flat->getSurface(), 'postcode' => $flat->getPostCode(), 'city' => $flat->getCity()
+            ];
+
+            $bill = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
+
+            foreach ($bill as $priceParameter) {
+                $headers[] = [
+                    'title' => $apiClientService->findTitleOfBillTypeBySlug($priceParameter->getBillType()),
+                    'slug' => $priceParameter->getBillType()
+                ];
+
+                $tmp[$priceParameter->getBillType()] = $apiClientService->findTitleOfBillTypeBySlug(
+                    $priceParameter->getBillType()
+                ) . ':' . $priceParameter->getValue();
+            }
+
+            $output[] = $tmp;
+
+            if (count($headers) > count($globalHeaders)) {
+                $globalHeaders = array_merge([
+                    [
+                        'title' => 'ID',
+                        'slug' => 'id',
+                    ],
+                    [
+                        'title' => 'IP',
+                        'slug' => 'ip',
+                    ],
+                    [
+                        'title' => 'Koszt',
+                        'slug' => 'cost',
+                    ],
+                    [
+                        'title' => 'Powierzchnia',
+                        'slug' => 'surface',
+                    ],
+                    [
+                        'title' => 'Kod pocztowy',
+                        'slug' => 'surface',
+                    ],
+                    [
+                        'title' => 'Miasto',
+                        'slug' => 'city',
+                    ]
+                ], $headers);
+            }
+        }
+
+        $csvHeaders = [];
+        foreach ($globalHeaders as $header) {
+            $csvHeaders[] = $header['title'];
+        }
+
+        $f = fopen('php://memory', 'r+');
+        if (fputcsv($f, $csvHeaders) === false) {
+            return false;
+        }
+
+        $csvOutput = [];
+
+        for ($i = 0; $i < count($output); ++$i) {
+            $preparedData = [];
+
+            foreach ($globalHeaders as $header) {
+                $preparedData[] = array_key_exists($header['slug'], $output[$i]) ? $output[$i][$header['slug']] : '';
+            }
+
+            if (fputcsv($f, $preparedData) === false) {
+                return false;
+            }
+        }
+
+        rewind($f);
+        echo stream_get_contents($f);
+        die;
     }
 }

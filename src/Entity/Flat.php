@@ -57,6 +57,11 @@ class Flat
      */
     private $files = null;
 
+    /**
+     * @ORM\Column(length=255)
+     */
+    private $ip;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -168,5 +173,15 @@ class Flat
     public function setFiles($files): void
     {
         $this->files = $files;
+    }
+
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    public function setIp($ip): void
+    {
+        $this->ip = $ip;
     }
 }

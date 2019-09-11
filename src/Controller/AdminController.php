@@ -19,62 +19,6 @@ use App\Form\BillType;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/info/", name="info.get")
-     * @Method({"GET"})
-     */
-    public function getInfo(SerializerInterface $serializer, ApiClientService $apiClientService)
-    {
-        $repository = $this->getDoctrine()->getRepository(Flat::class);
-        $flatList = $repository->findBy([], [
-            'id' => 'DESC'
-        ]);
-        $infoList = [];
-        foreach ($flatList as $flat) {
-            $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
-            $valueList = '<span style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
-            $valueList .= 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType()) .'</span><br><br><small>';
-            for ($x = 0; $x < sizeof($repository); $x++) {
-                $valueList = $valueList . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
-                if ($x < sizeof($repository) - 1) {
-                    $valueList = $valueList . '<br>';
-                }
-	    }
-
-	    $valueList .= '</small>';
-	    $status = '<span style="color: #b0cc37">Not accepted</span>';
-
-	    $actions = [
-                'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
-                'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles()
-            ];
-
-	    if ($flat->getState() == 0) {
-                $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);
-                $actions['reject'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL);
-	    }
-
-	    if ($flat->getState() == 1) { 
-		$status = '<span style="color: green">Accepted</span>';
-                $actions['reject'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL);
-	    }
-
-	    if ($flat->getState() == 2) {
-		$status = '<span style="color: red">Rejected</span>';
-                $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);
-	    }
-
-            $info = [
-                'subject' => $flat->getUuid(),
-		'status' => $status,
-                'payload' => $valueList,
-                '_actions' => $actions,
-            ];
-            array_push($infoList, $info);
-        }
-        return new Response($serializer->serialize(['total_items' => sizeof($infoList), 'data' => $infoList], 'json'));
-    }
-
-    /**
      * @Route("/info/{uuid}/edit/", name="info.edit")
      */
     public function editListInfo(
@@ -196,5 +140,94 @@ class AdminController extends AbstractController
 
         $referer = $request->headers->get('referer');
         return $this->redirect($referer);
+    }
+    /**
+     * @Route("/infos/{page}/{status}/", name="info.get")
+     * @Method({"GET"})
+     */
+    public function getInfo(
+        SerializerInterface $serializer, ApiClientService $apiClientService, int $page, $status = ''
+    )
+    {
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+
+        $offset = ($page - 1) * 10;
+
+        if ($status == 'accepted') {
+            $flatList = $repository->findBy([
+                'state' => 1,
+            ], [
+                'id' => 'DESC',
+            ], 10, $offset);
+
+            $totalItemCount = $repository
+                ->createQueryBuilder('f')
+                ->select('count(f) as c')
+                ->where('f.state = 1')
+                ->getQuery()
+                ->getSingleResult()['c'];
+        } else {
+            $flatList = $repository->findBy([], [
+                'id' => 'DESC'
+            ], 10, $offset);
+
+            $totalItemCount = $repository
+                ->createQueryBuilder('f')
+                ->select('count(f) as c')
+                ->getQuery()
+                ->getSingleResult()['c'];
+        }
+
+        $infoList = [];
+        foreach ($flatList as $flat) {
+            $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
+            $valueList = '<span style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
+            $valueList .= 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType()) .'</span><br><br><small>';
+            for ($x = 0; $x < sizeof($repository); $x++) {
+                $valueList = $valueList . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
+                if ($x < sizeof($repository) - 1) {
+                    $valueList = $valueList . '<br>';
+                }
+            }
+
+            $valueList .= '</small>';
+            $status = '<span style="color: #b0cc37">Not accepted</span>';
+
+            $actions = [
+                'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
+                'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles(),
+                'pdf' => $this->generateUrl('pdf.bill', ['uuid' => $flat->getUuid()], UrlGeneratorInterface::ABSOLUTE_URL),
+            ];
+
+            if ($flat->getState() == 0) {
+                $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);
+                $actions['reject'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL);
+            }
+
+            if ($flat->getState() == 1) {
+                $status = '<span style="color: green">Accepted</span>';
+                $actions['reject'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'delete'), UrlGeneratorInterface::ABSOLUTE_URL);
+            }
+
+            if ($flat->getState() == 2) {
+                $status = '<span style="color: red">Rejected</span>';
+                $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);
+            }
+
+            $info = [
+                'subject' => $flat->getUuid(),
+                'status' => $status,
+                'payload' => $valueList,
+                'ip' => $flat->getIp(),
+                '_actions' => $actions,
+            ];
+
+            array_push($infoList, $info);
+        }
+
+        return new Response($serializer->serialize([
+            'total_items' => $totalItemCount,
+            'data' => $infoList
+        ], 'json'));
     }
 }

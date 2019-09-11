@@ -61,6 +61,7 @@ class LandingController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $flat = new Flat();
+        $flat->setIp($request->getClientIp());
         $flat->setSurface($request->request->get('area'));
         $flat->setPostcode($request->request->get('postalCode'));
         $flat->setCity($cityService->getCityByPostcode($request->request->get('postalCode')));

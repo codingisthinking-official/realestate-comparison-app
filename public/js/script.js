@@ -2,15 +2,16 @@ $(document).ready(function () {
     let uuid = create_UUID();
 
     $(".rateYo").rateYo({
-        spacing   : "5px",
+        spacing: "3px",
         fullStar: true,
-        numStars: 10,
+        numStars: 5,
         multiColor: {
-
-            "startColor": "#FF0000",
-            "endColor"  : "#00FF00"
+            "startColor": "#FFBE00",
+            "endColor"  : "#FFBE00"
         },
-        starWidth: '40px',
+        normalFill: "#6B6B6B",
+        ratedFill: "#6B6B6B",
+        starWidth: '50px',
         onSet: function (rating, rateYoInstance) {
             $(this).parent().find('input[type=hidden]').val(rating);
         }
@@ -177,6 +178,8 @@ $(document).ready(function () {
             });
         }
     }
+
+    analyseRent();
 
     function setPriceParameterValues(item) {
         let smallContainer = $('#price-analysis .input-wrapper[data-billId="' + item.slug + '"]');

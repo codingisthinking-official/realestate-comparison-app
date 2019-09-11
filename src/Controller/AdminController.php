@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use JMS\Serializer\SerializerInterface;
@@ -219,6 +220,7 @@ class AdminController extends AbstractController
                 'subject' => $flat->getUuid(),
                 'status' => $status,
                 'payload' => $valueList,
+                'id' => $flat->getId(),
                 'ip' => $flat->getIp(),
                 '_actions' => $actions,
             ];
@@ -232,9 +234,41 @@ class AdminController extends AbstractController
         ], 'json'));
     }
 
+    /**
+     * @Route("/remove/{ids}/", name="info.remove_batch")
+     * @Method({"GET"})
+     */
+    public function removeInfos(Request $request, ApiClientService $apiClientService, $ids)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+
+        foreach (explode(',', $ids) as $id) {
+            $flat = $repository->findOneBy([
+                'id' => $id,
+            ]);
+
+            if ($flat) {
+                $billRepo = $this->getDoctrine()->getRepository(Bill::class);
+                
+                $bills = $billRepo->findBy(['uuid' => $flat->getUUid()]);
+
+                foreach ($bills as $bill) {
+                    $manager->remove($bill);
+                }
+
+                $manager->remove($flat);
+                $manager->flush();
+
+            }
+        }
+
+        $ref = $request->headers->get('referer');
+        return new RedirectResponse($ref);
+    }
 
     /**
-     * @Route("/infos/accepted/csv/", name="info.get")
+     * @Route("/accepted/csv/", name="info.get_csv")
      * @Method({"GET"})
      */
     public function getInfoCSV(Request $request, ApiClientService $apiClientService)
@@ -325,7 +359,11 @@ class AdminController extends AbstractController
         }
 
         rewind($f);
-        echo stream_get_contents($f);
-        die;
+        
+        $response = new Response(stream_get_contents($f));
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="prices-accepted.csv"');
+
+        return $response; 
     }
 }

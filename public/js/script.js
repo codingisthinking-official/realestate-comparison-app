@@ -179,8 +179,6 @@ $(document).ready(function () {
         }
     }
 
-    analyseRent();
-
     function setPriceParameterValues(item) {
         let smallContainer = $('#price-analysis .input-wrapper[data-billId="' + item.slug + '"]');
 

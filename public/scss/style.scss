@@ -182,7 +182,7 @@ nav {
 }
 
 section {
-  padding: 50px;
+  padding: 10px;
   color: #9596b3;
   .big-padding {
     padding: 20px 80px;
@@ -195,7 +195,7 @@ section {
 }
 
 form {
-  padding: 50px 0 0;
+  padding: 0;
   border-bottom: 2px solid #dae3f5;
   margin-bottom: 20px;
   font-size: 16px;
@@ -339,8 +339,9 @@ select, input {
   padding: 15px 15px 15px 0;
   text-indent: 15px;
   border: 1px solid #bbbcdd;
-  background: transparent;
   font-weight: 600;
+  background: #fff;
+  color: #000;
   border-radius: 6px;
   min-width: 50%;
   font-size: 16px;
@@ -533,6 +534,7 @@ input {
 .good {
   color: #48af10;
   .result {
+    margin-top: 20px;
     border-color: #48af10;
   }
   .big-paragraph {

@@ -131,6 +131,13 @@ $(document).ready(function () {
         }, 500);
     }
 
+    function addUserBill() {
+        let val = $(this).val();
+        $(this).siblings('.small-price-bar').find('.your-result').attr('data-result', val);
+
+        calculateSmallChartsBarsLengths();
+    }
+
     function analyseRent(e) {
         if (e) {
             e.preventDefault();
@@ -143,27 +150,74 @@ $(document).ready(function () {
             area: parseInt($('input[name="area"]').val())
         };
 
+        var calculateYearToMonthCost = {};
+
+        calculateYearToMonthCost.recalculate = function() {
+            let percentage = parseFloat($('#bill__udzial').val());
+            let houseArea = parseFloat(calculateEarnings.$elHouseArea.val());
+
+            $('.input-year-cost .primary--field').each(function() {
+                if (!$(this).val()) {
+                    return;
+                }
+
+                let value = parseFloat($(this).val());
+                let calculation = value * percentage / 12 / houseArea;
+
+                let $field = $(this).parent().find('input.secondary--field');
+                $field.val(calculation.toFixed(2));
+
+                $(this).parent().find('.small-price-bar').find('.your-result').attr('data-result', calculation.toFixed(2));
+                calculateSmallChartsBarsLengths();
+            });
+        };
+
+        calculateYearToMonthCost.init = function() {
+            $('.input-year-cost .primary--field').on('keyup change', function() {
+                calculateYearToMonthCost.recalculate();
+            });
+        };
+
         var calculateEarnings = {};
         calculateEarnings.$elTotalSpace = $('#bill__building_space');
         calculateEarnings.$elPercentageOfHouse = $('#bill__udzial');
         calculateEarnings.$elAdministratorEarnings = $('#bill__oplata_administracja');
+        calculateEarnings.$elHouseArea = $('#input__area');
 
-        calculateEarnings.changeAdministratorEarnings = function() {
-            console.log(
-                parseInt($('#bill__building_space').val()) / parseInt($('#bill__udzial').val())
-            );
+        calculateEarnings.changeAdministratorEarnings = function(whatShouldBeCounted = 'percentage') {
+            if (whatShouldBeCounted == 'percentage') {
+                let calculation =
+                    parseFloat(calculateEarnings.$elHouseArea.val()) / parseFloat(calculateEarnings.$elTotalSpace.val() / 100);
+
+                calculateEarnings.$elPercentageOfHouse.val(calculation);
+            }
+
+            if (whatShouldBeCounted == 'totalSpace') {
+                let calculation =
+                    parseFloat(calculateEarnings.$elHouseArea.val()) /
+                    (parseFloat(calculateEarnings.$elPercentageOfHouse.val()) / 100);
+
+                calculateEarnings.$elTotalSpace.val(calculation);
+            }
+
+            if (parseInt(calculateEarnings.$elPercentageOfHouse.val()) > 100) {
+                calculateEarnings.$elPercentageOfHouse.val(100);
+            }
         };
 
         calculateEarnings.init = function() {
-            calculateEarnings.$elTotalSpace.keyup(function() {
-                calculateEarnings.changeAdministratorEarnings();
+            calculateEarnings.$elTotalSpace.on('keyup change', function() {
+                calculateEarnings.changeAdministratorEarnings('percentage');
+                calculateYearToMonthCost.recalculate();
             });
-            calculateEarnings.$elPercentageOfHouse.keyup(function() {
-                calculateEarnings.changeAdministratorEarnings();
+            calculateEarnings.$elPercentageOfHouse.on('keyup change', function() {
+                calculateEarnings.changeAdministratorEarnings('totalSpace');
+                calculateYearToMonthCost.recalculate();
             });
         };
 
         calculateEarnings.init();
+        calculateYearToMonthCost.init();
 
         if (!formData.flatType || !formData.postalCode || !formData.price || !formData.area) {
             $('.wrong-data').show();
@@ -248,10 +302,16 @@ $(document).ready(function () {
             let data = null;
             switch ($(this).parent().attr('data-type')) {
                 case 'text':
-                case 'chart':
                 case 'rate':
                     data = {
                         'value': $(this).find('input').val(),
+                        'key': $(this).attr('data-billid'),
+                        'type': $(this).parent().attr('data-type')
+                    };
+                    break;
+                case 'chart':
+                    data = {
+                        'value': $(this).find('input.data--predictor').val(),
                         'key': $(this).attr('data-billid'),
                         'type': $(this).parent().attr('data-type')
                     };
@@ -342,13 +402,6 @@ $(document).ready(function () {
 
         (monthlyDifference * 12 > 0) ? $('.savings').show() : $('.savings').hide();
         $('.saving-amount').text((monthlyDifference * 12).toFixed(2));
-    }
-
-    function addUserBill() {
-        let val = $(this).val();
-        $(this).siblings('.small-price-bar').find('.your-result').attr('data-result', val);
-
-        calculateSmallChartsBarsLengths();
     }
 
     function create_UUID() {
@@ -478,5 +531,5 @@ $(document).ready(function () {
         return false;
     });
 
-    $('.price-analysis .input-wrapper input').change(addUserBill);
+    $('.price-analysis .input-wrapper input.data--predictor').change(addUserBill);
 });

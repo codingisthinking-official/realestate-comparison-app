@@ -71,6 +71,11 @@ class BillTypes
     protected $displayAverage;
 
     /**
+     * @Type("boolean")
+     */
+    protected $yearCost;
+
+    /**
      * @Type("array")
      */
     protected $autoCompleteOptions;
@@ -132,6 +137,11 @@ class BillTypes
     public function getOptions()
     {
         return $this->options;
+    }
+
+    public function getYearCost()
+    {
+        return $this->yearCost;
     }
 
     /**

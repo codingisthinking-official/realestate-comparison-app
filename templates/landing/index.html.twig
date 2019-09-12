@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="col-xs-8">
                                     <div class="input-wrapper">
-                                        <input type="number" name="area" value="45" min="0">
+                                        <input type="number" id="input__area" name="area" value="45" min="0">
                                         <span class="info">?</span>
                                         <div class="tooltip">
                                             <div class="content"> {{ 'index.input-msquare-tooltip'|toWording }} </div>
@@ -174,7 +174,7 @@
         <div class="wrapper">
             <form action="">
                 <div class="row">
-                    {% for group in groups %}
+                    {% for group in ['udzialy', 'koszty', 'zaliczki', 'deweloper', 'zarzad'] %}
                         <h3 style="width: 100%; margin: 20px 0; display: block;">{{ ('layout.group.' ~ group)|toWording }}</h3>
                         {% include 'landing/_bills.html.twig' with {'group': group}%}
                     {% endfor %}

@@ -40,6 +40,7 @@ class CityService
         $sumPrice = 0;
         $quantity = 0;
         $maxPrice = 0;
+
         $flatList = $repository->findBy(['postcode' => $postcode, 'type' => $type, 'state' => 1]);
 
         if (count($flatList) < 20) {

@@ -20,9 +20,16 @@
             </div>
             {% elseif bill.type == "chart" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
-            <div class="input-wrapper" data-billId="{{ bill.slug }}">
-                <input type="number" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
-                       min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                <div class="input-wrapper {% if bill.yearCost %}input-year-cost{% endif %}" data-billId="{{ bill.slug }}">
+                    {% if bill.yearCost %}
+                        <input type="number" id="temp__bill__{{ bill.slug }}" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                           min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                        <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                    {% else %}
+                        <input type="number" id="bill__{{ bill.slug }}" class="data--predictor" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                    {% endif %}
                 <span class="info">?</span>
                 <div class="tooltip">
                     <div class="content">{{ bill.tooltip }}</div>

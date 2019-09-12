@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\ApiClientService;
 use App\Service\CityService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Flat;
 use App\Entity\Bill;
@@ -53,9 +54,30 @@ class PdfController extends AbstractController
             $averageItemsMap[$item['slug']] = $item['avg'];
         }
 
+        $city = $apiClientService->getOneCityByTitle($flat->getcity());
+        $repository = $this->getDoctrine()->getRepository(Flat::class);
+
+        if ($city) {
+            $cityWithValues = $cityService->addPriceValuesByZipCode(
+                $flat->getPostCode(), $repository, $flat->getType()
+            );
+
+            if (false === $cityWithValues) {
+                $cityWithValues = $cityService->addPriceValues([$city], $repository, $flat->getType())[0];
+            }
+        } else {
+            $cityWithValues = [
+                'status' => 'ok',
+                'minPrice' => 5,
+                'avgPrice' => 25,
+                'maxPrice' => 55
+            ];
+        }
+
         return $this->render('PDF/bill.html.twig', [
             'averageItemsMap' => $averageItemsMap,
             'flat' => $flat,
+            'cityValues' => $cityWithValues,
             'bills' => $bills,
             'bill_list' => $apiClientService->getBillTypes(),
             'bill_price' => $billsTab,

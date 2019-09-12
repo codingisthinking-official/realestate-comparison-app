@@ -106,6 +106,15 @@ $(document).ready(function () {
         if (percentResult < 0) percentResult = 0;
         if (percentResult > 100) percentResult = 100;
 
+        let compared = $('.compared .wrapper');
+        compared.find('.result span').text(
+            compared.find('.result span').text()
+                .replace('%score%', price.toFixed(2))
+                .replace('%highest%', max.toFixed(2))
+                .replace('%lowest%', min.toFixed(2))
+                .replace('%avg%', average.toFixed(2))
+        );
+
         if (price > average) {
             $('.compared').removeClass('good');
             $('.compared').addClass('bad');

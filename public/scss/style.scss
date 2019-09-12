@@ -646,6 +646,7 @@ input {
     .req {
       font-weight: 400;
       color: #ff0000;
+      font-size: 12px;
     }
   }
   .input-wrapper {
@@ -675,7 +676,7 @@ input {
   .min-price {
     padding-right: 10px;
     &:before {
-      content: "Najtańszy";
+      content: "Najtańszy za m²";
       display: block;
       position: absolute;
       left: 0;
@@ -690,14 +691,14 @@ input {
   .max-price {
     padding-left: 10px;
     &:before {
-      content: "Najdroższy";
+      content: "Najdroższy za m²";
       display: block;
       position: absolute;
       right: 0;
       top: 0;
       -webkit-transform: translateY(calc(-250% - 10px));
       transform: translateY(calc(-250% - 10px));
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       font-family: Open Sans;
     }

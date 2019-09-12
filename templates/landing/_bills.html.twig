@@ -19,7 +19,7 @@
                 {% endfor %}
             </div>
             {% elseif bill.type == "chart" %}
-            <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
+            <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? '<span class="req">* pole wymagane</span>' : '' }}</label>
                 <div class="input-wrapper {% if bill.yearCost %}input-year-cost{% endif %}" data-billId="{{ bill.slug }}">
                     {% if bill.yearCost %}
                         <input type="number" id="temp__bill__{{ bill.slug }}" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
@@ -50,7 +50,7 @@
                 </div>
             </div>
             {% elseif bill.type == "text" %}
-            <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">* pole wymagane</span>' : '' }}</label>
+            <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? '<span class="req">* pole wymagane</span>' : '' }}</label>
             <div class="input-wrapper" data-billId="{{ bill.slug }}">
                 <input id="bill__{{ bill.slug }}" type="text" name="in1" placeholder=""
                         {{ bill.fieldRequired ? 'required' : '' }}>

@@ -695,10 +695,11 @@ input {
       content: "Najdroższy za m²/msc";
       display: block;
       position: absolute;
+      width: 70px;
       right: 0;
       top: 0;
-      -webkit-transform: translateY(calc(-250% - 100px));
-      transform: translateY(calc(-250% - 100px));
+      -webkit-transform: translateY(calc(-25% + 48px));
+      transform: translateY(calc(-25% + 48px));
       font-size: 12px;
       font-weight: 600;
       font-family: Open Sans;

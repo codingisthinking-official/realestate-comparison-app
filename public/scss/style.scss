@@ -676,13 +676,13 @@ input {
   .min-price {
     padding-right: 10px;
     &:before {
-      content: "Najtańszy za m²";
+      content: "Najtańszy za m²/msc";
       display: block;
       position: absolute;
       left: 0;
       top: 0;
-      -webkit-transform: translateY(calc(-250% - 10px));
-      transform: translateY(calc(-250% - 10px));
+      -webkit-transform: translateY(calc(-250% - 45px));
+      transform: translateY(calc(-250% - 45px));
       font-size: 14px;
       font-weight: 600;
       font-family: Open Sans;
@@ -691,13 +691,13 @@ input {
   .max-price {
     padding-left: 10px;
     &:before {
-      content: "Najdroższy za m²";
+      content: "Najdroższy za m²/msc";
       display: block;
       position: absolute;
       right: 0;
       top: 0;
-      -webkit-transform: translateY(calc(-250% - 10px));
-      transform: translateY(calc(-250% - 10px));
+      -webkit-transform: translateY(calc(-250% - 45px));
+      transform: translateY(calc(-250% - 45px));
       font-size: 13px;
       font-weight: 600;
       font-family: Open Sans;

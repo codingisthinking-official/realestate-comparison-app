@@ -162,7 +162,7 @@ $(document).ready(function () {
                 }
 
                 let value = parseFloat($(this).val());
-                let calculation = value * percentage / 12 / houseArea;
+                let calculation = value * (percentage / 100) / 12 / houseArea;
 
                 let $field = $(this).parent().find('input.secondary--field');
                 $field.val(calculation.toFixed(2));

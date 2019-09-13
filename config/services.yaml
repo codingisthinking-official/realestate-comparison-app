@@ -33,3 +33,4 @@ services:
         autoconfigure: false
         arguments:
             $client: "@eight_points_guzzle.client.api_client"
+            $redis: "@snc_redis.default"

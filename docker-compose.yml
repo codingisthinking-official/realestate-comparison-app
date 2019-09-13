@@ -1,5 +1,9 @@
 version: "3"
 services:
+  redis:
+    image: redis:alpine
+    container_name: realestate-redis
+
   mysql:
     image: mariadb:10.2
     container_name: realestate-mysql
@@ -40,6 +44,7 @@ services:
       - DATABASE_URL=mysql://test:test@realestate-mysql:3306/test
       - MAILER_GMAIL_USERNAME=matixe
       - MAILER_GMAIL_PASSWORD=C7BY8H3WYsg2hept72
+      - REDIS_URL=redis://realestate-redis
 
   composer:
     restart: 'no'

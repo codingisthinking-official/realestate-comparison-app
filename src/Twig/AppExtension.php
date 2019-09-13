@@ -5,6 +5,7 @@ namespace App\Twig;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use App\Service\ApiClientService;
+use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
 {
@@ -20,6 +21,26 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('toWording', [$this, 'toWording']),
         ];
+    }
+
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('lookupParameterValue', [$this, 'getLookupParameterValue'])
+        ];
+    }
+
+    public function getLookupParameterValue($array, $value)
+    {
+        $output = array_values(array_filter($array, function($item) use ($value) {
+            return $item->getBillType() == $value;
+        }));
+
+        if (count($output)) {
+            return $output[0];
+        }
+
+        return false;
     }
 
     public function toWording($word)

@@ -82,22 +82,28 @@ class CityService
 
             foreach ($flatList as $flat) {
                 $pricePerSquareMeter = ($flat->getCost()) / ($flat->getSurface());
+
                 if ($pricePerSquareMeter >= $maxPrice) {
                     $maxPrice = $pricePerSquareMeter;
                 }
+
                 if ($pricePerSquareMeter < $minPrice or $minPrice == 0) {
                     $minPrice = $pricePerSquareMeter;
                 }
+
                 $quantity++;
+
                 $sumPrice += $pricePerSquareMeter;
             }
 
             $page->minPrice = $minPrice;
+
             if ($quantity != 0) {
                 $page->avgPrice = $sumPrice / $quantity;
             } else {
                 $page->avgPrice = $sumPrice;
             }
+
             $page->maxPrice = $maxPrice;
         }
 

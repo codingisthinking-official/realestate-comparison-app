@@ -8,13 +8,20 @@ use GuzzleHttp\Client;
 
 class ApiClientService
 {
+    const KEY_CACHE_PRICE_PARAMETERS = 'cache-price-parameters';
+    const KEY_CACHE_TYPES_OF_BUILDING = 'cache-types-of-building';
+
     protected $serializer;
     protected $client;
+    protected $redis;
 
-    public function __construct(SerializerInterface $serializer, Client $client)
+    public function __construct(
+        SerializerInterface $serializer, Client $client, \Predis\Client $redis
+    )
     {
         $this->serializer = $serializer;
         $this->client = $client;
+        $this->redis = $redis;
     }
 
     public function getPages(): array
@@ -124,20 +131,62 @@ class ApiClientService
 
     public function findTitleOfBillTypeBySlug(string $slug)
     {
-        $response = $this->client->get('price_parameters/');
-        if ($response->getStatusCode() != 200) {
-            throw new \RuntimeException('Can not connect to the API (price parameters)');
+        if ($this->redis->exists(static::KEY_CACHE_PRICE_PARAMETERS)) {
+            $priceParameters = $this->serializer->deserialize(
+                $this->redis->get(static::KEY_CACHE_PRICE_PARAMETERS),
+                'array<App\ValueObject\Cms\BillTypes>',
+                'json'
+            );
+        } else {
+            $response = $this->client->get('price_parameters/');
+
+            if ($response->getStatusCode() != 200) {
+                throw new \RuntimeException('Can not connect to the API (price parameters)');
+            }
+
+            $this->redis->set(static::KEY_CACHE_PRICE_PARAMETERS, $response->getBody(), 'EX', 3600 * 24);
+
+            $priceParameters = $this->serializer->deserialize(
+                $response->getBody(),
+                'array<App\ValueObject\Cms\BillTypes>',
+                'json'
+            );
         }
 
-        $billTypeList = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\BillTypes>', 'json');
-
-        foreach ($billTypeList as $billType) {
+        foreach ($priceParameters as $billType) {
             if ($billType->getSlug() == $slug) {
                 return $billType->getTitle();
             }
         }
 
         return $slug;
+    }
+
+    public function findTitleOfFlatTypeById(string $id)
+    {
+        if ($this->redis->exists(static::KEY_CACHE_TYPES_OF_BUILDING)) {
+            $flatTypes = $this->serializer->deserialize(
+                $this->redis->get(static::KEY_CACHE_TYPES_OF_BUILDING),
+                'array<App\ValueObject\Cms\FlatTypes>',
+                'json'
+            );
+        } else {
+            $response = $this->client->get('type_of_buildings/');
+            if ($response->getStatusCode() != 200) {
+                throw new \RuntimeException('Can not connect to the API (type of buildings)');
+            }
+
+            $this->redis->set(static::KEY_CACHE_TYPES_OF_BUILDING, $response->getBody(), 'EX', 3600 * 24);
+            $flatTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
+        }
+
+        foreach ($flatTypes as $flatType) {
+            if ($flatType->getId() == $id) {
+                return $flatType->getTitle();
+            }
+        }
+
+        return $id;
     }
 
     public function getFlatTypes(): array
@@ -150,24 +199,6 @@ class ApiClientService
         $flatTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
 
         return $flatTypes;
-    }
-
-    public function findTitleOfFlatTypeById(string $id)
-    {
-        $response = $this->client->get('type_of_buildings/');
-        if ($response->getStatusCode() != 200) {
-            throw new \RuntimeException('Can not connect to the API (type of buildings)');
-        }
-
-        $flatTypeList = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
-
-        foreach ($flatTypeList as $flatType) {
-            if ($flatType->getId() == $id) {
-                return $flatType->getTitle();
-            }
-        }
-
-        return $id;
     }
 
     public function sortByPosition(array $array): array

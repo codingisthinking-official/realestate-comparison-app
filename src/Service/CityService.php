@@ -80,6 +80,10 @@ class CityService
             $maxPrice = 0;
             $flatList = $repository->findBy(['city' => $page->getTitle(), 'type' => $type, 'state' => 1]);
 
+            if (count($flatList) < 20) {
+                $flatList = $repository->findBy(['type' => $type, 'state' => 1]);
+            }
+
             foreach ($flatList as $flat) {
                 $pricePerSquareMeter = ($flat->getCost()) / ($flat->getSurface());
                 if ($pricePerSquareMeter >= $maxPrice) {
@@ -162,6 +166,13 @@ class CityService
                     'billType' => $billType->getSlug()
                 ]);
 
+                if (count($bills) < 20) {
+                    $bills = $repository->findBy([
+                        'flatType' => $type,
+                        'billType' => $billType->getSlug()
+                    ]);
+                }
+
                 $billType->setAutoCompleteOptions(['test', '123']);
 
                 foreach ($bills as $bill) {
@@ -174,7 +185,7 @@ class CityService
                         continue;
                     }
 
-                    $price = $bill->getValue();
+                    $price = (float) str_replace(',', '.', $bill->getValue());
                     if ($price >= $maxPrice) {
                         $maxPrice = $price;
                     }

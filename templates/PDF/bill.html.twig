@@ -46,7 +46,7 @@
         }
 
         header img {
-            max-height: 150px;
+            max-height: 200px;
             max-width: 100%;
         }
 
@@ -145,14 +145,15 @@
         }
 
         .small-price-bar .min-price:before {
-            content: "Najtańszy";
+            content: "Najtańszy na m2/msc";
             display: block;
+            width: 150px;
             position: absolute;
             left: 0;
             top: 0;
-            -webkit-transform: translateY(calc(-250% - 10px));
-            transform: translateY(calc(-250% - 10px));
-            font-size: 14px;
+            -webkit-transform: translateY(calc(-250% + 90px));
+            transform: translateY(calc(-250% + 90px));
+            font-size: 12px;
             font-weight: 600;
             font-family: Montserrat;
         }
@@ -163,14 +164,15 @@
         }
 
         .small-price-bar .max-price:before {
-            content: "Najdroższy";
+            content: "Najdroższy na m2/msc";
             display: block;
             position: absolute;
             right: 0;
+            width: 150px;
             top: 0;
-            -webkit-transform: translateY(calc(-250% - 10px));
-            transform: translateY(calc(-250% - 10px));
-            font-size: 14px;
+            -webkit-transform: translateY(calc(-250% + 90px));
+            transform: translateY(calc(-250% + 90px));
+            font-size: 12px;
             font-weight: 600;
             font-family: Montserrat;
         }
@@ -359,7 +361,7 @@
             <img src="{{ asset('images/logo-new.png') }}" alt="logo">
         </div>
         <div class="right">
-            {{ 'layout.report.top_logo_description'|toWording }}
+            {{ 'layout.report.top_logo_description'|toWording|raw }}
         </div>
     </div>
 </header>
@@ -381,27 +383,27 @@
             <strong>Kod pocztowy</strong>: {{ flat.postCode }}
         </li>
         <li>
-            <strong>Powierzchnia</strong>: {{ flat.surface }}
+            <strong>Powierzchnia</strong>: {{ flat.surface }} m<sup>2</sup>
         </li>
         <li>
-            <strong>Koszt</strong>: {{ flat.cost }}
+            <strong>Koszt</strong>: {{ flat.cost }} zł/msc
         </li>
     </ul>
     <h2>Pórownanie do najtańszego czynszu</h2>
     <p>
-        Mogłbyś zaoszczędzić na rok: <strong>{{ ((flat.cost/flat.surface) / cityValues.minPrice) * flat.surface * 12 }} zł</strong>
+        Mógłbyś zaoszczędzić na rok: <strong>{{ (((flat.cost/flat.surface) / cityValues.minPrice) * flat.surface * 12)|number_format(2) }} zł</strong>
         <br>
-        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ ((flat.cost/flat.surface) / cityValues.minPrice) * flat.surface * 12 * 10 }} zł</strong>
+        Mógłbyś zaoszczędzić na 10 lat: <strong>{{ (((flat.cost/flat.surface) / cityValues.minPrice) * flat.surface * 12 * 10)|number_format(2)}} zł</strong>
         <br>
-        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ ((flat.cost/flat.surface) / cityValues.minPrice) * flat.surface * 12 * 30 }} zł</strong>
+        Mógłbyś zaoszczędzić na 30 lat: <strong>{{ (((flat.cost/flat.surface) / cityValues.minPrice) * flat.surface * 12 * 30)|number_format(2) }} zł</strong>
     </p>
     <h2>Pórownanie do średniego czynszu</h2>
     <p>
-        Mogłbyś zaoszczędzić na rok: <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 }} zł</strong>
+        Mógłbyś zaoszczędzić na rok: <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12)|number_format(2) }} zł</strong>
         <br>
-        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 10 }} zł</strong>
+        Mógłbyś zaoszczędzić na 10 lat: <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 10)|number_format(2) }} zł</strong>
         <br>
-        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 30 }} zł</strong>
+        Mógłbyś zaoszczędzić na 30 lat: <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 30)|number_format(2) }} zł</strong>
     </p>
     {% set sum = 0 %}
     {% for billInfo in bill_list if (billInfo.type != 'empty space') %}

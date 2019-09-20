@@ -473,34 +473,37 @@
         })|raw }}
     </div>
     <p>
-        Mogłbyś zaoszczędzić na rok: <strong>{{ kwotaNaRok }} zł ({{ procentNaRok }}%)</strong>
+        Mogłbyś zaoszczędzić na rok: <strong>{{ kwotaNaRok|number_format(2, ',', '') }} zł ({{ procentNaRok }}%)</strong>
         <br>
-        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ kwotaNa10lat }} zł ({{ procentNaRok }}%)</strong>
+        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ kwotaNa10lat|number_format(2, ',', '') }} zł ({{ procentNaRok }}%)</strong>
         <br>
-        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ kwotaNa30lat }} zł ({{ procentNaRok }}%)</strong>
+        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ kwotaNa30lat|number_format(2, ',', '') }} zł ({{ procentNaRok }}%)</strong>
         <br>
-        Wspólnota mogłaby zaoszczędzić na rok: <strong>{{ wspolnotaKwotaNaRok }} zł ({{ procentNaRok }}%)</strong>
+        {#Wspólnota mogłaby zaoszczędzić na rok: <strong>{{ wspolnotaKwotaNaRok|number_format(2, ',', '') }} zł ({{ procentNaRok }}%)</strong>
         <br>
-        Wspólnota mogłaby zaoszczędzić na 10 lat: <strong>{{ wspolnotaKwotaNa10lat }} zł ({{ procentNaRok }}%)</strong>
+        Wspólnota mogłaby zaoszczędzić na 10 lat: <strong>{{ wspolnotaKwotaNa10lat|number_format(2, ',', '') }} zł ({{ procentNaRok }}%)</strong>
         <br>
-        Wspólnota mogłaby zaoszczędzić na 30 lat: <strong>{{ wspolnotaKwotaNa30lat }} zł ({{ procentNaRok }}%)</strong>
+        Wspólnota mogłaby zaoszczędzić na 30 lat: <strong>{{ wspolnotaKwotaNa30lat|number_format(2, ',', '') }} zł ({{ procentNaRok }}%)</strong>
+#}
     </p>
     <h2>Pórownanie do średniego czynszu</h2>
     <p>
-        Mogłbyś zaoszczędzić na rok: <strong>{{ sredniCzynszKwotaNaRok }} zł ({{ sredniCzynszProcentNaRok }}%)</strong>
+        Mogłbyś zaoszczędzić na rok: <strong>{{ sredniCzynszKwotaNaRok|number_format(2, ',', '') }} zł ({{ sredniCzynszProcentNaRok }}%)</strong>
         <br>
-        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 10 }} zł</strong>
+        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 10)|number_format(2, ',', '') }} zł</strong>
         <br>
-        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 30 }} zł</strong>
+        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 30)|number_format(2, ',', '') }} zł</strong>
         <br>
+{#
         Wspólnota mogłaby zaoszczędzić na rok:
-        <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 / (udzial.value / 100) }} zł</strong>
+        <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 / (udzial.value / 100))|number_format(2, ',', '') }} zł</strong>
         <br>
         Wspólnota mogłaby zaoszczędzić na 10 lat:
-        <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 10 / (udzial.value / 100) }} zł</strong>
+        <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 10 / (udzial.value / 100))|number_format(2, ',', '') }} zł</strong>
         <br>
         Wspólnota mogłaby zaoszczędzić na 30 lat:
-        <strong>{{ ((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 30 / (udzial.value / 100) }} zł</strong>
+        <strong>{{ (((flat.cost/flat.surface) / cityValues.avgPrice) * flat.surface * 12 * 30 / (udzial.value / 100))|number_format(2, ',', '') }} zł</strong>
+#}
     </p>
     {% set sum = 0 %}
     {% for billInfo in bill_list if (billInfo.type != 'empty space') %}

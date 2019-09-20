@@ -144,14 +144,15 @@
         }
 
         .small-price-bar .min-price:before {
-            content: "Najtańszy";
+            content: "Najtańszy za m²/msc";
             display: block;
             position: absolute;
             left: 0;
+            width: 70px;
             top: 0;
-            -webkit-transform: translateY(calc(-250% - 10px));
-            transform: translateY(calc(-250% - 10px));
-            font-size: 14px;
+            -webkit-transform: translateY(calc(-25% + 48px));
+            transform: translateY(calc(-25% + 48px));
+            font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
         }
@@ -162,14 +163,15 @@
         }
 
         .small-price-bar .max-price:before {
-            content: "Najdroższy";
+            content: "Najdroższy za m²/msc";
             display: block;
             position: absolute;
+            width: 70px;
             right: 0;
             top: 0;
-            -webkit-transform: translateY(calc(-250% - 10px));
-            transform: translateY(calc(-250% - 10px));
-            font-size: 14px;
+            -webkit-transform: translateY(calc(-25% + 48px));
+            transform: translateY(calc(-25% + 48px));
+            font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
         }
@@ -230,7 +232,7 @@
         .small-price-bar .average {
             font-weight: 600;
             color: #DB4335;
-            font-size: 14px;
+            font-size: 12px;
             position: absolute;
             left: 45%;
             top: 0;
@@ -250,7 +252,7 @@
         .small-price-bar .your-result {
             font-weight: 600;
             color: #DBAE35;
-            font-size: 14px;
+            font-size: 12px;
             position: absolute;
             left: 60%;
             top: 0;
@@ -467,7 +469,7 @@
             '%wspolnota_kwota_na_rok%': wspolnotaKwotaNaRok|number_format(2, ',', ''),
             '%wspolnota_kwota_na_10lat%': wspolnotaKwotaNa10lat|number_format(2, ',', ''),
             '%wspolnota_kwota_na_30lat%': wspolnotaKwotaNa30lat|number_format(2, ',', ''),
-            '%procent_oszczednosci%': procentNaRok,
+            '%procent_oszczednosci%': procentNaRok|number_format(2, ',', ''),
             '%sredni_czynsz_na_rok%': sredniCzynszKwotaNaRok|number_format(2, ',', ''),
             '%sredni_czynsz_procent%': sredniCzynszProcentNaRok
         })|raw }}
@@ -590,6 +592,7 @@
                                 </span>
                                 </div>
                             </div>
+                            <br>
                             {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
                         {% endif %}
                     {% endif %}

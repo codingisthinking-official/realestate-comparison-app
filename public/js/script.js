@@ -35,6 +35,16 @@ $(document).ready(function () {
             uuid: uuid
         };
 
+        var $gdpr1 = $('#input__gdpr1');
+        var $gdpr2 = $('#input__gdpr2');
+
+        if (!$gdpr1.is(':checked') || !$gdpr2.is(':checked')) {
+            $('#main-form .policy .error').fadeIn();
+            return false;
+        } else {
+            $('#main-form .policy .error').fadeOut();
+        }
+
         if (!formData.flatType || !formData.postalCode || !formData.price || !formData.area) {
             $('.wrong-data').show();
         } else {
@@ -83,9 +93,9 @@ $(document).ready(function () {
     }
 
     function setMinMaxAndAverageValues(parsedResponse) {
-        $('.price-bar .min-price span').attr('data-min', parsedResponse.minPrice).text(parsedResponse.minPrice.toFixed(2) + ' zł');
-        $('.price-bar .max-price span').attr('data-max', parsedResponse.maxPrice).text(parsedResponse.maxPrice.toFixed(2) + ' zł');
-        $('.price-bar .average').attr('data-avg', parsedResponse.avgPrice).text(parsedResponse.avgPrice.toFixed(2));
+        $('.price-bar .min-price span').attr('data-min', parsedResponse.minPrice).text(parsedResponse.minPrice.toFixed(2).replace('.', ',') + ' zł');
+        $('.price-bar .max-price span').attr('data-max', parsedResponse.maxPrice).text(parsedResponse.maxPrice.toFixed(2).replace('.', ',') + ' zł');
+        $('.price-bar .average').attr('data-avg', parsedResponse.avgPrice).text(parsedResponse.avgPrice.toFixed(2).replace('.', ','));
     }
 
     function compareRent(e, formData) {
@@ -96,10 +106,10 @@ $(document).ready(function () {
         let max = parseFloat($(".max-price span").attr("data-max"));
 
         let price = (formData.price / formData.area);
-        $('.result .user-rent').text(price.toFixed(2));
-        $('.avg-info').text(average.toFixed(2));
+        $('.result .user-rent').text(price.toFixed(2).replace('.', ','));
+        $('.avg-info').text(average.toFixed(2).replace('.', ','));
 
-        $('.bar .your-result').text(`${price.toFixed(2)}`);
+        $('.bar .your-result').text(`${price.toFixed(2).replace('.', ',')}`);
 
         let percent = ((average - min) * 100 / (max - min));
         let percentResult = ((price - min) * 100 / (max - min));
@@ -109,10 +119,10 @@ $(document).ready(function () {
         let compared = $('.compared .wrapper');
         compared.find('.result span').text(
             compared.find('.result span').text()
-                .replace('%score%', price.toFixed(2))
-                .replace('%highest%', max.toFixed(2))
-                .replace('%lowest%', min.toFixed(2))
-                .replace('%avg%', average.toFixed(2))
+                .replace('%score%', price.toFixed(2).replace('.', ','))
+                .replace('%highest%', max.toFixed(2).replace('.', ','))
+                .replace('%lowest%', min.toFixed(2).replace('.', ','))
+                .replace('%avg%', average.toFixed(2).replace('.', ','))
         );
 
         if (price > average) {
@@ -176,7 +186,8 @@ $(document).ready(function () {
                 let $field = $(this).parent().find('input.secondary--field');
                 $field.val(calculation.toFixed(2));
 
-                $(this).parent().find('.small-price-bar').find('.your-result').attr('data-result', calculation.toFixed(2));
+
+                $(this).parent().find('.small-price-bar').find('.your-result').attr('data-result', calculation.toFixed(2).replace('.', ','));
                 calculateSmallChartsBarsLengths();
             });
         };
@@ -196,9 +207,9 @@ $(document).ready(function () {
         calculateEarnings.changeAdministratorEarnings = function(whatShouldBeCounted = 'percentage') {
             if (whatShouldBeCounted == 'percentage') {
                 let calculation =
-                    parseFloat(calculateEarnings.$elHouseArea.val()) / parseFloat(calculateEarnings.$elTotalSpace.val() / 100);
+                    parseFloat(calculateEarnings.$elHouseArea.val().replace(',', '.')) / parseFloat(calculateEarnings.$elTotalSpace.val().replace(',', '.') / 100);
 
-                calculateEarnings.$elPercentageOfHouse.val(calculation);
+                calculateEarnings.$elPercentageOfHouse.val(calculation.toFixed(2).replace('.', ','));
             }
 
             if (whatShouldBeCounted == 'totalSpace') {
@@ -206,10 +217,10 @@ $(document).ready(function () {
                     parseFloat(calculateEarnings.$elHouseArea.val()) /
                     (parseFloat(calculateEarnings.$elPercentageOfHouse.val()) / 100);
 
-                calculateEarnings.$elTotalSpace.val(calculation);
+                calculateEarnings.$elTotalSpace.val(calculation.toFixed(2).replace('.', ','));
             }
 
-            if (parseInt(calculateEarnings.$elPercentageOfHouse.val()) > 100) {
+            if (parseInt(calculateEarnings.$elPercentageOfHouse.val().replace(',', '.')) > 100) {
                 calculateEarnings.$elPercentageOfHouse.val(100);
             }
         };
@@ -274,9 +285,9 @@ $(document).ready(function () {
         if (item.min_price === item.max_price) {
             smallContainer.find('.small-price-bar').hide();
         } else {
-            smallContainer.find('.small-price-bar').find('.min-price span').attr('data-min', item.min_price);
-            smallContainer.find('.small-price-bar').find('.max-price span').attr('data-max', item.max_price);
-            smallContainer.find('.small-price-bar').find('.average').attr('data-avg', item.avg_price);
+            smallContainer.find('.small-price-bar').find('.min-price span').attr('data-min', item.min_price.toFixed(2).replace('.', ','));
+            smallContainer.find('.small-price-bar').find('.max-price span').attr('data-max', item.max_price.toFixed(2).replace('.', ','));
+            smallContainer.find('.small-price-bar').find('.average').attr('data-avg', item.avg_price.toFixed(2).replace('.', ','));
         }
     }
 
@@ -435,10 +446,10 @@ $(document).ready(function () {
             let userResultAttr = $(this).find('.your-result').attr('data-result');
             let userPrice = parseFloat(userResultAttr).toFixed(2);
 
-            $(this).find('.min-price span').text(minPrice + ' zł');
-            $(this).find('.max-price span').text(maxPrice + ' zł');
-            $(this).find('.average').text(avgPrice + ' zł');
-            $(this).find('.your-result').text(userPrice + ' zł');
+            $(this).find('.min-price span').text(minPrice.replace('.', ',') + ' zł');
+            $(this).find('.max-price span').text(maxPrice.replace('.', ',') + ' zł');
+            $(this).find('.average').text(avgPrice.replace('.', ',') + ' zł');
+            $(this).find('.your-result').text(userPrice.replace('.', ',') + ' zł');
 
             let avgLength = ((avgPrice - minPrice) / (maxPrice - minPrice)) * 100;
             avgLength = parseFloat(avgLength);

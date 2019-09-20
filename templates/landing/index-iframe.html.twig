@@ -72,6 +72,24 @@
                         <div class="wrong-data red">
                             Formularz wypełniono niepoprawnie.
                         </div>
+                        <div class="row">
+                            <div class="col-xs-4 align-right">
+                                <label for="area"></label>
+                            </div>
+                            <div class="col-xs-8 policy">
+                                <input type="checkbox" style="width: 25px; min-width: 0;" id="input__gdpr1"> {{ 'index.policy.gdpr1'|toWording|raw }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4 align-right">
+                                <label for="area"></label>
+                            </div>
+                            <div class="col-xs-8 policy">
+                                <input type="checkbox" style="width: 25px; min-width: 0;" id="input__gdpr2"> {{ 'index.policy.gdpr2'|toWording|raw }}
+                                <div class="error">Zaakceptuj proszę regulamin oraz politykę prywatności.</div>
+                            </div>
+                        </div>
+                        <br>
                     </form>
                 </div>
             </div>

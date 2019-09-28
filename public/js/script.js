@@ -184,7 +184,7 @@ $(document).ready(function () {
                 let calculation = value * (percentage / 100) / 12 / houseArea;
 
                 let $field = $(this).parent().find('input.secondary--field');
-                $field.val(calculation.toFixed(2));
+                $field.val(calculation.toFixed(2).replace('.', ','));
 
 
                 $(this).parent().find('.small-price-bar').find('.your-result').attr('data-result', calculation.toFixed(2).replace('.', ','));
@@ -449,7 +449,7 @@ $(document).ready(function () {
             $(this).find('.min-price span').text(minPrice.replace('.', ',') + ' zł');
             $(this).find('.max-price span').text(maxPrice.replace('.', ',') + ' zł');
             $(this).find('.average').text(avgPrice.replace('.', ',') + ' zł');
-            $(this).find('.your-result').text(userPrice.replace('.', ',') + ' zł');
+            $(this).find('.your-result').text(userResultAttr + ' zł');
 
             let avgLength = ((avgPrice - minPrice) / (maxPrice - minPrice)) * 100;
             avgLength = parseFloat(avgLength);

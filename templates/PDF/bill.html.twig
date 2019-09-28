@@ -386,6 +386,12 @@
     <h2>Twoje wyniki porównania</h2>
     <ul class="comparison-results">
         <li>
+            <strong>Nazwa wspólnoty</strong>: {{ lookupParameterValue(bills, 'nazwa_wspolnota').value }}
+        </li>
+        <li>
+            <strong>Adres wspólnoty</strong>: {{ lookupParameterValue(bills, 'adres').value }}
+        </li>
+        <li>
             <strong>Miasto</strong>: {{ flat.city }}
         </li>
         <li>
@@ -395,13 +401,13 @@
             <strong>Koszt na miesiąc</strong>: {{ flat.cost|number_format(2, ',', '') }} zł
         </li>
         <li>
-            <strong>Powierzchnia w m<sup>2</sup></strong>: {{ flat.surface }}
+            <strong>Powierzchnia</strong>: {{ flat.surface }} m<sup>2</sup>
         </li>
         <li>
             {% set udzial = lookupParameterValue(bills, 'udzial') %}
             <strong>Udział % w budynku</strong>:
             {% if udzial %}
-                {{ udzial.value }} %
+                {{ udzial.value|number_format(2, ',', '') }} %
             {% else %}
                 brak danych
             {% endif %}
@@ -409,6 +415,10 @@
         <li>
             <strong>Koszt miesięczny za m<sup>2</sup></strong>: {{ (flat.cost/flat.surface)|number_format(2, ',', '') }} zł
         </li>
+        <li>
+            <strong>Ilość Miejsc Postojowych</strong>: {{ lookupParameterValue(bills, 'miejsce_postojowe_ilosc').value }}
+        </li>
+        <li></li>
     </ul>
     <br>
     {% set yourResult = (flat.cost/flat.surface) %}
@@ -508,7 +518,7 @@
 #}
     </p>
     {% set sum = 0 %}
-    {% for billInfo in bill_list if (billInfo.type != 'empty space') %}
+    {% for billInfo in bill_list if (billInfo.type != 'empty space' and billInfo.slug != 'miejsce_postojowe_ilosc' or billInfo.slug != 'nazwa_wspolnota' and billInfo.slug != 'adres') %}
         {% for bill in bills %}
             <div style="margin-bottom: 10px;">
                 {% if bill.billType == billInfo.slug %}
@@ -545,6 +555,7 @@
                             Brak danych <br><br>
                         {% else %}
                             <div class="small-price-bar">
+                                {% set billValue = bill.value|number_format(2, '.', '') %}
                                 <div class="min-price">
                                 <span> {{ bill_price[loop.parent.loop.index0].minPrice|number_format(2, ',', '.') }}
                                     zł</span>
@@ -554,18 +565,18 @@
                                     <div class="average-bar"
                                          style="width:{{ (bill_price[loop.parent.loop.index0].avgPrice-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
                                     <div class="your-bar"
-                                         style="width:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
-                                    {% if (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
+                                         style="width:{{ (billValue-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"></div>
+                                    {% if (billValue-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) > 100 %}
                                         <div class="your-result"
-                                             style="left:100%;"> {{ bill.value|number_format(2, ',', '.') }}zł
+                                             style="left:100%;"> {{ billValue|number_format(2, ',', '.') }}zł
                                         </div>
-                                    {% elseif (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
+                                    {% elseif (billValue-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) <= 0 %}
                                         <div class="your-result"
-                                             style="left:0;"> {{ bill.value|number_format(2, ',', '.') }}zł
+                                             style="left:0;"> {{ billValue|number_format(2, ',', '.') }}zł
                                         </div>
                                     {% else %}
                                         <div class="your-result"
-                                             style="left:{{ (bill.value-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ bill.value|number_format(2, ',', '.') }}
+                                             style="left:{{ (billValue-bill_price[loop.parent.loop.index0].minPrice)*100/(bill_price[loop.parent.loop.index0].maxPrice-bill_price[loop.parent.loop.index0].minPrice) }}%;"> {{ billValue|number_format(2, ',', '.') }}
                                             zł
                                         </div>
                                     {% endif %}
@@ -593,7 +604,7 @@
                                 </div>
                             </div>
                             <br>
-                            {% set sum = sum+bill.value-bill_price[loop.parent.loop.index0].avgPrice %}
+                            {% set sum = sum+billValue-bill_price[loop.parent.loop.index0].avgPrice %}
                         {% endif %}
                     {% endif %}
                 {% endif %}

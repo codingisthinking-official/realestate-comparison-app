@@ -181,11 +181,19 @@ $(document).ready(function () {
                 }
 
                 let value = parseFloat($(this).val());
-                let calculation = value * (percentage / 100) / 12 / houseArea;
+                let calculationMethod = $(this).attr('data-calculation');
+                let calculation = 0;
+
+                if (calculationMethod == "year") {
+                    calculation = value * (percentage / 100) / 12 / houseArea;
+                }
+
+                if (calculationMethod == "month") {
+                    calculation = value / 12 / houseArea;
+                }
 
                 let $field = $(this).parent().find('input.secondary--field');
                 $field.val(calculation.toFixed(2).replace('.', ','));
-
 
                 $(this).parent().find('.small-price-bar').find('.your-result').attr('data-result', calculation.toFixed(2).replace('.', ','));
                 calculateSmallChartsBarsLengths();
@@ -274,6 +282,8 @@ $(document).ready(function () {
             });
         }
     }
+
+    analyseRent();
 
     function setPriceParameterValues(item) {
         let smallContainer = $('#price-analysis .input-wrapper[data-billId="' + item.slug + '"]');

@@ -76,6 +76,11 @@ class BillTypes
     protected $yearCost;
 
     /**
+     * @Type("boolean")
+     */
+    protected $monthlyCost;
+
+    /**
      * @Type("array")
      */
     protected $autoCompleteOptions;
@@ -196,5 +201,10 @@ class BillTypes
     public function getAutoCompleteOptions()
     {
         return $this->autoCompleteOptions;
+    }
+
+    public function getMonthlyCost()
+    {
+        return $this->monthlyCost;
     }
 }

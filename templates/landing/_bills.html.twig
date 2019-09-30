@@ -20,10 +20,15 @@
             </div>
             {% elseif bill.type == "chart" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">*pole wymagane</span>' : '' }}</label>
-                <div class="input-wrapper {% if bill.yearCost %}input-year-cost{% endif %}" data-billId="{{ bill.slug }}">
+                <div class="input-wrapper {% if bill.yearCost or bill.monthlyCost %}input-year-cost{% endif %}" data-billId="{{ bill.slug }}">
                     {% if bill.yearCost %}
-                        <input type="number" id="temp__bill__{{ bill.slug }}" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                        <input type="number" id="temp__bill__{{ bill.slug }}" data-calculation="year" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
                            min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                        <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                    {% elseif bill.monthlyCost %}
+                        <input type="number" id="temp__bill__{{ bill.slug }}" data-calculation="month" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
                         <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
                                min="0" {{ bill.fieldRequired ? 'required' : '' }}>
                     {% else %}
@@ -49,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            {% elseif bill.type == "text" %}
+        {% elseif bill.type == "text" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">*pole wymagane</span>' : '' }}</label>
             <div class="input-wrapper" data-billId="{{ bill.slug }}">
                 <input id="bill__{{ bill.slug }}" type="text" name="in1" placeholder=""

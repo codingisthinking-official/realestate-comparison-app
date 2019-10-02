@@ -185,6 +185,39 @@ class AdminController extends AbstractController
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
             $valueList = '<span style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
             $valueList .= 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType()) .'</span><br><br><small>';
+
+            $valueList .= '<strong>Poprawność danych:</strong> ';
+
+            $percentOfBuilding = 0.0;
+
+            for ($x = 0; $x < sizeof($repository); $x++) {
+                $bill = $repository[$x];
+                if ($bill->getBillType() == 'udzial') {
+                    $percentOfBuilding = 1 / (100 - (float) str_replace(',', '.', $bill->getValue()));
+                }
+            }
+
+            $sum = 0.0;
+            for ($x = 0; $x < sizeof($repository); $x++) {
+                $bill = $repository[$x];
+                $billMeta = $apiClientService->getPriceParameterBySlug($bill->getBillType());
+                $value = (float) str_replace(',', '.', $bill->getValue());
+
+                if ($billMeta->getType() == 'chart' && $billMeta->getYearCost()) {
+                    $formula = ($value * 12 * $flat->getSurface() * $percentOfBuilding);
+
+                    $sum += $formula;
+                }
+
+                if ($billMeta->getType() == 'chart' && $billMeta->getMonthlyCost()) {
+                    $sum += ($value * 12 * $flat->getSurface());
+                }
+            }
+
+            $deviation = $sum / $flat->getCost();
+            $valueList .= round($sum, 2) . ' zł (' . round($deviation * 100, 2). ' %)';
+            $valueList .= '<br><br>';
+
             for ($x = 0; $x < sizeof($repository); $x++) {
                 $valueList = $valueList . $apiClientService->findTitleOfBillTypeBySlug($repository[$x]->getBillType()) . ': ' . $repository[$x]->getValue();
                 if ($x < sizeof($repository) - 1) {

@@ -129,6 +129,39 @@ class ApiClientService
         return $this->sortByPosition($billTypes);
     }
 
+    public function getPriceParameterBySlug(string $slug)
+    {
+        if ($this->redis->exists(static::KEY_CACHE_PRICE_PARAMETERS)) {
+            $priceParameters = $this->serializer->deserialize(
+                $this->redis->get(static::KEY_CACHE_PRICE_PARAMETERS),
+                'array<App\ValueObject\Cms\BillTypes>',
+                'json'
+            );
+        } else {
+            $response = $this->client->get('price_parameters/');
+
+            if ($response->getStatusCode() != 200) {
+                throw new \RuntimeException('Can not connect to the API (price parameters)');
+            }
+
+            $this->redis->set(static::KEY_CACHE_PRICE_PARAMETERS, $response->getBody(), 'EX', 3600 * 24);
+
+            $priceParameters = $this->serializer->deserialize(
+                $response->getBody(),
+                'array<App\ValueObject\Cms\BillTypes>',
+                'json'
+            );
+        }
+
+        foreach ($priceParameters as $billType) {
+            if ($billType->getSlug() == $slug) {
+                return $billType;
+            }
+        }
+
+        return null;
+    }
+
     public function findTitleOfBillTypeBySlug(string $slug)
     {
         if ($this->redis->exists(static::KEY_CACHE_PRICE_PARAMETERS)) {

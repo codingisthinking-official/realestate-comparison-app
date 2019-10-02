@@ -454,9 +454,9 @@ $(document).ready(function () {
             let userResultAttr = $(this).find('.your-result').attr('data-result');
             let userPrice = parseFloat(userResultAttr).toFixed(2);
 
-            $(this).find('.min-price span').text(minPrice.replace('.', ',') + ' zł');
-            $(this).find('.max-price span').text(maxPrice.replace('.', ',') + ' zł');
-            $(this).find('.average').text(avgPrice.replace('.', ',') + ' zł');
+            $(this).find('.min-price span').text(minPriceAttr + ' zł');
+            $(this).find('.max-price span').text(maxPriceAttr + ' zł');
+            $(this).find('.average').text(avgPriceAttr + ' zł');
             $(this).find('.your-result').text(userResultAttr + ' zł');
 
             let avgLength = ((avgPrice - minPrice) / (maxPrice - minPrice)) * 100;

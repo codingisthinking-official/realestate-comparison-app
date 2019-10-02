@@ -527,9 +527,11 @@
                         {% for star in range(1, bill.value) %}
                             <i class="fa fa-star" aria-hidden="true" style="color: #ffa027;"></i>
                         {% endfor %}
-                        {% for star in range(bill.value + 1, 5) %}
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        {% endfor %}
+                        {% if bill.value != 5 %}
+                            {% for star in range(bill.value + 1, 5) %}
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            {% endfor %}
+                        {% endif %}
                         <br/>
                     {% elseif billInfo.type == "checkboxes" %}
                         <strong>{{ billInfo.title }}:</strong>

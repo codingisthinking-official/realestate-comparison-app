@@ -41,17 +41,17 @@ class BillTypes
     private $position;
 
     /**
-     * @Type("integer")
+     * @Type("float")
      */
     protected $minPrice;
 
     /**
-     * @Type("integer")
+     * @Type("float")
      */
     protected $avgPrice;
 
     /**
-     * @Type("integer")
+     * @Type("float")
      */
     protected $maxPrice;
 

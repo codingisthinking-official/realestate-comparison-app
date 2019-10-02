@@ -172,14 +172,12 @@ class CityService
                     'billType' => $billType->getSlug()
                 ]);
 
-                if (count($bills) < 20) {
+                if (count($bills) < 5) {
                     $bills = $repository->findBy([
                         'flatType' => $type,
                         'billType' => $billType->getSlug()
                     ]);
                 }
-
-                $billType->setAutoCompleteOptions(['test', '123']);
 
                 foreach ($bills as $bill) {
                     $flat = $this->entityManager->getRepository(Flat::class)->findOneBy([
@@ -202,15 +200,15 @@ class CityService
                     $sumPrice += $price;
                 }
 
-                $billType->setMinPrice($minPrice);
+                $billType->setMinPrice(round($minPrice, 2));
 
                 if ($quantity != 0) {
-                    $billType->setAvgPrice($sumPrice / $quantity);
+                    $billType->setAvgPrice(round($sumPrice / $quantity, 2));
                 } else {
-                    $billType->setAvgPrice($sumPrice);
+                    $billType->setAvgPrice(round($sumPrice, 2));
                 }
 
-                $billType->setMaxPrice($maxPrice);
+                $billType->setMaxPrice(round($maxPrice, 2));
             }
         }
 

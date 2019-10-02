@@ -701,8 +701,8 @@ input {
       left: 0;
       width: 70px;
       top: 0;
-      -webkit-transform: translateY(calc(-25% + 48px));
-      transform: translateY(calc(-25% + 48px));
+      -webkit-transform: translateY(calc(-25% + 60px));
+      transform: translateY(calc(-25% + 60px));
       font-size: 9px;
       font-weight: 600;
       font-family: Open Sans;
@@ -717,8 +717,8 @@ input {
       width: 70px;
       right: 0;
       top: 0;
-      -webkit-transform: translateY(calc(-25% + 48px));
-      transform: translateY(calc(-25% + 48px));
+      -webkit-transform: translateY(calc(-25% + 60px));
+      transform: translateY(calc(-25% + 60px));
       font-size: 9px;
       font-weight: 600;
       font-family: Open Sans;
@@ -774,12 +774,12 @@ input {
   .average {
     font-weight: 600;
     color: #DB4335;
-    font-size: 12px;
+    font-size: 10px;
     position: absolute;
     left: 45%;
     top: 0;
-    -webkit-transform: translate(-50%, 60%);
-    transform: translate(-50%, 60%);
+    -webkit-transform: translate(-50%, 80%);
+    transform: translate(-50%, 80%);
     &:after {
       content: "Średnia";
       display: block;
@@ -792,7 +792,7 @@ input {
   .your-result {
     font-weight: 600;
     color: #DBAE35;
-    font-size: 12px;
+    font-size: 11px;
     position: absolute;
     left: 60%;
     top: 0;

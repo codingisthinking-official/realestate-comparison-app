@@ -19,19 +19,9 @@ class LandingController extends AbstractController
     /**
      * @Route("/", name="homepage")
      */
-    public function index(ApiClientService $apiClientService)
+    public function index()
     {
-        $bills = $apiClientService->getBillTypes();
-
-        $groups = array_unique(array_map(function($bill) {
-            return $bill->getGroupName();
-        }, $bills));
-
-        return $this->render('landing/index.html.twig', [
-            'type_list' => $apiClientService->getFlatTypes(),
-            'bills' => $bills,
-            'groups' => $groups,
-        ]);
+        return $this->redirectToRoute('homepage.iframe');
     }
 
     /**

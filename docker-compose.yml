@@ -39,7 +39,7 @@ services:
       - .:/application
       - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
     environment:
-      - APP_ENV=prod
+      - APP_ENV=dev
       - API_URL=http://realestate.wiseweb.pl/api/
       - DATABASE_URL=mysql://test:test@realestate-mysql:3306/test
       - MAILER_GMAIL_USERNAME=matixe

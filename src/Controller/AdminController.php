@@ -210,7 +210,7 @@ class AdminController extends AbstractController
                 }
 
                 if ($billMeta->getType() == 'chart' && $billMeta->getMonthlyCost()) {
-                    $sum += ($value * 12 * $flat->getSurface());
+                    $sum += ($value * $flat->getSurface());
                 }
             }
 

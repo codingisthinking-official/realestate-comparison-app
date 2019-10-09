@@ -80,7 +80,7 @@ class CityService
             $maxPrice = 0;
             $flatList = $repository->findBy(['city' => $page->getTitle(), 'type' => $type, 'state' => 1]);
 
-            if (count($flatList) < 20) {
+            if (count($flatList) < 5) {
                 $flatList = $repository->findBy(['type' => $type, 'state' => 1]);
             }
 
@@ -160,11 +160,12 @@ class CityService
 
                 $billType->setAutoCompleteOptions($values);
             }
+
             if ($billType->getType() == 'chart') {
-                $minPrice = 0;
-                $sumPrice = 0;
-                $quantity = 0;
-                $maxPrice = 0;
+                $minPrice = 0.0;
+                $sumPrice = 0.0;
+                $quantity = 0.0;
+                $maxPrice = 0.0;
 
                 $bills = $repository->findBy([
                     'city' => $city->getTitle(),
@@ -172,7 +173,7 @@ class CityService
                     'billType' => $billType->getSlug()
                 ]);
 
-                if (count($bills) < 5) {
+                if (count($bills) < 20) {
                     $bills = $repository->findBy([
                         'flatType' => $type,
                         'billType' => $billType->getSlug()

@@ -150,8 +150,8 @@
             left: 0;
             width: 70px;
             top: 0;
-            -webkit-transform: translateY(calc(-25% + 48px));
-            transform: translateY(calc(-25% + 48px));
+            -webkit-transform: translateY(calc(-25% + 70px));
+            transform: translateY(calc(-25% + 70px));
             font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
@@ -169,8 +169,8 @@
             width: 70px;
             right: 0;
             top: 0;
-            -webkit-transform: translateY(calc(-25% + 48px));
-            transform: translateY(calc(-25% + 48px));
+            -webkit-transform: translateY(calc(-25% + 70px));
+            transform: translateY(calc(-25% + 70px));
             font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
@@ -232,7 +232,7 @@
         .small-price-bar .average {
             font-weight: 600;
             color: #DB4335;
-            font-size: 12px;
+            font-size: 10px;
             position: absolute;
             left: 45%;
             top: 0;
@@ -252,7 +252,7 @@
         .small-price-bar .your-result {
             font-weight: 600;
             color: #DBAE35;
-            font-size: 12px;
+            font-size: 10px;
             position: absolute;
             left: 60%;
             top: 0;
@@ -461,43 +461,48 @@
         </div>
     </div>
     <br>
+    {% set udzial = lookupParameterValue(bills, 'udzial').value|replace({',': '.'}) %}
     {% set kwotaNaRok = ((flat.cost) - (flat.surface * cityValues.minPrice)) * 12 %}
     {% set kwotaNa10lat = kwotaNaRok * 10 %}
     {% set kwotaNa30lat = kwotaNaRok * 30 %}
-    {% set wspolnotaKwotaNaRok = kwotaNaRok / (1/(100 - lookupParameterValue(bills, 'udzial').value)) %}
+    {% set wspolnotaKwotaNaRok = kwotaNaRok / (1/(100 - udzial)) %}
     {% set wspolnotaKwotaNa10lat = wspolnotaKwotaNaRok * 10 %}
     {% set wspolnotaKwotaNa30lat = wspolnotaKwotaNaRok * 30 %}
     {% set procentNaRok = kwotaNaRok / (flat.cost * 12) * 100 %}
     {% set sredniCzynszKwotaNaRok = ((flat.cost) - (flat.surface * cityValues.avgPrice)) * 12%}
     {% set sredniCzynszProcentNaRok = sredniCzynszKwotaNaRok / (flat.cost * 12) * 100 %}
-    {% set sredniCzynszWspolnotaKwotaNaRok = sredniCzynszKwotaNaRok / (1/(100 - lookupParameterValue(bills, 'udzial').value)) %}
+    {% set sredniCzynszWspolnotaKwotaNaRok = sredniCzynszKwotaNaRok / (1/(100 - udzial)) %}
     <h2>Pórownanie do najtańszego czynszu</h2>
-    <div class="comparison-text">
-        {{ 'layout.reports.saving_info'|toWording|replace({
-            '%kwota_na_rok%': kwotaNaRok|number_format(2, ',', ''),
-            '%kwota_na_10lat%': kwotaNa10lat|number_format(2, ',', ''),
-            '%kwota_na_30lat%': kwotaNa30lat|number_format(2, ',', ''),
-            '%wspolnota_kwota_na_rok%': wspolnotaKwotaNaRok|number_format(2, ',', ''),
-            '%wspolnota_kwota_na_10lat%': wspolnotaKwotaNa10lat|number_format(2, ',', ''),
-            '%wspolnota_kwota_na_30lat%': wspolnotaKwotaNa30lat|number_format(2, ',', ''),
-            '%procent_oszczednosci%': procentNaRok|number_format(2, ',', ''),
-            '%sredni_czynsz_na_rok%': sredniCzynszKwotaNaRok|number_format(2, ',', ''),
-            '%sredni_czynsz_procent%': sredniCzynszProcentNaRok,
-        })|raw }}
-    </div>
-    <p>
-        Mogłbyś zaoszczędzić na rok: <strong>{{ kwotaNaRok|number_format(2, ',', '') }} zł ({{ procentNaRok|number_format(2, ',', '') }}%)</strong>
-        <br>
-        Mogłbyś zaoszczędzić na 10 lat: <strong>{{ kwotaNa10lat|number_format(2, ',', '') }} zł</strong>
-        <br>
-        Mogłbyś zaoszczędzić na 30 lat: <strong>{{ kwotaNa30lat|number_format(2, ',', '') }} zł</strong>
-        <br>
-        Wspólnota mogłaby zaoszczędzić na rok: <strong>{{ wspolnotaKwotaNaRok|number_format(2, ',', '') }} zł</strong>
-        <br>
-        Wspólnota mogłaby zaoszczędzić na 10 lat: <strong>{{ wspolnotaKwotaNa10lat|number_format(2, ',', '') }} zł</strong>
-        <br>
-        Wspólnota mogłaby zaoszczędzić na 30 lat: <strong>{{ wspolnotaKwotaNa30lat|number_format(2, ',', '') }} zł</strong>
-    </p>
+    {% if kwotaNaRok > 0 %}
+        <div class="comparison-text">
+            {{ 'layout.reports.saving_info'|toWording|replace({
+                '%kwota_na_rok%': kwotaNaRok|number_format(2, ',', ''),
+                '%kwota_na_10lat%': kwotaNa10lat|number_format(2, ',', ''),
+                '%kwota_na_30lat%': kwotaNa30lat|number_format(2, ',', ''),
+                '%wspolnota_kwota_na_rok%': wspolnotaKwotaNaRok|number_format(2, ',', ''),
+                '%wspolnota_kwota_na_10lat%': wspolnotaKwotaNa10lat|number_format(2, ',', ''),
+                '%wspolnota_kwota_na_30lat%': wspolnotaKwotaNa30lat|number_format(2, ',', ''),
+                '%procent_oszczednosci%': procentNaRok|number_format(2, ',', ''),
+                '%sredni_czynsz_na_rok%': sredniCzynszKwotaNaRok|number_format(2, ',', ''),
+                '%sredni_czynsz_procent%': sredniCzynszProcentNaRok,
+            })|raw }}
+        </div>
+        <p>
+            Mogłbyś zaoszczędzić na rok: <strong>{{ kwotaNaRok|number_format(2, ',', '') }} zł ({{ procentNaRok|number_format(2, ',', '') }}%)</strong>
+            <br>
+            Mogłbyś zaoszczędzić na 10 lat: <strong>{{ kwotaNa10lat|number_format(2, ',', '') }} zł</strong>
+            <br>
+            Mogłbyś zaoszczędzić na 30 lat: <strong>{{ kwotaNa30lat|number_format(2, ',', '') }} zł</strong>
+            <br>
+            Wspólnota mogłaby zaoszczędzić na rok: <strong>{{ wspolnotaKwotaNaRok|number_format(2, ',', '') }} zł</strong>
+            <br>
+            Wspólnota mogłaby zaoszczędzić na 10 lat: <strong>{{ wspolnotaKwotaNa10lat|number_format(2, ',', '') }} zł</strong>
+            <br>
+            Wspólnota mogłaby zaoszczędzić na 30 lat: <strong>{{ wspolnotaKwotaNa30lat|number_format(2, ',', '') }} zł</strong>
+        </p>
+    {%  else %}
+        Płacisz poprawnie za czynsz.
+    {% endif %}
     <h2>Pórownanie do średniego czynszu</h2>
     {% if sredniCzynszKwotaNaRok > 0 %}
     <p>

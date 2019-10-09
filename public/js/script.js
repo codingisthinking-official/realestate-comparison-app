@@ -189,7 +189,7 @@ $(document).ready(function () {
                 }
 
                 if (calculationMethod == "month") {
-                    calculation = value / 12 / houseArea;
+                    calculation = value / houseArea;
                 }
 
                 let $field = $(this).parent().find('input.secondary--field');

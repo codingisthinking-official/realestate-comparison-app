@@ -201,14 +201,19 @@ class CityService
                     $sumPrice += $price;
                 }
 
-                $billType->setMinPrice(round($minPrice, 2));
-
                 if ($quantity != 0) {
-                    $billType->setAvgPrice(round($sumPrice / $quantity, 2));
+                    $avgPrice = round($sumPrice / $quantity, 2);
                 } else {
-                    $billType->setAvgPrice(round($sumPrice, 2));
+                    $avgPrice = round($sumPrice, 2);
                 }
 
+                if (round($minPrice, 2) > $avgPrice) {
+                    $billType->setMinPrice($avgPrice);
+                } else {
+                    $billType->setMinPrice(round($minPrice, 2));
+                }
+
+                $billType->setAvgPrice($avgPrice);
                 $billType->setMaxPrice(round($maxPrice, 2));
             }
         }

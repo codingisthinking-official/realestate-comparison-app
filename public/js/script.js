@@ -446,22 +446,33 @@ $(document).ready(function () {
         let charts = $('.small-price-bar');
         charts.each(function () {
             let minPriceAttr = $(this).find('.min-price span').attr('data-min');
-            let minPrice = parseFloat(minPriceAttr).toFixed(2);
             let maxPriceAttr = $(this).find('.max-price span').attr('data-max');
-            let maxPrice = parseFloat(maxPriceAttr).toFixed(2);
             let avgPriceAttr = $(this).find('.average').attr('data-avg');
-            let avgPrice = parseFloat(avgPriceAttr).toFixed(2);
             let userResultAttr = $(this).find('.your-result').attr('data-result');
+
+            if (!avgPriceAttr) {
+                return;
+            }
+
+            avgPriceAttr = avgPriceAttr.replace(',', '.');
+            maxPriceAttr = maxPriceAttr.replace(',', '.');
+            minPriceAttr = minPriceAttr.replace(',', '.');
+            userResultAttr = userResultAttr.replace(',', '.');
+
+            let maxPrice = parseFloat(maxPriceAttr).toFixed(2);
+            let avgPrice = parseFloat(avgPriceAttr).toFixed(2);
+            let minPrice = parseFloat(minPriceAttr).toFixed(2);
             let userPrice = parseFloat(userResultAttr).toFixed(2);
 
             $(this).find('.min-price span').text(minPriceAttr + ' zł');
             $(this).find('.max-price span').text(maxPriceAttr + ' zł');
-            $(this).find('.average').text(avgPriceAttr + ' zł');
+            $(this).find('.average').text(avgPriceAttr.replace('.', ',') + ' zł');
             $(this).find('.your-result').text(userResultAttr + ' zł');
 
             let avgLength = ((avgPrice - minPrice) / (maxPrice - minPrice)) * 100;
             avgLength = parseFloat(avgLength);
-            let userBarLength = ((userPrice - minPrice) / (maxPrice - minPrice)) * 100;
+
+            let userBarLength = ((userPrice.replace(',', '.') - minPrice) / (maxPrice - minPrice)) * 100;
             userBarLength = parseFloat(userBarLength);
 
             if (avgLength <= 0) {

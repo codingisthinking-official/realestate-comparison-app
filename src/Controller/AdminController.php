@@ -204,13 +204,11 @@ class AdminController extends AbstractController
                 $value = (float) str_replace(',', '.', $bill->getValue());
 
                 if ($billMeta->getType() == 'chart' && $billMeta->getYearCost()) {
-                    $formula = ($value * 12 * $flat->getSurface() * $percentOfBuilding);
-
-                    $sum += $formula;
+                    $sum += $value * $flat->getSurface(); 
                 }
 
                 if ($billMeta->getType() == 'chart' && $billMeta->getMonthlyCost()) {
-                    $sum += ($value * $flat->getSurface());
+                    $sum += $value * $flat->getSurface();
                 }
             }
 

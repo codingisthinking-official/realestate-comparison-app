@@ -390,7 +390,7 @@
     <h2>Raport - porównanie czynszu</h2>
     <p class="date">
         Raport wygenerowano: {{ 'now'|date('d.m.Y') }}<br>
-        {{ url('pdf.bill', {'uuid': flat.uuid}) }}
+        http://www.porownaj-czynsz.pl/raport/?id={{ flat.uuid }}
     </p>
     <p>
         {{ 'layout.report.top_description'|toWording|raw }}

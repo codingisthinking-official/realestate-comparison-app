@@ -184,7 +184,7 @@ class AdminController extends AbstractController
         foreach ($flatList as $flat) {
             $repository = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
             $valueList = '<span style="border-bottom: 1px solid #ccc; padding-bottom: 5px;">';
-            $valueList .= 'Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType()) .'</span><br><br><small>';
+            $valueList .= 'Powierzchnia: ' . $flat->getSurface() . 'm<sup>2</sup>, Miasto: ' . $flat->getCity() . ', Kod pocztowy: ' . $flat->getPostcode() . ', Typ: ' . $apiClientService->findTitleOfFlatTypeById($flat->getType()) .'</span><br><br><small>';
 
             $valueList .= '<strong>Poprawność danych:</strong> ';
 
@@ -199,12 +199,12 @@ class AdminController extends AbstractController
 
             $sum = 0.0;
             for ($x = 0; $x < sizeof($repository); $x++) {
+                $bill = $repository[$x];
+                $billMeta = $apiClientService->getPriceParameterBySlug($bill->getBillType());
                 if (!$billMeta) {
                     continue;
                 }
-                $bill = $repository[$x];
-                $billMeta = $apiClientService->getPriceParameterBySlug($bill->getBillType());
-                $value = (float) str_replace(',', '.', $bill->getValue());
+                $value = str_replace(',', '.', $bill->getValue());
 
                 if ($billMeta->getType() == 'chart' && $billMeta->getYearCost()) {
                     $sum += $value * $flat->getSurface(); 
@@ -232,7 +232,7 @@ class AdminController extends AbstractController
             $actions = [
                 'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
                 'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles(),
-                'pdf' => $this->generateUrl('pdf.bill', ['uuid' => $flat->getUuid()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'pdf' => 'http://www.porownaj-czynsz.pl/raport/?id=' . $flat->getUuid(),
             ];
 
             if ($flat->getState() == 0) {

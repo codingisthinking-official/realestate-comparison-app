@@ -330,9 +330,7 @@ class AdminController extends AbstractController
                     'slug' => $priceParameter->getBillType()
                 ];
 
-                $tmp[$priceParameter->getBillType()] = $apiClientService->findTitleOfBillTypeBySlug(
-                    $priceParameter->getBillType()
-                ) . ':' . $priceParameter->getValue();
+                $tmp[$priceParameter->getBillType()] = $priceParameter->getValue();
             }
 
             $output[] = $tmp;

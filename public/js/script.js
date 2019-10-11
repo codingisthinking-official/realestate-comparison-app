@@ -172,7 +172,7 @@ $(document).ready(function () {
         var calculateYearToMonthCost = {};
 
         calculateYearToMonthCost.recalculate = function() {
-            let percentage = parseFloat($('#bill__udzial').val());
+            let percentage = parseFloat($('#bill__udzial').val().replace(',', '.'));
             let houseArea = parseFloat(calculateEarnings.$elHouseArea.val());
 
             $('.input-year-cost .primary--field').each(function() {

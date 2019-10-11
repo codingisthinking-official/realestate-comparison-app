@@ -199,6 +199,9 @@ class AdminController extends AbstractController
 
             $sum = 0.0;
             for ($x = 0; $x < sizeof($repository); $x++) {
+                if (!$billMeta) {
+                    continue;
+                }
                 $bill = $repository[$x];
                 $billMeta = $apiClientService->getPriceParameterBySlug($bill->getBillType());
                 $value = (float) str_replace(',', '.', $bill->getValue());

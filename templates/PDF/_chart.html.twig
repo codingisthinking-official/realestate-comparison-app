@@ -35,7 +35,7 @@
                 Brak danych <br><br>
             {% else %}
                 <div class="small-price-bar">
-                    {% set billValue = bill.value|number_format(2, '.', '') %}
+                    {% set billValue = bill.value|replace({',': '.'})|number_format(2, '.', '') %}
                     <div class="min-price">
                     <span> {{ bill_price[loop.parent.loop.index0].minPrice|number_format(2, ',', '.') }}
                         zł</span>

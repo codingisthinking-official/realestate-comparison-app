@@ -222,8 +222,8 @@ $(document).ready(function () {
 
             if (whatShouldBeCounted == 'totalSpace') {
                 let calculation =
-                    parseFloat(calculateEarnings.$elHouseArea.val()) /
-                    (parseFloat(calculateEarnings.$elPercentageOfHouse.val()) / 100);
+                    parseFloat(calculateEarnings.$elHouseArea.val().replace(',', '.')) /
+                    (parseFloat(calculateEarnings.$elPercentageOfHouse.val().replace(',', '.')) / 100);
 
                 calculateEarnings.$elTotalSpace.val(calculation.toFixed(2).replace('.', ','));
             }

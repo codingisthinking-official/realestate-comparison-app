@@ -416,10 +416,10 @@
             <strong>Powierzchnia</strong>: {{ flat.surface }} m<sup>2</sup>
         </li>
         <li>
-            {% set udzial = lookupParameterValue(bills, 'udzial') %}
+            {% set udzial = lookupParameterValue(bills, 'udzial').value|replace({',': '.'}) %}
             <strong>Udział % w budynku</strong>:
             {% if udzial %}
-                {{ udzial.value|number_format(2, ',', '') }} %
+                {{ udzial|number_format(2, ',', '') }} %
             {% else %}
                 brak danych
             {% endif %}
@@ -431,7 +431,7 @@
             <strong>Ilość Miejsc Postojowych</strong>: {{ lookupParameterValue(bills, 'miejsce_postojowe_ilosc').value }}
         </li>
         <li>
-            <strong>Powierzchnia użytkowa budynku</strong>: {{ lookupParameterValue(bills, 'building_space').value }} m<sup>2</sup>
+            <strong>Powierzchnia użytkowa budynku</strong>: {{ lookupParameterValue(bills, 'building_space').value|number_format(2, ',', '.') }} m<sup>2</sup>
         </li>
     </ul>
     <br>
@@ -532,22 +532,22 @@
             <div class="row col-savings">
                 <div class="col-xs-6">
                     <h3>Twoje potencjalne oszczędności</h3>
-                    Mogłbyś zaoszczędzić na rok: <strong>{{ sredniCzynszKwotaNaRok|number_format(2, ',', '') }} zł ({{ sredniCzynszProcentNaRok }}%)</strong>
+                    Mogłbyś zaoszczędzić na rok: <strong>{{ sredniCzynszKwotaNaRok|number_format(2, ',', '.') }} zł</strong>
                     <br>
-                    Mogłbyś zaoszczędzić na 10 lat: <strong>{{ (sredniCzynszKwotaNaRok * 10)|number_format(2, ',', '') }} zł</strong>
+                    Mogłbyś zaoszczędzić na 10 lat: <strong>{{ (sredniCzynszKwotaNaRok * 10)|number_format(2, ',', '.') }} zł</strong>
                     <br>
-                    Mogłbyś zaoszczędzić na 30 lat: <strong>{{ (sredniCzynszKwotaNaRok * 30)|number_format(2, ',', '') }} zł</strong>
+                    Mogłbyś zaoszczędzić na 30 lat: <strong>{{ (sredniCzynszKwotaNaRok * 30)|number_format(2, ',', '.') }} zł</strong>
                 </div>
                 <div class="col-xs-6">
                     <h3>Potencjalne oszczędności wspólnoty</h3>
                     Wspólnota mogłaby zaoszczędzić na rok:
-                    <strong>{{ sredniCzynszWspolnotaKwotaNaRok|number_format(2, ',', '') }} zł</strong>
+                    <strong>{{ sredniCzynszWspolnotaKwotaNaRok|number_format(2, ',', '.') }} zł</strong>
                     <br>
                     Wspólnota mogłaby zaoszczędzić na 10 lat:
-                    <strong>{{ (sredniCzynszWspolnotaKwotaNaRok * 10)|number_format(2, ',', '') }} zł</strong>
+                    <strong>{{ (sredniCzynszWspolnotaKwotaNaRok * 10)|number_format(2, ',', '.') }} zł</strong>
                     <br>
                     Wspólnota mogłaby zaoszczędzić na 30 lat:
-                    <strong>{{ (sredniCzynszWspolnotaKwotaNaRok * 30)|number_format(2, ',', '') }} zł</strong>
+                    <strong>{{ (sredniCzynszWspolnotaKwotaNaRok * 30)|number_format(2, ',', '.') }} zł</strong>
                 </div>
             </div>
         {% else %}

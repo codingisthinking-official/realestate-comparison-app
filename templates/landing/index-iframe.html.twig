@@ -8,12 +8,12 @@
                 <div class="col-xs-12">
                     <form action="" id="main-form">
                         <div class="row">
-                            <div class="col-xs-4 align-right">
+                            <div class="col-md-2 col-xs-12">
                                 <label for="flat-type"> {{ 'index.input-type'|toWording }}</label>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-md-9 col-xs-10">
                                 <div class="input-wrapper">
-                                    <select name="flat-type" style="width: 100%;">
+                                    <select name="flat-type" class="select-type">
                                         {% for type in type_list %}
                                             <option value="{{ type.id }}">{{ type.title }}</option>
                                         {% endfor %}
@@ -26,10 +26,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 align-right">
+                            <div class="col-md-2 col-xs-12">
                                 <label for="postal-code"> {{ 'index.input-postcode'|toWording }}</label>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-md-9 col-xs-10">
                                 <div class="input-wrapper">
                                     <input type="text" name="postal-code" value="40-668" maxlength="6">
                                     <span class="info">?</span>
@@ -41,10 +41,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 align-right">
+                            <div class="col-md-2 col-xs-12">
                                 <label for="rent"> {{ 'index.input-cost'|toWording }}</label>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-md-9 col-xs-10">
                                 <div class="input-wrapper">
                                     <input type="number" name="rent" min="0" value="350">
                                     <span class="info">?</span>
@@ -56,10 +56,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 align-right">
+                            <div class="col-md-2 col-xs-12">
                                 <label for="area"> Powierzchnia w m<sup>2</sup></label>
                             </div>
-                            <div class="col-xs-8">
+                            <div class="col-md-9 col-xs-10">
                                 <div class="input-wrapper">
                                     <input type="number" id="input__area" name="area" value="45" min="0">
                                     <span class="info">?</span>
@@ -73,18 +73,18 @@
                             Formularz wypełniono niepoprawnie.
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 align-right">
+                            <div class="col-xs-3 col-xs-12">
                                 <label for="area"></label>
                             </div>
-                            <div class="col-xs-8 policy">
+                            <div class="col-xs-8 col-xs-10 policy">
                                 <input type="checkbox" style="width: 25px; min-width: 0;" id="input__gdpr1"> {{ 'index.policy.gdpr1'|toWording|raw }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-4 align-right">
+                            <div class="col-xs-3 col-xs-12">
                                 <label for="area"></label>
                             </div>
-                            <div class="col-xs-8 policy">
+                            <div class="col-xs-8 col-xs-10 policy">
                                 <input type="checkbox" style="width: 25px; min-width: 0;" id="input__gdpr2"> {{ 'index.policy.gdpr2'|toWording|raw }}
                                 <div class="error">Zaakceptuj proszę regulamin oraz politykę prywatności.</div>
                             </div>
@@ -161,9 +161,6 @@
                     <div class="col-xs-12">
                         <a href="#price-analysis" id="analyse"
                            class="button yellow-bcg wide"> {{ 'index.button_analyse'|toWording }} </a>
-                        <br>
-                        <br>
-                        {{ 'index.contact_form'|toWording|raw }}
                         <br>
                     </div>
                 </div>

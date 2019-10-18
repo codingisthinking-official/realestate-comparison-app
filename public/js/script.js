@@ -408,7 +408,7 @@ $(document).ready(function () {
     }
 
     function addBillsItem() {
-        let itemTemplate = `<div class="bill-name" style="width: 100%; text-align: center;"> <a style="text-align: center" class="bill-name" href="http://porownaj-czynsz.pl/raport/?id=%uuid%" target="_blank">Pobierz Darmowy Raport</a></div>`;
+        let itemTemplate = `<div class="bill-name" style="width: 100%; text-align: center;"> <a style="text-align: center" class="button yellow-bcg wide" href="http://porownaj-czynsz.pl/raport/?id=%uuid%" target="_blank">Pobierz Darmowy Raport</a></div>`;
 
         $('.pdf-show .bill-pdf').append(itemTemplate.replace('%uuid%', uuid));
         $('.pdf-show').show();

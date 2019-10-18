@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600&amp;subset=latin-ext" rel="stylesheet">
     <style type="text/css">
         h3.head {
-            border-bottom: 1px solid #cc6600;
+            border-bottom: 2px solid #084f7e;
             font-weight: 400;
             margin: 40px 0 20px 0;
         }
@@ -64,7 +64,7 @@
         h2 {
             color: #0a1416;
             text-transform: uppercase;
-            border-bottom: 2px solid #ff2011;
+            border-bottom: 2px solid #084f7e;
             margin-bottom: 35px;
         }
 
@@ -376,20 +376,20 @@
     </style>
 </head>
 <body>
-<header>
-    <div class="container wrapper">
-        <div class="left">
-            <img src="{{ asset('images/logo-new.png') }}" alt="logo">
-        </div>
-        <div class="right">
-            {{ 'layout.report.top_logo_description'|toWording|raw }}
-        </div>
-    </div>
-</header>
+{#<header>#}
+{#    <div class="container wrapper">#}
+{#        <div class="left">#}
+{#            <img src="{{ asset('images/logo-new.png') }}" alt="logo">#}
+{#        </div>#}
+{#        <div class="right">#}
+{#            {{ 'layout.report.top_logo_description'|toWording|raw }}#}
+{#        </div>#}
+{#    </div>#}
+{#</header>#}
 <div class="container wrapper">
-    <h2>Raport - porównanie czynszu</h2>
+{#    <h2>Raport - porównanie czynszu</h2>#}
     <p class="date">
-        Raport wygenerowano: {{ 'now'|date('d.m.Y') }}<br>
+{#        Raport wygenerowano: {{ 'now'|date('d.m.Y') }}<br>#}
         http://www.porownaj-czynsz.pl/raport/?id={{ flat.uuid }}
     </p>
     <p>

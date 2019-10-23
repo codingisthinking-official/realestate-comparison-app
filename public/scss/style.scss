@@ -104,7 +104,7 @@ header {
   min-width: 150px;
   padding: 10px 20px;
   font-family: Montserrat, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   display: inline-block;
   text-align: center;
   border-radius: 30px;
@@ -297,6 +297,14 @@ label {
   padding-left: 30px;
   position: relative;
   margin: 25px 0;
+}
+
+#main-form .input-wrapper {
+  padding-left: 0 !important;
+}
+
+#main-form .input-wrapper .info {
+  left: 0;
 }
 
 .input-wrapper.wrapper-checkbox {
@@ -1206,7 +1214,7 @@ h3 {
     }
   }
   section {
-    padding: 40px 0;
+    padding: 20px 0;
     p {
       padding: 0;
     }
@@ -1219,8 +1227,8 @@ h3 {
     padding: 20px 0;
   }
   form {
-    padding: 20px 0;
-    margin-bottom: 10px;
+    padding: 10px 0;
+    margin-bottom: 5px;
   }
   label {
     padding: 5px 0;
@@ -1325,7 +1333,7 @@ h3 {
 @media (max-width: 560px) {
   #form {
     .wrapper {
-      padding: 0 15px;
+      padding: 0 !important;
     }
     .align-right {
       text-align: left;

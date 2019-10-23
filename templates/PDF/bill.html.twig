@@ -390,7 +390,8 @@
 {#    <h2>Raport - porównanie czynszu</h2>#}
     <p class="date">
 {#        Raport wygenerowano: {{ 'now'|date('d.m.Y') }}<br>#}
-        http://www.porownaj-czynsz.pl/raport/?id={{ flat.uuid }}
+        
+{% set reportUrl = 'http://www.porownaj-czynsz.pl/raport/?id=' ~ flat.uuid %}
     </p>
     <p>
         {{ 'layout.report.top_description'|toWording|raw }}
@@ -591,10 +592,10 @@
         {% endif %}
     {% endfor %}
     <p>
-        {{ 'layout.report.bottom_description'|toWording|raw }}
+        {{ 'layout.report.bottom_description'|toWording|replace({'%adres_raportu%': reportUrl})|raw }}
     </p>
     <p>
-        {{ 'layout.report.legal_description'|toWording|raw }}
+        {{ 'layout.report.legal_description'|toWording|replace({'%adres_raportu%': reportUrl})|raw }}
     </p>
 </div>
 </body>

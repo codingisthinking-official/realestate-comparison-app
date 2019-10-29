@@ -35,10 +35,10 @@ $(document).ready(function () {
             uuid: uuid
         };
 
-        var $gdpr1 = $('#input__gdpr1');
+        // var $gdpr1 = $('#input__gdpr1');
         var $gdpr2 = $('#input__gdpr2');
 
-        if (!$gdpr1.is(':checked') || !$gdpr2.is(':checked')) {
+        if (!$gdpr2.is(':checked')) {
             $('#main-form .policy .error').fadeIn();
             return false;
         } else {

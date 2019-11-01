@@ -301,20 +301,34 @@ $(document).ready(function () {
 
     function postFile() {
         // const files = document.querySelector('#addFile_1').files;
-        const formData = new FormData();
+        // const formData = new FormData();
 
         $('.file').each(function() {
             let id = $(this).attr('id');
-            let files = document.querySelector(`#${id}`).files
+            let files = document.querySelector(`#${id}`).files;
+            const formData = new FormData();
             if (files.length > 0) {
-                console.log(files);
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('file', files[i]);
+                };
+                fetch('/files/', {
+                    method: 'POST',
+                    headers: {
+                        'uuid': uuid
+                    },
+                    body: formData
+                })
             }
         });
 
         
+        // const files = document.querySelector('#addFile_1').files;
+        // const formData = new FormData();
         // for (let i = 0; i < files.length; i++) {
         //     formData.append('file', files[i]);
         // }
+
+        // console.log(formData);
 
         // fetch('/files/', {
         //     method: 'POST',

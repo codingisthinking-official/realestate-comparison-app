@@ -300,17 +300,21 @@ $(document).ready(function () {
     }
 
     function postFile() {
-        const files = document.querySelector('#addFile_1').files;
+        // const files = document.querySelector('#addFile_1').files;
+        const formData = new FormData();
 
         $('.file').each(function() {
-            console.log($(this).files);
-            console.log('elo');
+            let id = $(this).attr('id');
+            let files = document.querySelector(`#${id}`).files
+            if (files.length > 0) {
+                console.log(files);
+            }
         });
 
-        const formData = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            formData.append('file', files[i]);
-        }
+        
+        // for (let i = 0; i < files.length; i++) {
+        //     formData.append('file', files[i]);
+        // }
 
         // fetch('/files/', {
         //     method: 'POST',
@@ -407,6 +411,8 @@ $(document).ready(function () {
 
         let inputTemplate = `<div data-id="${newId}"><input class="start-xs file" type="file" id="addFile_${newId}" name="file${newId}"><label for="addFile_${newId}" class="label-button"> Wybierz plik </label></div>`;
         $('.files').prepend(inputTemplate);
+
+        postFile;
     }
 
     $('#compared').on('click', '.delete', removeBillsItemList);

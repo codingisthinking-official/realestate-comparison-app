@@ -850,11 +850,10 @@ input {
   min-width: 100px;
   text-align: right;
   span {
-    position: absolute;
+    cursor: pointer;
     font-weight: 400;
     color: #9596b3;
-    right: 0;
-    bottom: 0;
+    margin-left: 10px;
   }
 }
 

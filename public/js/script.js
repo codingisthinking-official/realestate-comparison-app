@@ -300,19 +300,25 @@ $(document).ready(function () {
     }
 
     function postFile() {
-        const files = document.querySelector('#addFile').files;
+        const files = document.querySelector('#addFile_1').files;
+
+        $('.file').each(function() {
+            console.log($(this).files);
+            console.log('elo');
+        });
+
         const formData = new FormData();
         for (let i = 0; i < files.length; i++) {
             formData.append('file', files[i]);
         }
 
-        fetch('/files/', {
-            method: 'POST',
-            headers: {
-                'uuid': uuid
-            },
-            body: formData
-        })
+        // fetch('/files/', {
+        //     method: 'POST',
+        //     headers: {
+        //         'uuid': uuid
+        //     },
+        //     body: formData
+        // })
     }
 
     function postSmallFormData(e) {
@@ -379,7 +385,7 @@ $(document).ready(function () {
         calculateSavings();
     }
 
-    $('.file').change(addBillsItemList);
+    $(document.body).delegate('.file', 'change', addBillsItemList);
 
     function addBillsItemList() {
         let fileName = $(this).val();
@@ -390,21 +396,25 @@ $(document).ready(function () {
                 break;
             }
         }
-        fileName = fileName.substr(id + 1);
+        
+        let inputId = $(this).attr('id').split('_')[1];
+        $(`div[data-id=${inputId}]`).hide();
 
-        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete"> usuń X</span></div>`;
-        $('.added-files').append(itemTemplate);
-        $('.label-button').hide();
-        $('#addFile').hide();
+        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete" data-id="${inputId}"> usuń X</span></div>`;
+        $('.added-files').prepend(itemTemplate);
+
+        let newId = parseInt(inputId) + 1;
+
+        let inputTemplate = `<div data-id="${newId}"><input class="start-xs file" type="file" id="addFile_${newId}" name="file${newId}"><label for="addFile_${newId}" class="label-button"> Wybierz plik </label></div>`;
+        $('.files').prepend(inputTemplate);
     }
 
     $('#compared').on('click', '.delete', removeBillsItemList);
 
     function removeBillsItemList() {
+        let id = $(this).data('id');
         $(this).parent().remove();
-        if ($('.added-files').children().length == 0 || document.querySelector('#addFile').files.length == 0) {
-            $('.label-button').show();
-        }
+        $(`div[data-id=${id}]`).remove();
     }
 
     function addBillsItem() {

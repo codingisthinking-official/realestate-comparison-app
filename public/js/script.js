@@ -299,7 +299,7 @@ $(document).ready(function () {
         }
     }
 
-    function postFile() {
+    async function postFile() {
         // const files = document.querySelector('#addFile_1').files;
         // const formData = new FormData();
 
@@ -423,7 +423,7 @@ $(document).ready(function () {
 
         let newId = parseInt(inputId) + 1;
 
-        let inputTemplate = `<div data-id="${newId}"><input class="start-xs file" type="file" id="addFile_${newId}" name="file${newId}"><label for="addFile_${newId}" class="label-button"> Wybierz plik </label></div>`;
+        let inputTemplate = `<div data-id="${newId}"><input class="start-xs file" type="file" id="addFile_${newId}" name="file${newId}"><label for="addFile_${newId}" class="label-button"> Dodaj kolejny plik </label></div>`;
         $('.files').prepend(inputTemplate);
 
         postFile;

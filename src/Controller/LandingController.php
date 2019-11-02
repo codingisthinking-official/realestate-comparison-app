@@ -169,11 +169,18 @@ class LandingController extends AbstractController
         $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
 
         $file->move($path, $filename);
-        $city->setFiles($filename);
+        $olderFiles = $city->getFiles();
+        if ($olderFiles !== null) {
+            $filesList = $olderFiles . ', ' . $filename;
+            $city->setFiles($filesList);
+        } else {
+            $filesList = '';
+            $city->setFiles($filename);
+        }
 
         $entityManager->persist($city);
         $entityManager->flush();
 
-        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+        return new Response($serializer->serialize(['status' => $filesList], 'json'));
     }
 }

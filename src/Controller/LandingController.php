@@ -181,6 +181,6 @@ class LandingController extends AbstractController
         $entityManager->persist($city);
         $entityManager->flush();
 
-        return new Response($serializer->serialize(['status' => $filesList], 'json'));
+        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
     }
 }

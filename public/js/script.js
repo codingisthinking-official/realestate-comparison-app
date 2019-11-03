@@ -299,9 +299,7 @@ $(document).ready(function () {
         }
     }
 
-    async function postFile() {
-        // const files = document.querySelector('#addFile_1').files;
-        // const formData = new FormData();
+    function postFile() {
         const formData = new FormData();
 
         $('.file').each(function() {
@@ -322,22 +320,25 @@ $(document).ready(function () {
             body: formData
         })
 
-        
-        // const files = document.querySelector('#addFile_1').files;
-        // const formData = new FormData();
-        // for (let i = 0; i < files.length; i++) {
-        //     formData.append('file', files[i]);
-        // }
+        const formDataAdvances = new FormData();
 
-        // console.log(formData);
+        $('.advance').each(function() {
+            let id = $(this).attr('id');
+            let files = document.querySelector(`#${id}`).files;
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    formDataAdvances.append(`advances[${id}]`, files[i]);
+                };
+            }
+        });
 
-        // fetch('/files/', {
-        //     method: 'POST',
-        //     headers: {
-        //         'uuid': uuid
-        //     },
-        //     body: formData
-        // })
+        fetch('/advances/', {
+            method: 'POST',
+            headers: {
+                'uuid': uuid
+            },
+            body: formDataAdvances
+        })
     }
 
     function postSmallFormData(e) {
@@ -405,6 +406,7 @@ $(document).ready(function () {
     }
 
     $(document.body).delegate('.file', 'change', addBillsItemList);
+    $(document.body).delegate('.advance', 'change', addAdvancesItemList);
 
     function addBillsItemList() {
         let fileName = $(this).val();
@@ -417,10 +419,10 @@ $(document).ready(function () {
         }
         
         let inputId = $(this).attr('id').split('_')[1];
-        $(`div[data-id=${inputId}]`).hide();
+        $(`.files div[data-id=${inputId}]`).hide();
 
-        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete" data-id="${inputId}"> usuń X</span></div>`;
-        $('.added-files').prepend(itemTemplate);
+        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete-file" data-id="${inputId}"> usuń X</span></div>`;
+        $('.files .added-files').prepend(itemTemplate);
 
         let newId = parseInt(inputId) + 1;
 
@@ -430,12 +432,43 @@ $(document).ready(function () {
         postFile;
     }
 
-    $('#compared').on('click', '.delete', removeBillsItemList);
+    function addAdvancesItemList() {
+        let fileName = $(this).val();
+        
+        for (let i = fileName.length - 1; i >= 0; i--) {
+            if (fileName[i] == `\\` || fileName[i] == '/') {
+                id = i;
+                break;
+            }
+        }
+        
+        let inputId = $(this).attr('id').split('_')[1];
+        $(`.advances div[data-id=${inputId}]`).hide();
+
+        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete-advance" data-id="${inputId}"> usuń X</span></div>`;
+        $('.advances .added-advances').prepend(itemTemplate);
+
+        let newId = parseInt(inputId) + 1;
+
+        let inputTemplate = `<div data-id="${newId}"><input class="start-xs advance" type="file" id="addAdvance_${newId}" name="file${newId}"><label for="addAdvance_${newId}" class="label-button"> Dodaj kolejny plik </label></div>`;
+        $('.advances').prepend(inputTemplate);
+
+        postFile;
+    }
+
+    $('#compared').on('click', '.delete-file', removeBillsItemList);
+    $('#compared').on('click', '.delete-advance', removeAdvancesItemList);
 
     function removeBillsItemList() {
         let id = $(this).data('id');
         $(this).parent().remove();
-        $(`div[data-id=${id}]`).remove();
+        $(`.files div[data-id=${id}]`).remove();
+    }
+
+    function removeAdvancesItemList() {
+        let id = $(this).data('id');
+        $(this).parent().remove();
+        $(`.advances div[data-id=${id}]`).remove();
     }
 
     function addBillsItem() {

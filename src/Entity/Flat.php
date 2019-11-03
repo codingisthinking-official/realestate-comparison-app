@@ -58,6 +58,11 @@ class Flat
     private $files = null;
 
     /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $advances = null;
+
+    /**
      * @ORM\Column(length=255)
      */
     private $ip;
@@ -173,6 +178,22 @@ class Flat
     public function setFiles($files): void
     {
         $this->files = $files;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAdvances()
+    {
+        return $this->advances;
+    }
+
+    /**
+     * @param mixed $advances
+     */
+    public function setAdvances($advances): void
+    {
+        $this->advances = $advances;
     }
 
     public function getIp()

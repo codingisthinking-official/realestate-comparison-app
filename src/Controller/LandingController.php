@@ -156,7 +156,6 @@ class LandingController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $city = $entityManager->getRepository(Flat::class)->findOneBy([
             'uuid' => $request->headers->get('uuid')
-            // 'uuid' => 'bc27f754-c98f-46ca-8496-21d3fccaed79'
         ]);
 
         if (!$city) {
@@ -173,11 +172,46 @@ class LandingController extends AbstractController
             $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
 
             $f->move($path, $filename);
-            // $olderFiles = $city->getFiles();
             array_push($fileList, $filename);
         }
-        
+
         $city->setFiles($fileList);
+
+        $entityManager->persist($city);
+        $entityManager->flush();
+
+        return new Response($serializer->serialize(['status' => 'ok'], 'json'));
+    }
+
+    /**
+     * @Route("/advances/", name="advance.post")
+     * @Method({"POST"})
+     */
+    public function postAdvances(SerializerInterface $serializer, Request $request, CityService $cityService)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $city = $entityManager->getRepository(Flat::class)->findOneBy([
+            'uuid' => $request->headers->get('uuid')
+        ]);
+
+        if (!$city) {
+            throw $this->createNotFoundException(
+                'City not found!'
+            );
+        }
+
+        $file = $request->files->get('advances');
+        $fileList = array();
+
+        foreach($file as $f) {
+            $filename = uniqid() . "." . $f->getClientOriginalExtension();
+            $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
+
+            $f->move($path, $filename);
+            array_push($fileList, $filename);
+        }
+
+        $city->setAdvances($fileList);
 
         $entityManager->persist($city);
         $entityManager->flush();

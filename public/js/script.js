@@ -302,24 +302,25 @@ $(document).ready(function () {
     async function postFile() {
         // const files = document.querySelector('#addFile_1').files;
         // const formData = new FormData();
+        const formData = new FormData();
 
         $('.file').each(function() {
             let id = $(this).attr('id');
             let files = document.querySelector(`#${id}`).files;
-            const formData = new FormData();
             if (files.length > 0) {
                 for (let i = 0; i < files.length; i++) {
-                    formData.append('file', files[i]);
+                    formData.append(`file[${id}]`, files[i]);
                 };
-                fetch('/files/', {
-                    method: 'POST',
-                    headers: {
-                        'uuid': uuid
-                    },
-                    body: formData
-                })
             }
         });
+
+        fetch('/files/', {
+            method: 'POST',
+            headers: {
+                'uuid': uuid
+            },
+            body: formData
+        })
 
         
         // const files = document.querySelector('#addFile_1').files;

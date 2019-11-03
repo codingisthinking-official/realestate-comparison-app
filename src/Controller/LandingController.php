@@ -166,31 +166,18 @@ class LandingController extends AbstractController
         }
 
         $file = $request->files->get('file');
-        $filename = uniqid() . "." . $file->getClientOriginalExtension();
-        $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
+        $fileList = array();
 
-        $file->move($path, $filename);
-        $olderFiles = $city->getFiles();
-        
-        if ($olderFiles != '') {
-            array_push($olderFiles, $filename);
+        foreach($file as $f) {
+            $filename = uniqid() . "." . $f->getClientOriginalExtension();
+            $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
 
-            $city->setFiles($olderFiles);
-        } else {
-            $fileList = array();
+            $f->move($path, $filename);
+            // $olderFiles = $city->getFiles();
             array_push($fileList, $filename);
-
-            // $days = array(
-            //     1=>true,
-            //     2=>true,
-            //     3=>true,
-            //     4=>true,
-            //     5=>true,
-            //     6=>false,
-            //     7=>false
-            // );
-            $city->setFiles($fileList);
         }
+        
+        $city->setFiles($fileList);
 
         $entityManager->persist($city);
         $entityManager->flush();

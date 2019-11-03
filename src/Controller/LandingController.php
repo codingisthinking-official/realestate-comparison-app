@@ -156,6 +156,7 @@ class LandingController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $city = $entityManager->getRepository(Flat::class)->findOneBy([
             'uuid' => $request->headers->get('uuid')
+            // 'uuid' => 'bc27f754-c98f-46ca-8496-21d3fccaed79'
         ]);
 
         if (!$city) {
@@ -170,12 +171,25 @@ class LandingController extends AbstractController
 
         $file->move($path, $filename);
         $olderFiles = $city->getFiles();
-        if ($olderFiles !== null) {
-            $filesList = $olderFiles . ', ' . $filename;
-            $city->setFiles($filesList);
+        
+        if ($olderFiles != '') {
+            array_push($olderFiles, $filename);
+
+            $city->setFiles($olderFiles);
         } else {
-            $filesList = '';
-            $city->setFiles($filename);
+            $fileList = array();
+            array_push($fileList, $filename);
+
+            // $days = array(
+            //     1=>true,
+            //     2=>true,
+            //     3=>true,
+            //     4=>true,
+            //     5=>true,
+            //     6=>false,
+            //     7=>false
+            // );
+            $city->setFiles($fileList);
         }
 
         $entityManager->persist($city);

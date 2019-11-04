@@ -410,18 +410,20 @@ $(document).ready(function () {
 
     function addBillsItemList() {
         let fileName = $(this).val();
-        let id = null;
-        for (let i = fileName.length - 1; i >= 0; i--) {
-            if (fileName[i] == `\\` || fileName[i] == '/') {
-                id = i;
-                break;
-            }
-        }
+        // let id = null;
+        // for (let i = fileName.length - 1; i >= 0; i--) {
+        //     if (fileName[i] == `\\` || fileName[i] == '/') {
+        //         id = i;
+        //         break;
+        //     }
+        // }
+
+        let cleanName =  fileName.replace(/^C:\\fakepath\\/, "");
         
         let inputId = $(this).attr('id').split('_')[1];
         $(`.files div[data-id=${inputId}]`).hide();
 
-        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete-file" data-id="${inputId}"> usuń X</span></div>`;
+        let itemTemplate = `<div class="bill-name"> ${cleanName}<span class="delete-file" data-id="${inputId}"> usuń X</span></div>`;
         $('.files .added-files').prepend(itemTemplate);
 
         let newId = parseInt(inputId) + 1;
@@ -435,17 +437,19 @@ $(document).ready(function () {
     function addAdvancesItemList() {
         let fileName = $(this).val();
         
-        for (let i = fileName.length - 1; i >= 0; i--) {
-            if (fileName[i] == `\\` || fileName[i] == '/') {
-                id = i;
-                break;
-            }
-        }
+        // for (let i = fileName.length - 1; i >= 0; i--) {
+        //     if (fileName[i] == `\\` || fileName[i] == '/') {
+        //         id = i;
+        //         break;
+        //     }
+        // }
+
+        let cleanName =  fileName.replace(/^C:\\fakepath\\/, "");
         
         let inputId = $(this).attr('id').split('_')[1];
         $(`.advances div[data-id=${inputId}]`).hide();
 
-        let itemTemplate = `<div class="bill-name"> ${fileName}<span class="delete-advance" data-id="${inputId}"> usuń X</span></div>`;
+        let itemTemplate = `<div class="bill-name"> ${cleanName}<span class="delete-advance" data-id="${inputId}"> usuń X</span></div>`;
         $('.advances .added-advances').prepend(itemTemplate);
 
         let newId = parseInt(inputId) + 1;

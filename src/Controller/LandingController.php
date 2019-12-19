@@ -48,10 +48,11 @@ class LandingController extends AbstractController
      */
     public function postCityValues(SerializerInterface $serializer, Request $request, CityService $cityService)
     {
+        $ip = $request->server->get('HTTP_X_FORWARDED_FOR', $request->server->get('REMOTE_ADDR'));
         $entityManager = $this->getDoctrine()->getManager();
 
         $flat = new Flat();
-        $flat->setIp($request->getClientIp());
+        $flat->setIp($ip);
         $flat->setSurface($request->request->get('area'));
         $flat->setPostcode($request->request->get('postalCode'));
         $flat->setCity($cityService->getCityByPostcode($request->request->get('postalCode')));

@@ -231,9 +231,19 @@ class AdminController extends AbstractController
 
             $actions = [
                 'edit' => $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'edit'), UrlGeneratorInterface::ABSOLUTE_URL),
-                'file' => "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $flat->getFiles(),
                 'pdf' => 'http://www.porownaj-czynsz.pl/raport/?id=' . $flat->getUuid(),
             ];
+
+
+            $files = $flat->getFiles();
+            foreach ($files as $i => $file) {
+                $actions['file_'. $i] = "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $file;
+            }
+
+            $advances = $flat->getAdvances();
+            foreach ($advances as $i => $adv) {
+                $actions['adv_'. $i] = "http://" . $_SERVER['HTTP_HOST'] . "/images/upload/" . $adv;
+            }
 
             if ($flat->getState() == 0) {
                 $actions['accept'] = $this->generateUrl('info.state.set', array('uuid' => $flat->getUuid(), 'state' => 'accept'), UrlGeneratorInterface::ABSOLUTE_URL);

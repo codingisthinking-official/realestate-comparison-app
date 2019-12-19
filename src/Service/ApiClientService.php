@@ -231,7 +231,7 @@ class ApiClientService
 
         $flatTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
 
-        return $flatTypes;
+        return [ $flatTypes[1], $flatTypes[0], $flatTypes[2] ];
     }
 
     public function sortByPosition(array $array): array

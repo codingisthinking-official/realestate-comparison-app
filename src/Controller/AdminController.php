@@ -335,13 +335,28 @@ class AdminController extends AbstractController
 
             $bill = $this->getDoctrine()->getRepository(Bill::class)->findBy(['uuid' => $flat->getUuid()]);
 
+            $billTypes = $apiClientService->getBillTypes();
             foreach ($bill as $priceParameter) {
+                $billType = array_values(array_filter($billTypes, function($billType) use ($priceParameter) {
+                    return $billType->getSlug() == $priceParameter->getBillType();
+                }));
+
+                if (0 === count($billType)) {
+                    continue;
+                }
+
+                $billType = $billType[0];
+
                 $headers[] = [
-                    'title' => $apiClientService->findTitleOfBillTypeBySlug($priceParameter->getBillType()),
+                    'title' => $billType->getTitle(),
                     'slug' => $priceParameter->getBillType()
                 ];
 
-                $tmp[$priceParameter->getBillType()] = $priceParameter->getValue();
+                if ($billType->getType() == 'chart') {
+                    $tmp[$priceParameter->getBillType()] = str_replace('.', ',', $priceParameter->getValue());
+                } else {
+                    $tmp[$priceParameter->getBillType()] = $priceParameter->getValue();
+                }
             }
 
             $output[] = $tmp;

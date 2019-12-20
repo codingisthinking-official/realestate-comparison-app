@@ -76,11 +76,24 @@ class PdfController extends AbstractController
 
         $billRepository = $this->getDoctrine()->getRepository(Bill::class);
 
+
+        $flatTypes = $apiClientService->getFlatTypes();
+        $flatType = array_values(array_filter($flatTypes, function($f) use ($flat) {
+            return $f->getId() == $flat->getType();
+        }));
+
+        if ($flatType) {
+            $flatType = $flatType[0];
+        } else {
+            $flatType = null;
+        }
+
         return $this->render('PDF/bill.html.twig', [
             'averageItemsMap' => $averageItemsMap,
             'flat' => $flat,
             'cityValues' => $cityWithValues,
             'bills' => $bills,
+            'flatType' => $flatType,
             'bill_list' => $cityService->createBillsTabByCity($city, $billRepository, $flat->getType()),
             'bill_price' => $billsTab,
             'cityInfo' => $apiClientService->getOneCityByTitle($flat->getCity())

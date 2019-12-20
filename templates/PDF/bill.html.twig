@@ -263,7 +263,7 @@
 
         .small-price-bar .your-result {
             font-weight: 600;
-            color: #DBAE35;
+            color: #084f7e;
             font-size: 9px;
             position: absolute;
             left: 60%;
@@ -277,8 +277,8 @@
             content: "Twój wynik";
             display: block;
             left: 50%;
-            -webkit-transform: translate(-50%, -80%);
-            transform: translate(-50%, -80%);
+            -webkit-transform: translate(-65%, -80%);
+            transform: translate(-65%, -80%);
             top: 0;
             position: absolute;
             min-width: 90px;
@@ -418,7 +418,7 @@
         </li>
         <li>
             {% set udzial = lookupParameterValue(bills, 'udzial').value|replace({',': '.'}) %}
-            <strong>Udział % w budynku</strong>:
+            <strong>Udział w Nieruchomości</strong>:
             {% if udzial %}
                 {{ udzial|number_format(2, ',', '') }} %
             {% else %}
@@ -429,10 +429,18 @@
             <strong>Koszt miesięczny za m<sup>2</sup></strong>: {{ (flat.cost/flat.surface)|number_format(2, ',', '') }} zł
         </li>
         <li>
-            <strong>Ilość Miejsc Postojowych</strong>: {{ lookupParameterValue(bills, 'miejsce_postojowe_ilosc').value }}
+            <strong>Ilość miejsc postojowych</strong>: {{ lookupParameterValue(bills, 'miejsce_postojowe_ilosc').value }}
         </li>
         <li>
-            <strong>Powierzchnia użytkowa budynku</strong>: {{ lookupParameterValue(bills, 'building_space').value|number_format(2, ',', '.') }} m<sup>2</sup>
+            <strong>Powierzchnia użytkowa lokali</strong>: {{ lookupParameterValue(bills, 'building_space').value|number_format(2, ',', '.') }} m<sup>2</sup>
+        </li>
+        {% if flatType %}
+                <li>
+                    <strong>Rodzaj Nieruchomości</strong>: {{ flatType.title }}
+                </li>
+        {% endif %}
+        <li>
+            <strong>Liczba Mieszkających w Mieszkaniu</strong>: {{ lookupParameterValue(bills, 'mieszkancy').value }}
         </li>
     </ul>
     <br>
@@ -567,7 +575,7 @@
 
     <h3 class="head">Zaliczki Miesięczne</h3>
     {% for billInfo in bill_list if (billInfo.type != 'empty space' and billInfo.slug != 'miejsce_postojowe_ilosc' or billInfo.slug != 'nazwa_wspolnota' and billInfo.slug != 'adres') %}
-        {% if billInfo.groupName == 'zaliczki' and billInfo.slug not in ['ocena_administrator', 'administrator_name'] %}
+        {% if billInfo.groupName == 'zaliczki' and billInfo.slug not in ['ocena_administrator', 'administrator_name', 'mieszkancy'] %}
             {% for bill in bills %}
                 {% include 'PDF/_chart.html.twig' %}
             {% endfor %}

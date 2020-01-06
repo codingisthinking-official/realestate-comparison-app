@@ -229,9 +229,7 @@ class ApiClientService
             throw new \RuntimeException('Can not connect to the API (type of buildings)');
         }
 
-        $flatTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
-
-        return [ $flatTypes[1], $flatTypes[0], $flatTypes[2] ];
+        return $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
     }
 
     public function sortByPosition(array $array): array

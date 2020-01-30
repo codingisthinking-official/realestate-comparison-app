@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   redis:
     image: redis:alpine
@@ -40,7 +40,7 @@ services:
     ports:
       - "84:80"
       - "82:81"
-      - "444:443"
+      - "449:443"
 
   php-fpm:
     build: phpdocker/php-fpm
@@ -51,7 +51,7 @@ services:
       - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
     environment:
       - APP_ENV=prod
-      - API_URL=http://realestate.wiseweb.pl/api/
+      - API_URL=https://cms.porownaj-czynsz.pl/api/
       - DATABASE_URL=mysql://test:test@realestate-mysql:3306/test
       - MAILER_GMAIL_USERNAME=matixe
       - MAILER_GMAIL_PASSWORD=C7BY8H3WYsg2hept72

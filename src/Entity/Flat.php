@@ -88,7 +88,7 @@ class Flat
         return $this->surface;
     }
 
-    public function setSurface(int $surface): self
+    public function setSurface(float $surface): self
     {
         $this->surface = $surface;
 

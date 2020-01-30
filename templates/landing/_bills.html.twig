@@ -20,8 +20,8 @@
             </div>
             {% elseif bill.type == "dropdown" %}
             <label for="in1">{{ bill.title }}</label>
-            <div class="input-wrapper wrapper-checkbox" data-billId="{{ bill.slug }}">
-                <select name="in1[]" id="in1">
+            <div class="input-wrapper" data-billId="{{ bill.slug }}">
+                <select style="width: 100%" name="in1[]" id="in1">
                     {% for option in bill.options|split(',') %}
                         <option value="{{ option }}">{{ option|capitalize }}</option>
                     {% endfor %}

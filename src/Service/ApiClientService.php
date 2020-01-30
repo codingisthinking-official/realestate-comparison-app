@@ -8,8 +8,8 @@ use JMS\Serializer\SerializerInterface;
 
 class ApiClientService
 {
-    const KEY_CACHE_PRICE_PARAMETERS = 'cache-price-parameters';
-    const KEY_CACHE_TYPES_OF_BUILDING = 'cache-types-of-building';
+    const KEY_CACHE_PRICE_PARAMETERS = 'cache-price-parameters_';
+    const KEY_CACHE_TYPES_OF_BUILDING = 'cache-types-of-building_';
 
     protected $serializer;
     protected $client;

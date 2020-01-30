@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-md-9 col-xs-12">
                                 <div class="input-wrapper">
-                                    <input type="number" id="input__area" name="area" value="45" min="0">
+                                    <input type="number" id="input__area" name="area" step="0.01" value="45.00" min="0">
                                     <span class="info">?</span>
                                     <div class="tooltip">
                                         <div class="content"> {{ 'index.input-msquare-tooltip'|toWording }} </div>
@@ -77,7 +77,8 @@
                                 <label for="area"></label>
                             </div>
                             <div class="col-xs-8 col-xs-10 policy">
-                                <input type="checkbox" style="width: 25px; min-width: 0;" id="input__gdpr1"> {{ 'index.policy.gdpr1'|toWording|raw }}
+                                <input type="checkbox" style="width: 25px; min-width: 0;"
+                                       id="input__gdpr1"> {{ 'index.policy.gdpr1'|toWording|raw }}
                             </div>
                         </div>
                         <div class="row">
@@ -85,7 +86,8 @@
                                 <label for="area"></label>
                             </div>
                             <div class="col-xs-8 col-xs-10 policy">
-                                <input type="checkbox" style="width: 25px; min-width: 0;" id="input__gdpr2"> {{ 'index.policy.gdpr2'|toWording|raw }}
+                                <input type="checkbox" style="width: 25px; min-width: 0;"
+                                       id="input__gdpr2"> {{ 'index.policy.gdpr2'|toWording|raw }}
                                 <div class="error">Zaakceptuj proszę regulamin oraz politykę prywatności.</div>
                             </div>
                         </div>
@@ -187,7 +189,7 @@
                 <div class="row">
                     {% for group in ['udzialy', 'koszty', 'zaliczki', 'deweloper', 'zarzad'] %}
                         <h3 style="width: 100%; margin: 20px 0; display: block;">{{ ('layout.group.' ~ group)|toWording }}</h3>
-                        {% include 'landing/_bills.html.twig' with {'group': group}%}
+                        {% include 'landing/_bills.html.twig' with {'group': group} %}
                     {% endfor %}
                 </div>
                 <div class="row end-xs savings">

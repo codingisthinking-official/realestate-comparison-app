@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use JMS\Serializer\SerializerInterface;
-use App\Service\CityService;
-use App\Service\ApiClientService;
-use App\Entity\Flat;
 use App\Entity\Bill;
+use App\Entity\Flat;
+use App\Service\ApiClientService;
+use App\Service\CityService;
+use JMS\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class LandingController extends AbstractController
 {
@@ -31,15 +31,23 @@ class LandingController extends AbstractController
     {
         $bills = $apiClientService->getBillTypes();
 
-        $groups = array_unique(array_map(function($bill) {
-            return $bill->getGroupName();
-        }, $bills));
+        $groups = array_unique(
+            array_map(
+                function ($bill) {
+                    return $bill->getGroupName();
+                },
+                $bills
+            )
+        );
 
-        return $this->render('landing/index-iframe.html.twig', [
-            'type_list' => $apiClientService->getFlatTypes(),
-            'bills' => $bills,
-            'groups' => $groups,
-        ]);
+        return $this->render(
+            'landing/index-iframe.html.twig',
+            [
+                'type_list' => $apiClientService->getFlatTypes(),
+                'bills'     => $bills,
+                'groups'    => $groups,
+            ]
+        );
     }
 
     /**
@@ -72,10 +80,12 @@ class LandingController extends AbstractController
      * @Method({"GET"})
      */
     public function getCityValues(
-        SerializerInterface $serializer, CityService $cityService, ApiClientService $apiClientService,
-        $postCode, $flatType
-    )
-    {
+        SerializerInterface $serializer,
+        CityService $cityService,
+        ApiClientService $apiClientService,
+        $postCode,
+        $flatType
+    ) {
         $city = $cityService->getCityByPostcode($postCode);
         $city = $apiClientService->getOneCityByTitle($city);
 
@@ -87,20 +97,30 @@ class LandingController extends AbstractController
                 $cityWithValues = $cityService->addPriceValues([$city], $repository, $flatType);
             }
         } else {
-            return new Response($serializer->serialize([
-                'status' => 'ok',
-                'minPrice' => 5,
-                'avgPrice' => 25,
-                'maxPrice' => 55
-            ], 'json'));
+            return new Response(
+                $serializer->serialize(
+                    [
+                        'status'   => 'ok',
+                        'minPrice' => 5,
+                        'avgPrice' => 25,
+                        'maxPrice' => 55,
+                    ],
+                    'json'
+                )
+            );
         }
 
-        return new Response($serializer->serialize([
-            'status' => 'ok',
-            'minPrice' => $cityWithValues[0]->minPrice,
-            'avgPrice' => $cityWithValues[0]->avgPrice,
-            'maxPrice' => $cityWithValues[0]->maxPrice
-        ], 'json'));
+        return new Response(
+            $serializer->serialize(
+                [
+                    'status'   => 'ok',
+                    'minPrice' => $cityWithValues[0]->minPrice,
+                    'avgPrice' => $cityWithValues[0]->avgPrice,
+                    'maxPrice' => $cityWithValues[0]->maxPrice,
+                ],
+                'json'
+            )
+        );
     }
 
     /**
@@ -108,17 +128,20 @@ class LandingController extends AbstractController
      * @Method({"GET"})
      */
     public function getBills(
-        CityService $cityService, ApiClientService $apiClientService, $postCode, $flatType,
+        CityService $cityService,
+        ApiClientService $apiClientService,
+        $postCode,
+        $flatType,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         $city = $cityService->getCityByPostcode($postCode);
         $city = $apiClientService->getOneCityByTitle($city);
         $repository = $this->getDoctrine()->getRepository(Bill::class);
 
         return new Response(
             $serializer->serialize($cityService->createBillsTabByCity($city, $repository, $flatType), 'json')
-        , 200);
+            , 200
+        );
     }
 
     /**
@@ -155,9 +178,11 @@ class LandingController extends AbstractController
     public function postFiles(SerializerInterface $serializer, Request $request, CityService $cityService)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $city = $entityManager->getRepository(Flat::class)->findOneBy([
-            'uuid' => $request->headers->get('uuid')
-        ]);
+        $city = $entityManager->getRepository(Flat::class)->findOneBy(
+            [
+                'uuid' => $request->headers->get('uuid'),
+            ]
+        );
 
         if (!$city) {
             throw $this->createNotFoundException(
@@ -166,9 +191,9 @@ class LandingController extends AbstractController
         }
 
         $file = $request->files->get('file');
-        $fileList = array();
+        $fileList = [];
 
-        foreach($file as $f) {
+        foreach ($file as $f) {
             $filename = uniqid() . "." . $f->getClientOriginalExtension();
             $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
 
@@ -191,9 +216,11 @@ class LandingController extends AbstractController
     public function postAdvances(SerializerInterface $serializer, Request $request, CityService $cityService)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $city = $entityManager->getRepository(Flat::class)->findOneBy([
-            'uuid' => $request->headers->get('uuid')
-        ]);
+        $city = $entityManager->getRepository(Flat::class)->findOneBy(
+            [
+                'uuid' => $request->headers->get('uuid'),
+            ]
+        );
 
         if (!$city) {
             throw $this->createNotFoundException(
@@ -202,9 +229,9 @@ class LandingController extends AbstractController
         }
 
         $file = $request->files->get('advances');
-        $fileList = array();
+        $fileList = [];
 
-        foreach($file as $f) {
+        foreach ($file as $f) {
             $filename = uniqid() . "." . $f->getClientOriginalExtension();
             $path = $this->getParameter('kernel.project_dir') . "/public/images/upload";
 

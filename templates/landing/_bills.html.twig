@@ -1,4 +1,4 @@
-{% for bill in bills if (bill.groupName == group)%}
+{% for bill in bills if (bill.groupName == group) %}
     <div class="col-md-6 col-xs-12" data-type="{{ bill.type }}">
         {% if bill.type == "rate" %}
             <label for="in1">{{ bill.title }}</label>
@@ -18,23 +18,38 @@
                     </div>
                 {% endfor %}
             </div>
+            {% elseif bill.type == "dropdown" %}
+            <label for="in1">{{ bill.title }}</label>
+            <div class="input-wrapper wrapper-checkbox" data-billId="{{ bill.slug }}">
+                <select name="in1[]" id="in1">
+                    {% for option in bill.options|split(',') %}
+                        <option value="{{ option }}">{{ option|capitalize }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             {% elseif bill.type == "chart" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">*pole wymagane</span>' : '' }}</label>
-                <div class="input-wrapper {% if bill.yearCost or bill.monthlyCost %}input-year-cost{% endif %}" data-billId="{{ bill.slug }}">
-                    {% if bill.yearCost %}
-                        <input type="number" id="temp__bill__{{ bill.slug }}" data-calculation="year" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+            <div class="input-wrapper {% if bill.yearCost or bill.monthlyCost %}input-year-cost{% endif %}"
+                 data-billId="{{ bill.slug }}">
+                {% if bill.yearCost %}
+                    <input type="number" id="temp__bill__{{ bill.slug }}" data-calculation="year" class="primary--field"
+                           placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
                            min="0" {{ bill.fieldRequired ? 'required' : '' }}>
-                        <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
-                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
-                    {% elseif bill.monthlyCost %}
-                        <input type="number" id="temp__bill__{{ bill.slug }}" data-calculation="month" class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
-                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
-                        <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
-                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
-                    {% else %}
-                        <input type="number" id="bill__{{ bill.slug }}" class="data--predictor" name="in1" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
-                               min="0" {{ bill.fieldRequired ? 'required' : '' }}>
-                    {% endif %}
+                    <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1"
+                           placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                           min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                {% elseif bill.monthlyCost %}
+                    <input type="number" id="temp__bill__{{ bill.slug }}" data-calculation="month"
+                           class="primary--field" placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                           min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                    <input class="secondary--field data--predictor" type="hidden" id="bill__{{ bill.slug }}" name="in1"
+                           placeholder="0" pattern="[0-9]+([\.,][0-9]+)?"
+                           min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                {% else %}
+                    <input type="number" id="bill__{{ bill.slug }}" class="data--predictor" name="in1" placeholder="0"
+                           pattern="[0-9]+([\.,][0-9]+)?"
+                           min="0" {{ bill.fieldRequired ? 'required' : '' }}>
+                {% endif %}
                 <span class="info">?</span>
                 <div class="tooltip">
                     <div class="content">{{ bill.tooltip }}</div>
@@ -54,7 +69,7 @@
                     </div>
                 </div>
             </div>
-        {% elseif bill.type == "text" %}
+            {% elseif bill.type == "text" %}
             <label for="in1">{{ bill.title }}{{ bill.fieldRequired ? ' <span class="req">*pole wymagane</span>' : '' }}</label>
             <div class="input-wrapper" data-billId="{{ bill.slug }}">
                 <input id="bill__{{ bill.slug }}" type="text" name="in1" placeholder=""
@@ -66,30 +81,30 @@
             </div>
         {% if bill.autocomplete %}
             <script type="text/javascript">
-                $('input#bill__{{ bill.slug }}').autoComplete({
-                    minChars: 2,
-                    source: function(term, suggest){
-                        term = term.toLowerCase();
-                        let foundTag = [];
-                        window.AVAILABLE_TAGS.forEach(function(tag) {
-                            if (tag.slug == "{{ bill.slug }}") {
-                                foundTag = tag.auto_complete_options;
-                            }
-                        });
-
-                        let matches = [];
-                        let choices = Object.keys(foundTag).map(function(key) {
-                            return foundTag[key];
-                        });
-                        for (i=0; i<choices.length; i++) {
-                            if (~choices[i].toLowerCase().indexOf(term)) {
-                                matches.push(choices[i]);
-                            }
-                        }
-
-                        suggest(matches);
+              $('input#bill__{{ bill.slug }}').autoComplete({
+                minChars: 2,
+                source: function (term, suggest) {
+                  term = term.toLowerCase();
+                  let foundTag = [];
+                  window.AVAILABLE_TAGS.forEach(function (tag) {
+                    if (tag.slug == "{{ bill.slug }}") {
+                      foundTag = tag.auto_complete_options;
                     }
-                });
+                  });
+
+                  let matches = [];
+                  let choices = Object.keys(foundTag).map(function (key) {
+                    return foundTag[key];
+                  });
+                  for (i = 0; i < choices.length; i++) {
+                    if (~choices[i].toLowerCase().indexOf(term)) {
+                      matches.push(choices[i]);
+                    }
+                  }
+
+                  suggest(matches);
+                }
+              });
             </script>
         {% endif %}
         {% else %}

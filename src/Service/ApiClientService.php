@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\ValueObject\Cms\Page;
-use JMS\Serializer\SerializerInterface;
 use GuzzleHttp\Client;
+use JMS\Serializer\SerializerInterface;
 
 class ApiClientService
 {
@@ -16,9 +16,10 @@ class ApiClientService
     protected $redis;
 
     public function __construct(
-        SerializerInterface $serializer, Client $client, \Predis\Client $redis
-    )
-    {
+        SerializerInterface $serializer,
+        Client $client,
+        \Predis\Client $redis
+    ) {
         $this->serializer = $serializer;
         $this->client = $client;
         $this->redis = $redis;
@@ -124,7 +125,11 @@ class ApiClientService
             throw new \RuntimeException('Can not connect to the API (price parameters)');
         }
 
-        $billTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\BillTypes>', 'json');
+        $billTypes = $this->serializer->deserialize(
+            $response->getBody(),
+            'array<App\ValueObject\Cms\BillTypes>',
+            'json'
+        );
 
         return $this->sortByPosition($billTypes);
     }
@@ -210,7 +215,11 @@ class ApiClientService
             }
 
             $this->redis->set(static::KEY_CACHE_TYPES_OF_BUILDING, $response->getBody(), 'EX', 3600 * 24);
-            $flatTypes = $this->serializer->deserialize($response->getBody(), 'array<App\ValueObject\Cms\FlatTypes>', 'json');
+            $flatTypes = $this->serializer->deserialize(
+                $response->getBody(),
+                'array<App\ValueObject\Cms\FlatTypes>',
+                'json'
+            );
         }
 
         foreach ($flatTypes as $flatType) {

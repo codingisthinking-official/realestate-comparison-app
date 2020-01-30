@@ -2,20 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Bill;
+use App\Entity\Flat;
+use App\Form\BillType;
+use App\Form\FlatType;
+use App\Service\ApiClientService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use JMS\Serializer\SerializerInterface;
-use App\Service\ApiClientService;
-use App\Entity\Flat;
-use App\Form\FlatType;
-use App\Entity\Bill;
-use App\Form\BillType;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AdminController extends AbstractController
 {

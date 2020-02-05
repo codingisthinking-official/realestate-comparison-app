@@ -86,9 +86,6 @@
             "ref": "e5e657ce5a4ebc99f3c76916938aa0a5f8ef7736"
         }
     },
-    "facebook/webdriver": {
-        "version": "1.6.0"
-    },
     "fig/link-util": {
         "version": "1.0.0"
     },
@@ -184,6 +181,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.1.1"
+    },
+    "php": {
+        "version": "7.2"
     },
     "php-http/httplug": {
         "version": "v2.0.0"
@@ -380,9 +380,6 @@
     "symfony/orm-pack": {
         "version": "v1.0.6"
     },
-    "symfony/panther": {
-        "version": "v0.2.0"
-    },
     "symfony/phpunit-bridge": {
         "version": "4.1",
         "recipe": {
@@ -394,6 +391,9 @@
     },
     "symfony/polyfill-intl-icu": {
         "version": "v1.10.0"
+    },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.13.1"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.10.0"

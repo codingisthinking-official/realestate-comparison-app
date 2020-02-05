@@ -173,11 +173,20 @@
             "ref": "1da7c9584a9face8cc2a9ee42a04ae33c284bea8"
         }
     },
+    "laminas/laminas-eventmanager": {
+        "version": "3.2.1"
+    },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.0.1"
+    },
     "monolog/monolog": {
         "version": "1.24.0"
     },
     "nikic/php-parser": {
         "version": "v4.2.0"
+    },
+    "ocramius/package-versions": {
+        "version": "1.4.2"
     },
     "ocramius/proxy-manager": {
         "version": "2.1.1"

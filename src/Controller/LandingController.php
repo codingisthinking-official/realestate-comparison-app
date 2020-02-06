@@ -61,7 +61,7 @@ class LandingController extends AbstractController
 
         $flat = new Flat();
         $flat->setIp($ip);
-        $flat->setSurface($request->request->get('area'));
+        $flat->setSurface((float)$request->request->get('area'));
         $flat->setPostcode($request->request->get('postalCode'));
         $flat->setCity($cityService->getCityByPostcode($request->request->get('postalCode')));
         $flat->setType($request->request->get('flatType'));

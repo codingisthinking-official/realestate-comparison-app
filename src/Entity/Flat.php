@@ -83,7 +83,7 @@ class Flat
         return $this;
     }
 
-    public function getSurface(): ?int
+    public function getSurface(): ?float
     {
         return $this->surface;
     }

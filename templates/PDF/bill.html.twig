@@ -165,8 +165,8 @@
             left: 0;
             width: 70px;
             top: 0;
-            -webkit-transform: translateY(calc(-25% + 70px));
-            transform: translateY(calc(-25% + 70px));
+            -webkit-transform: translateY(calc(-25% + 40px));
+            transform: translateY(calc(-25% + 40px));
             font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
@@ -184,8 +184,8 @@
             width: 70px;
             right: 0;
             top: 0;
-            -webkit-transform: translateY(calc(-25% + 70px));
-            transform: translateY(calc(-25% + 70px));
+            -webkit-transform: translateY(calc(-25% + 40px));
+            transform: translateY(calc(-25% + 40px));
             font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
@@ -198,8 +198,8 @@
             left: 0;
             width: 70px;
             top: 0;
-            -webkit-transform: translateY(calc(-25% + 70px));
-            transform: translateY(calc(-25% + 70px));
+            -webkit-transform: translateY(calc(-25% + 40px));
+            transform: translateY(calc(-25% + 40px));
             font-size: 9px;
             font-weight: 600;
             font-family: Montserrat;
@@ -501,6 +501,9 @@
     {% if average < 0 %}
         {% set average = 0 %}
     {% endif %}
+
+
+    <h3>Porównanie w skali miesiąca</h3>
     <div class="small-price-bar">
         <div class="min-price">
             <span> {{ cityValues.minPrice|number_format(2, ',', '') }}zł</span>
@@ -523,6 +526,8 @@
             </span>
         </div>
     </div>
+
+    <h3>Porównanie w skali roku</h3>
     <div class="small-price-bar small-price-bar__year">
         <div class="min-price">
             <span> {{ (cityValues.minPrice * 12)|number_format(2, ',', '') }}zł</span>
@@ -563,6 +568,8 @@
     {% set sredniCzynszProcentNaRok = sredniCzynszKwotaNaRok / (flat.cost * 12) * 100 %}
     {% set sredniCzynszWspolnotaKwotaNaRok = sredniCzynszKwotaNaRok / (1/(100 - udzial)) %}
     {% set sredniCzynszWspolnotaKwotaNaRok = (yourResult|number_format(2) - cityValues.avgPrice) * budynekM2 * 12 %}
+
+
     <h2>Pórownanie do najtańszego czynszu</h2>
     {% if kwotaNaRok > 0 %}
         <div class="comparison-text">

@@ -414,7 +414,8 @@
             <strong>Kod pocztowy</strong>: {{ flat.postCode }}
         </li>
         <li>
-            <strong>Forma budownictwa</strong>: {{ flat. }}
+            <strong>Forma budownictwa</strong>:
+            {{ lookupParameterValue(bills, 'forma_budownictwo').value|default('prywatne') }}
         </li>
         <li>
             <strong>Koszt na miesiąc</strong>: {{ flat.cost|number_format(2, ',', '') }} zł
@@ -432,8 +433,8 @@
             {% endif %}
         </li>
         <li>
-            <strong>Koszt miesięczny za m<sup>2</sup></strong>: {{ (flat.cost/flat.surface)|number_format(2, ',', '') }}
-            zł
+            <strong>Koszt miesięczny za m<sup>2</sup></strong>:
+            {{ (flat.cost/flat.surface)|number_format(2, ',', '') }} zł
         </li>
         <li>
             <strong>Powierzchnia użytkowa
@@ -585,8 +586,9 @@
     {% endfor %}
 
     <h3 class="head">Zaliczki Miesięczne</h3>
-    {% for billInfo in bill_list if (billInfo.type != 'empty space' and billInfo.slug != 'miejsce_postojowe_ilosc' or billInfo.slug != 'nazwa_wspolnota' and billInfo.slug != 'adres') %}
-        {% if billInfo.groupName == 'zaliczki' and billInfo.slug not in ['ocena_administrator', 'administrator_name', 'mieszkancy'] %}
+    {% for billInfo in bill_list if (billInfo.slug != 'nazwa_wspolnota' and billInfo.slug != 'adres') %}
+        {% if billInfo.groupName == 'zaliczki' and billInfo.slug not in ['ocena_administrator', 'administrator_name',
+            'mieszkancy']  and billInfo.slug != 'miejsce_postojowe_ilosc' %}
             {% for bill in bills %}
                 {% include 'PDF/_chart.html.twig' %}
             {% endfor %}

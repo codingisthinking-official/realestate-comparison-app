@@ -178,7 +178,7 @@ $(document).ready(function () {
       flatType: $('select[name="flat-type"]').val(),
       postalCode: $('input[name="postal-code"]').val(),
       price: parseInt($('input[name="rent"]').val()),
-      area: parseInt($('input[name="area"]').val())
+      area: parseFloat($('input[name="area"]').val())
     };
 
     var calculateYearToMonthCost = {};
@@ -251,7 +251,7 @@ $(document).ready(function () {
           calculation.toFixed(2).replace('.', ','));
       }
 
-      if (parseInt(
+      if (parseFloat(
         calculateEarnings.$elPercentageOfHouse.val().replace(',', '.')) > 100) {
         calculateEarnings.$elPercentageOfHouse.val(100);
       }

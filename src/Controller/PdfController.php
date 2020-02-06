@@ -2,13 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Bill;
+use App\Entity\Flat;
 use App\Service\ApiClientService;
 use App\Service\CityService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Flat;
-use App\Entity\Bill;
 
 class PdfController extends AbstractController
 {
@@ -29,25 +28,36 @@ class PdfController extends AbstractController
 
         $billsTab = $cityService->createBillsTabByCity(
             $apiClientService->getOneCityByTitle($flat->getCity())
-            , $repository, $flat->getType()
+            ,
+            $repository,
+            $flat->getType()
         );
 
-        $averageItems = array_filter(array_map(function($tab) use ($cityService, $repository, $flat) {
-            $avg = $cityService->calculateAverageValueForCityAndTypeAndSlug(
-                $repository, $flat->getCity(), $flat->getType(), $tab->getSlug()
-            );
+        $averageItems = array_filter(
+            array_map(
+                function ($tab) use ($cityService, $repository, $flat) {
+                    $avg = $cityService->calculateAverageValueForCityAndTypeAndSlug(
+                        $repository,
+                        $flat->getCity(),
+                        $flat->getType(),
+                        $tab->getSlug()
+                    );
 
-            if (!$tab->getDisplayAverage()) {
-                return false;
+                    if (!$tab->getDisplayAverage()) {
+                        return false;
+                    }
+
+                    return [
+                        'slug' => $tab->getSlug(),
+                        'avg'  => $avg,
+                    ];
+                },
+                $billsTab
+            ),
+            function ($tab) {
+                return false !== $tab;
             }
-
-            return [
-                'slug' => $tab->getSlug(),
-                'avg' => $avg,
-            ];
-        }, $billsTab), function($tab) {
-            return false !== $tab;
-        });
+        );
 
         $averageItemsMap = [];
         foreach ($averageItems as $item) {
@@ -59,7 +69,9 @@ class PdfController extends AbstractController
 
         if ($city) {
             $cityWithValues = $cityService->addPriceValuesByZipCode(
-                $flat->getPostCode(), $repository, $flat->getType()
+                $flat->getPostCode(),
+                $repository,
+                $flat->getType()
             );
 
             if (false === $cityWithValues) {
@@ -67,10 +79,10 @@ class PdfController extends AbstractController
             }
         } else {
             $cityWithValues = [
-                'status' => 'ok',
+                'status'   => 'ok',
                 'minPrice' => 5,
                 'avgPrice' => 25,
-                'maxPrice' => 55
+                'maxPrice' => 55,
             ];
         }
 
@@ -78,9 +90,14 @@ class PdfController extends AbstractController
 
 
         $flatTypes = $apiClientService->getFlatTypes();
-        $flatType = array_values(array_filter($flatTypes, function($f) use ($flat) {
-            return $f->getId() == $flat->getType();
-        }));
+        $flatType = array_values(
+            array_filter(
+                $flatTypes,
+                function ($f) use ($flat) {
+                    return $f->getId() == $flat->getType();
+                }
+            )
+        );
 
         if ($flatType) {
             $flatType = $flatType[0];
@@ -88,15 +105,18 @@ class PdfController extends AbstractController
             $flatType = null;
         }
 
-        return $this->render('PDF/bill.html.twig', [
-            'averageItemsMap' => $averageItemsMap,
-            'flat' => $flat,
-            'cityValues' => $cityWithValues,
-            'bills' => $bills,
-            'flatType' => $flatType,
-            'bill_list' => $cityService->createBillsTabByCity($city, $billRepository, $flat->getType()),
-            'bill_price' => $billsTab,
-            'cityInfo' => $apiClientService->getOneCityByTitle($flat->getCity())
-        ]);
+        return $this->render(
+            'PDF/bill.html.twig',
+            [
+                'averageItemsMap' => $averageItemsMap,
+                'flat'            => $flat,
+                'cityValues'      => $cityWithValues,
+                'bills'           => $bills,
+                'flatType'        => $flatType,
+                'bill_list'       => $cityService->createBillsTabByCity($city, $billRepository, $flat->getType()),
+                'bill_price'      => $billsTab,
+                'cityInfo'        => $apiClientService->getOneCityByTitle($flat->getCity()),
+            ]
+        );
     }
 }

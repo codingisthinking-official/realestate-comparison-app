@@ -397,6 +397,13 @@ $(document).ready(function () {
             'type': $(this).parent().attr('data-type')
           };
           break;
+        case 'dropdown':
+          data = {
+            'value': $(this).find('select').val(),
+            'key': $(this).attr('data-billid'),
+            'type': $(this).parent().attr('data-type')
+          };
+          break;
         case 'chart':
           data = {
             'value': $(this).find('input.data--predictor').val(),

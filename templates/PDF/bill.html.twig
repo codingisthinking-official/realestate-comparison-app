@@ -501,7 +501,19 @@
     {% if average < 0 %}
         {% set average = 0 %}
     {% endif %}
-
+    {% set udzial = lookupParameterValue(bills, 'udzial').value|replace({',': '.'}) %}
+    {% set budynekM2 = lookupParameterValue(bills, 'building_space').value|replace({',': '.'}) %}
+    {% set kwotaNaRok = ((flat.cost) - (flat.surface * cityValues.minPrice)) * 12 %}
+    {% set kwotaNa10lat = kwotaNaRok * 10 %}
+    {% set kwotaNa30lat = kwotaNaRok * 30 %}
+    {% set wspolnotaKwotaNaRok = (yourResult|number_format(2) - cityValues.minPrice) * budynekM2 * 12 %}
+    {% set wspolnotaKwotaNa10lat = wspolnotaKwotaNaRok * 10 %}
+    {% set wspolnotaKwotaNa30lat = wspolnotaKwotaNaRok * 30 %}
+    {% set procentNaRok = kwotaNaRok / (flat.cost * 12) * 100 %}
+    {% set sredniCzynszKwotaNaRok = ((flat.cost) - (flat.surface * cityValues.avgPrice)) * 12 %}
+    {% set sredniCzynszProcentNaRok = sredniCzynszKwotaNaRok / (flat.cost * 12) * 100 %}
+    {% set sredniCzynszWspolnotaKwotaNaRok = sredniCzynszKwotaNaRok / (1/(100 - udzial)) %}
+    {% set sredniCzynszWspolnotaKwotaNaRok = (yourResult|number_format(2) - cityValues.avgPrice) * budynekM2 * 12 %}
 
     <h3>Porównanie w skali miesiąca</h3>
     <div class="small-price-bar">
@@ -527,8 +539,8 @@
         </div>
     </div>
 
-    <h3>Porównanie w skali roku</h3>
-    <div class="small-price-bar small-price-bar__year">
+    <h3>Koszty części wspólnej</h3>
+    <div class="small-price-bar">
         <div class="min-price">
             <span> {{ (cityValues.minPrice * 12)|number_format(2, ',', '') }}zł</span>
         </div>
@@ -555,19 +567,6 @@
         {{ 'layout.report.average_summary'|toWording|raw }}
     </p>
     <br>
-    {% set udzial = lookupParameterValue(bills, 'udzial').value|replace({',': '.'}) %}
-    {% set budynekM2 = lookupParameterValue(bills, 'building_space').value|replace({',': '.'}) %}
-    {% set kwotaNaRok = ((flat.cost) - (flat.surface * cityValues.minPrice)) * 12 %}
-    {% set kwotaNa10lat = kwotaNaRok * 10 %}
-    {% set kwotaNa30lat = kwotaNaRok * 30 %}
-    {% set wspolnotaKwotaNaRok = (yourResult|number_format(2) - cityValues.minPrice) * budynekM2 * 12 %}
-    {% set wspolnotaKwotaNa10lat = wspolnotaKwotaNaRok * 10 %}
-    {% set wspolnotaKwotaNa30lat = wspolnotaKwotaNaRok * 30 %}
-    {% set procentNaRok = kwotaNaRok / (flat.cost * 12) * 100 %}
-    {% set sredniCzynszKwotaNaRok = ((flat.cost) - (flat.surface * cityValues.avgPrice)) * 12 %}
-    {% set sredniCzynszProcentNaRok = sredniCzynszKwotaNaRok / (flat.cost * 12) * 100 %}
-    {% set sredniCzynszWspolnotaKwotaNaRok = sredniCzynszKwotaNaRok / (1/(100 - udzial)) %}
-    {% set sredniCzynszWspolnotaKwotaNaRok = (yourResult|number_format(2) - cityValues.avgPrice) * budynekM2 * 12 %}
 
 
     <h2>Pórownanie do najtańszego czynszu</h2>

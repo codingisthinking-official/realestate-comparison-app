@@ -515,7 +515,7 @@
     {% set sredniCzynszWspolnotaKwotaNaRok = sredniCzynszKwotaNaRok / (1/(100 - udzial)) %}
     {% set sredniCzynszWspolnotaKwotaNaRok = (yourResult|number_format(2) - cityValues.avgPrice) * budynekM2 * 12 %}
 
-    <h3>Porównanie w skali miesiąca</h3>
+    <h3> {{ 'layout.report.header_month_scale_comparison'|toWording|raw }}</h3>
     <div class="small-price-bar">
         <div class="min-price">
             <span> {{ cityValues.minPrice|number_format(2, ',', '') }}zł</span>
@@ -539,14 +539,32 @@
         </div>
     </div>
 
+    {% set yourResult = commonCosts.current %}
+    {% set average = (commonCosts.min - commonCosts.avg)/(commonCosts.min - commonCosts.max) * 100 %}
+    {% set you = (commonCosts.min - yourResult)/(commonCosts.min - commonCosts.max) * 100 %}
+
+    {% if you > 100 %}
+        {% set you = 100 %}
+    {% endif %}
+    {% if you < 0 %}
+        {% set you = 0 %}
+    {% endif %}
+
+    {% if average > 100 %}
+        {% set average = 100 %}
+    {% endif %}
+    {% if average < 0 %}
+        {% set average = 0 %}
+    {% endif %}
+
     <p style="padding-top: 30px">
         {{ 'layout.report.average_summary'|toWording|raw }}
     </p>
 
-    <h3>Koszty części wspólnej</h3>
+    <h3> {{ 'layout.report.heading_common_part'|toWording|raw }}</h3>
     <div class="small-price-bar">
         <div class="min-price">
-            <span> {{ (cityValues.minPrice * 12)|number_format(2, ',', '') }}zł</span>
+            <span> {{ commonCosts.min|number_format(2, ',', '') }}zł</span>
         </div>
         <div class="small-bar">
             <div class="average-bar"
@@ -554,15 +572,15 @@
             <div class="your-bar"
                  style="width: {{ you }}%;"></div>
             <div class="your-result"
-                 style="left: {{ you }}%"> {{ (wspolnotaKwotaNaRok)|number_format(2, ',', '') }}zł
+                 style="left: {{ you }}%"> {{ commonCosts.current|number_format(2, ',', '') }}zł
             </div>
             <div class="average"
-                 style="left: {{ average }}%;"> {{ (cityValues.avgPrice * 12)|number_format(2, ',', '') }}zł
+                 style="left: {{ average }}%;"> {{ commonCosts.avg|number_format(2, ',', '') }}zł
             </div>
         </div>
         <div class="max-price">
             <span>
-                {{ (cityValues.maxPrice*12)|number_format(2, ',', '') }}zł
+                {{ commonCosts.max|number_format(2, ',', '') }}zł
             </span>
         </div>
     </div>

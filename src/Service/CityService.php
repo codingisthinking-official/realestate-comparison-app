@@ -2,11 +2,12 @@
 
 namespace App\Service;
 
+use App\Entity\Flat;
+use App\Entity\Postcode;
 use App\ValueObject\Cms\BillTypes;
 use Doctrine\ORM\EntityManagerInterface;
 use JMS\Serializer\SerializerInterface;
-use App\Entity\Flat;
-use App\Entity\Postcode;
+use stdClass;
 
 class CityService
 {
@@ -14,8 +15,11 @@ class CityService
     private $serializer;
     private $apiClientService;
 
-    public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer, ApiClientService $apiClientService)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
+        ApiClientService $apiClientService
+    ) {
         $this->entityManager = $entityManager;
         $this->serializer = $serializer;
         $this->apiClientService = $apiClientService;
@@ -23,9 +27,12 @@ class CityService
 
     public function calculateAverageValueForCityAndTypeAndSlug($repository, string $city, string $type, string $slug)
     {
-        $results = array_map(function($result) {
-            return $result->getValue();
-        }, $repository->findBy(['city' => $city, 'flatType' => $type, 'billType' => $slug,]));
+        $results = array_map(
+            function ($result) {
+                return $result->getValue();
+            },
+            $repository->findBy(['city' => $city, 'flatType' => $type, 'billType' => $slug,])
+        );
 
         if (count($results) === 0) {
             return false;
@@ -47,7 +54,7 @@ class CityService
             return false;
         }
 
-        $page = new \stdClass();
+        $page = new stdClass();
         foreach ($flatList as $flat) {
             $pricePerSquareMeter = ($flat->getCost()) / ($flat->getSurface());
             if ($pricePerSquareMeter >= $maxPrice) {
@@ -78,6 +85,8 @@ class CityService
             $sumPrice = 0;
             $quantity = 0;
             $maxPrice = 0;
+            $minCommonCostsMonthly = 0;
+            $maxCommonCostsMonthly = 0;
             $flatList = $repository->findBy(['city' => $page->getTitle(), 'type' => $type, 'state' => 1]);
 
             if (count($flatList) < 5) {
@@ -107,6 +116,7 @@ class CityService
             } else {
                 $page->avgPrice = $sumPrice;
             }
+
 
             $page->maxPrice = $maxPrice;
         }
@@ -148,15 +158,22 @@ class CityService
         /** @var BillTypes $billType */
         foreach ($billTypes as $billType) {
             if ($billType->getType() == 'text' && $billType->getAutocomplete()) {
-                $bills = $repository->findBy([
-                    'city' => $city->getTitle(),
-                    'flatType' => $type,
-                    'billType' => $billType->getSlug()
-                ]);
+                $bills = $repository->findBy(
+                    [
+                        'city'     => $city->getTitle(),
+                        'flatType' => $type,
+                        'billType' => $billType->getSlug(),
+                    ]
+                );
 
-                $values = array_unique(array_map(function($val) {
-                    return $val->getValue();
-                }, $bills));
+                $values = array_unique(
+                    array_map(
+                        function ($val) {
+                            return $val->getValue();
+                        },
+                        $bills
+                    )
+                );
 
                 $billType->setAutoCompleteOptions($values);
             }
@@ -167,30 +184,36 @@ class CityService
                 $quantity = 0.0;
                 $maxPrice = 0.0;
 
-                $bills = $repository->findBy([
-                    'city' => $city->getTitle(),
-                    'flatType' => $type,
-                    'billType' => $billType->getSlug()
-                ]);
+                $bills = $repository->findBy(
+                    [
+                        'city'     => $city->getTitle(),
+                        'flatType' => $type,
+                        'billType' => $billType->getSlug(),
+                    ]
+                );
 
                 if (count($bills) < 20) {
-                    $bills = $repository->findBy([
-                        'flatType' => $type,
-                        'billType' => $billType->getSlug()
-                    ]);
+                    $bills = $repository->findBy(
+                        [
+                            'flatType' => $type,
+                            'billType' => $billType->getSlug(),
+                        ]
+                    );
                 }
 
                 foreach ($bills as $bill) {
-                    $flat = $this->entityManager->getRepository(Flat::class)->findOneBy([
-                        'uuid' => $bill->getUuid(),
-                        'state' => 1,
-                    ]);
+                    $flat = $this->entityManager->getRepository(Flat::class)->findOneBy(
+                        [
+                            'uuid'  => $bill->getUuid(),
+                            'state' => 1,
+                        ]
+                    );
 
                     if (!$flat) {
                         continue;
                     }
 
-                    $price = (float) str_replace(',', '.', $bill->getValue());
+                    $price = (float)str_replace(',', '.', $bill->getValue());
                     if ($price >= $maxPrice) {
                         $maxPrice = $price;
                     }

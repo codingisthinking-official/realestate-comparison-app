@@ -115,4 +115,13 @@ class Bill
     {
         $this->uuid = $uuid;
     }
+
+    public function getValueAsFloat(): float
+    {
+        if (strpos($this->value, ',') !== false) {
+            $fl = str_replace(',', '.', $this->value);
+            return (float)$fl;
+        }
+        return (float)$this->value;
+    }
 }

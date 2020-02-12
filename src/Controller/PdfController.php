@@ -6,11 +6,20 @@ use App\Entity\Bill;
 use App\Entity\Flat;
 use App\Service\ApiClientService;
 use App\Service\CityService;
+use App\Service\CommonCostCalculator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PdfController extends AbstractController
 {
+    /** @var CommonCostCalculator */
+    private $calculator;
+
+    public function __construct(CommonCostCalculator $calculator)
+    {
+        $this->calculator = $calculator;
+    }
+
     /**
      * @Route("/bill/{uuid}/", name="pdf.bill")
      */
@@ -64,7 +73,7 @@ class PdfController extends AbstractController
             $averageItemsMap[$item['slug']] = $item['avg'];
         }
 
-        $city = $apiClientService->getOneCityByTitle($flat->getcity());
+        $city = $apiClientService->getOneCityByTitle($flat->getCity());
         $repository = $this->getDoctrine()->getRepository(Flat::class);
 
         if ($city) {
@@ -105,6 +114,8 @@ class PdfController extends AbstractController
             $flatType = null;
         }
 
+        $commonCost = $this->calculator->getChartData($flat->getPostcode(), $flat->getUuid());
+
         return $this->render(
             'PDF/bill.html.twig',
             [
@@ -114,6 +125,7 @@ class PdfController extends AbstractController
                 'bills'           => $bills,
                 'flatType'        => $flatType,
                 'bill_list'       => $cityService->createBillsTabByCity($city, $billRepository, $flat->getType()),
+                'commonCosts'     => $commonCost,
                 'bill_price'      => $billsTab,
                 'cityInfo'        => $apiClientService->getOneCityByTitle($flat->getCity()),
             ]

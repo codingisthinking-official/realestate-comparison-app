@@ -451,6 +451,10 @@
             {{ lookupParameterValue(bills, 'forma_budownictwo').value|default('prywatne') }}
         </li>
         <li>
+            <strong>Powierzchnia użytkowa lokali</strong>:
+            {{ lookupParameterValue(bills, 'building_space').value|number_format(2, ',', '.') }}m<sup>2</sup>
+        </li>
+        <li>
             <strong>Koszt na miesiąc</strong>: {{ flat.cost|number_format(2, ',', '') }} zł
         </li>
         <li>
@@ -468,11 +472,6 @@
         <li>
             <strong>Koszt miesięczny za m<sup>2</sup></strong>:
             {{ (flat.cost/flat.surface)|number_format(2, ',', '') }} zł
-        </li>
-        <li>
-            <strong>Powierzchnia użytkowa
-                lokali</strong>: {{ lookupParameterValue(bills, 'building_space').value|number_format(2, ',', '.') }}
-            m<sup>2</sup>
         </li>
         {% if flatType %}
             <li>

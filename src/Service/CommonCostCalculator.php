@@ -81,6 +81,14 @@ class CommonCostCalculator
             $sortedByUuid[$each->getUuid()][] = $each;
         }
 
+        if (count($sortedByUuid) < 20) {
+            $all = $this->billRepository->findAll();
+
+            foreach ($this->filterCalculable($all) as $each) {
+                $sortedByUuid[$each->getUuid()][] = $each;
+            }
+        }
+
         $costsByUuid = [];
 
         foreach ($sortedByUuid as $each) {
